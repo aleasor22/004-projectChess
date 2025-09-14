@@ -8,37 +8,55 @@ import sys
 import traceback
 
 class Inputs():
-	def __init__(self, canvas, chessClass):
+	def __init__(self, chessObject, movement):
 		self.__listeningStarted =  False
-		self.__chessGame = chessClass
-		self.__render = canvas
+		self.__chessGame = chessObject
+		self.__render = chessObject.get_canvas()
+		self.__move = movement
 		
 		self.applicationActive = False
-		self.mouseLocation = None
+		self.currMouseLocation = None
+		self.oldMouseLocation = None
 		
 		self.__listenForKeyboard = keyboard.Listener(on_press=self.onPress, on_release=self.onRelease)
 		
 		##Starts listening for keyboard & mouse events
 		self.__listenForKeyboard.start()
 
+		self.clickCounter = 0
+		self.selectedPiece = None
+		self.aPieceIsSelected = False
+		self.lastIMG = None
+
 
 	##Logic for Mouse Inputs##
 	def bindEvents(self, ):
 		if self.applicationActive:
 			self.__render.bind("<Motion>", self.findMyMouse)
-			# self.__render.bind("<Button-1>", self.onMousePress)
+			self.__render.bind("<Button-1>", self.onMousePress)
 		else:
 			self.__render.unbind("<Motion>")
+			self.__render.unbind("<Button-1>")
 
-	# def onMousePress(self, event):
-	# 	if "default" in self.selectedPiece.get_imageTK_Dict(True):
-	# 		self.selectedPiece.changedMyTag("default", self.mouseLocation)
-	# 		self.selectedPiece.placeImage(self.__chessGame.get_nwCoords(self.mouseLocation), self.mouseLocation)
-	# 	else:
-	# 		self.selectedPiece.changedMyTag(self.selectedPiece.get_imageTK_Dict(True), self.mouseLocation)
-	# 		self.selectedPiece.placeImage(self.__chessGame.get_nwCoords(self.mouseLocation), self.mouseLocation)
+	def onMousePress(self, event):
+		print(f"Mouse clicked at: {self.currMouseLocation}")
+		if self.clickCounter == 0:
+			self.selectedPiece = self.__move.selectPiece(self.currMouseLocation)
+			# print("first Click") ## Debuggin
+			if self.selectedPiece != None:
+				print(f"Canvas ID: {self.selectedPiece.canvasID}")
+				self.aPieceIsSelected = True
+				self.clickCounter += 1
+		elif self.clickCounter == 1:
+			# print("Second Click") ## Debuggin
+			self.aPieceIsSelected = False
+			self.__move.movePiece(self.currMouseLocation)
+			self.__render.delete(self.lastIMG)
+			self.clickCounter = 0
+		else:
+			print("ERROR @onMousePress")
 
-	# 	pass
+		
 
 	def findMyMouse(self, event):
 		# print(event.x, event.y)
@@ -49,13 +67,23 @@ class Inputs():
 					if event.y > bbox[1] and event.y < bbox[3]:
 						matchingCanvasIDs = self.__render.find_overlapping(bbox[0]+1, bbox[1]+1, bbox[2]-1, bbox[3]-1)[0]
 						break
+
+			self.currMouseLocation = self.__render.gettags(matchingCanvasIDs)[0] ##Saves current mouse location
+			if self.currMouseLocation != self.oldMouseLocation:
+				# print(f"My Mouse Position: {self.currMouseLocation}")
+				self.oldMouseLocation = self.currMouseLocation ##Saves original Mouse location
+				
+			if self.aPieceIsSelected:
+				pos = self.__chessGame.get_nwCoord(matchingCanvasIDs)
+				self.__render.coords(self.selectedPiece.canvasID, pos[0], pos[1])
+				self.lastIMG = self.selectedPiece.canvasID
 			
-			
-			self.mouseLocation = self.__render.gettags(matchingCanvasIDs)[0]
-			# print(self.mouseLocation, " + ", matchingCanvasIDs)
+
+
 		except tkinter.TclError:
 			##currently triggers when perfectly inbetween tiles
-			print("Variable 'matchingCanvasIDs' cannot be of NoneType")
+			# print("Variable 'matchingCanvasIDs' cannot be of NoneType")
+			pass
 
 	##Logic for Keyboard inputs##
 	def onPress(self, key):

@@ -20,12 +20,12 @@ CHESS.createGrid()
 ##Create the "Board" that the game is played on
 BOARD = CHESS.get_canvas()
 
-##BLANK PIECES
-PIECE_LIST = [ROOK(BOARD), KNIGHT(BOARD), BISHOP(BOARD), KING(BOARD), QUEEN(BOARD), PAWN(BOARD)]
 
 ##CLASS CALLING
-PLACE = placements(BOARD, CHESS, PIECE_LIST)
-INPUTS = Inputs(BOARD, CHESS)
+PLACE = placements(CHESS)
+MOVE = Move(CHESS, PLACE)
+INPUTS = Inputs(CHESS, MOVE)
+
 
 
 ##CREATE & PLACE PIECES IN STARTING POSITION
@@ -46,8 +46,6 @@ PLACE.createPieces("BISHOP", 2, "black")
 PLACE.createPieces("QUEEN", 1, "black")
 PLACE.createPieces("KING", 1, "black")
 PLACE.placePieces("black")
-
-
 
 
 ##-------INITIAL RUNTIME DEBUGGING EVENTS-------##

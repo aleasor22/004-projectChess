@@ -1,13 +1,13 @@
 ##List of  Imports
 import os
-from backEnd.movement import Move
+from backEnd.imageWidget import imageWidget
 from Images import *
 
 
 ##Start of Class PAWN
-class QUEEN(Move):
+class QUEEN(imageWidget):
 	def __init__(self, canvas):
-		Move.__init__(self, canvas)
+		imageWidget.__init__(self, canvas)
 		self.pieceID = "QUEEN"
 
 	def setup(self, pos, color, tag):

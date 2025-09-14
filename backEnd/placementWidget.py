@@ -4,23 +4,22 @@ from .Pieces import *
 
 
 class placements():
-	def __init__(self, canvas, chessClass, blankPieces):
-		self.__chessGame = chessClass
-		self.__render = canvas
-		self.__pieceList = blankPieces
+	def __init__(self, chessObject):
+		self.__chessGame = chessObject
+		self.__render = chessObject.get_canvas()
+		self.__pieceList = [ROOK(self.__render), KNIGHT(self.__render), BISHOP(self.__render), KING(self.__render), QUEEN(self.__render), PAWN(self.__render)]
 		self.whitePieces = {}
 		self.blackPieces = {}
-		
-	
+
 
 	def createPieces(self, pieceName, quantity, team):
 		for pieceNum in range(quantity):
 			tag = f"{pieceName}-{pieceNum}"
 			if team == "white":
-				self.whitePieces[tag] = self.returnClass(pieceName)
+				self.whitePieces[tag] = self.get_object(pieceName)
 				self.whitePieces[tag].myID = tag
 			elif team == "black":
-				self.blackPieces[tag] = self.returnClass(pieceName)
+				self.blackPieces[tag] = self.get_object(pieceName)
 				self.blackPieces[tag].myID = tag
 
 
@@ -53,9 +52,35 @@ class placements():
 				teamDict[f"PAWN-{pawnCount}"].setup(self.__chessGame.get_nwCoord(location), team, location)
 				pawnCount += 1
 
+	def place(self, pieceObject, location):
+		position = self.__chessGame.get_nwCoord(location)
+		pieceObject.placeImage(position[0], position[1], location)
+
+	def get_piece(self, team=None, tagOrTile=None):
+		if tagOrTile in self.whitePieces or tagOrTile in self.blackPieces:
+			if team == "white":
+				return self.whitePieces[tagOrTile]
+			elif team == "black":
+				return self.blackPieces[tagOrTile]
+			elif team == None:
+				pass
+			else:
+				print(f"Incorrect Team: {team} \n\t ERROR@ placements.get_piece")
+		elif tagOrTile in self.__chessGame.tileTitleList:
+			# print(tagOrTile) 
+			for key in self.whitePieces.keys():
+				if self.whitePieces[key].locationID == tagOrTile:
+					print(f"Found {self.whitePieces[key].pieceID}")
+					return self.whitePieces[key] 
+			for key in self.blackPieces.keys():
+				if self.blackPieces[key].locationID == tagOrTile:
+					print(f"Found {self.blackPieces[key].pieceID} at {tagOrTile}")
+					return self.blackPieces[key] 
+		else:
+			print(f"Incorrect tagOrTile: {tagOrTile}")
 
 	## 0=Rook, 1=KNIGHT, 2=BISHOP, 3=KING, 4=QUEEN, 5=PAWN
-	def returnClass(self, title):
+	def get_object(self, title):
 		if title == self.__pieceList[0].pieceID: ##ROOK
 			return ROOK(self.__render)
 		elif title == self.__pieceList[1].pieceID:

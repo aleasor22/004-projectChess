@@ -6,11 +6,12 @@ from PIL import ImageTk, Image ##NOTE may not need
 class mainCanvas:
 	def __init__(self):
 		self.__chessApp = tkinter.Tk()
-		self.__chessApp.title("Chess.leasor  [v0.0.44]")
+		self.__chessApp.title("Chess.leasor  [v0.0.5]")
 		self.__board = None ##Default to None
 		self.boardSize = 1024
 		self.columnTitle = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] ##Used to generate tags for each square
 		self.bboxTileList = []
+		self.tileTitleList = []
 
 	def createCanvas(self, ):
 		##Sets boundary based on parameter "boardSize"
@@ -23,15 +24,17 @@ class mainCanvas:
 		self.__board.grid_propagate(False)
 	
 	def displayGridTagList(self, debugActive):
-		if debugActive:
-			xPos = 0
-			yPos = 0
-			for column in range(8):
-				for row in range(8):
+		xPos = 0
+		yPos = 0
+		for column in range(8):
+			for row in range(8):
+				if debugActive:
 					self.__board.create_text(xPos+64, yPos+64, font=("Arial", 16), text=(self.columnTitle[row], column+1), tag=(self.columnTitle[row], column+1))
-					xPos += 128
-				yPos += 128
-				xPos = 0
+				self.tileTitleList.append(f"{self.columnTitle[row]}{column+1}")
+				xPos += 128
+			yPos += 128
+			xPos = 0
+		# print(self.tileTitleList, f"length of list: {len(self.tileTitleList)}")
 
 	def createGrid(self, ): ## NOTE: Need to add a label system to the grid spots (A1, A2, A3, etc.)
 		fillActive = False
@@ -66,7 +69,14 @@ class mainCanvas:
 		# print(self.__board.coords(self.__board.find_withtag("a1")), "CANVAS WIDGET @60")
 
 	def get_nwCoord(self, tag):
-		return (self.__board.coords(self.__board.find_withtag(tag))[0], self.__board.coords(self.__board.find_withtag(tag))[1])
+		try:
+			# print(f"find_withtag: {self.__board.find_withtag(tag)[0]}")
+			# print(f"coords: {self.__board.coords(self.__board.find_withtag(tag)[0])}")
+			self.tileBoxCoords = self.__board.coords(self.__board.find_withtag(tag)[0])
+			# print(self.tileBoxCoords, f"Coords of Tag: {tag}")
+			return (self.tileBoxCoords[0], self.tileBoxCoords[1])
+		except tkinter.TclError:
+			print(f"NW Coords: {self.tileBoxCoords}\n")
 	
 	def get_canvas(self):
 		return self.__board
