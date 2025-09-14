@@ -8,18 +8,18 @@ from Images import *
 class QUEEN(Move):
 	def __init__(self, canvas):
 		Move.__init__(self, canvas)
-		self.imgLocation = None
+		self.pieceID = "QUEEN"
 
-	def queenSetup(self, pos, color, tag):
+	def setup(self, pos, color, tag):
 			self.set_team(color)
-			self.createImage(self.imgLocation, tag)
+			self.createImage()
 			self.placeImage(pos[0], pos[1], tag)
 
 
 	def set_team(self, color):
 		if color == "black":
-			self.imgLocation = "Images/BlackQueen.png"
+			self._imgLocation = "Images/BlackQueen.png"
 		elif color == "white":
-			self.imgLocation = "Images/WhiteQueen.png"
+			self._imgLocation = "Images/WhiteQueen.png"
 		else:
 			print("Incorrect team selected @QUEEN.set_team()")

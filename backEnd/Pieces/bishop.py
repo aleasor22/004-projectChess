@@ -8,19 +8,19 @@ from Images import *
 class BISHOP(Move):
 	def __init__(self, canvas):
 		Move.__init__(self, canvas)
-		self.imgLocation = None
+		self.pieceID = "BISHOP"
 		
 
-	def bishopSetup(self, pos, color, tag):
+	def setup(self, pos, color, tag):
 			self.set_team(color)
-			self.createImage(self.imgLocation, tag)
+			self.createImage()
 			self.placeImage(pos[0], pos[1], tag)
 
 
 	def set_team(self, color):
 		if color == "black":
-			self.imgLocation = "Images/BlackBishop.png"
+			self._imgLocation = "Images/BlackBishop.png"
 		elif color == "white":
-			self.imgLocation = "Images/WhiteBishop.png"
+			self._imgLocation = "Images/WhiteBishop.png"
 		else:
 			print("Incorrect team selected @Bishop.set_team()")

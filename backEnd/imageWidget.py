@@ -7,24 +7,34 @@ from PIL import ImageTk, Image
 ##Start of the Image Class
 class imageWidget:
 	def __init__(self, canvas):
-		"""Canvas is the the base layer of my application"""
+		"""Everything to do with creating/displaying images to screen"""
 		self.__render = canvas #Only for this class
 
-		##General Data for the child classses
+		## Identifying Tags (Global)
+		self.locationID = None
+		self.canvasID = None
+		self.pieceID = None
+		self.myID = None
+		
+		## Image Data (Local)
+		self._imgLocation = None
 		self._imagePIL = None
 		self._imgSize = None
-		self._imageTK = {}
-		# self._myTag = []
+		self._imageTK = None
 	
-	def createImage(self, fileLocation, tag):
-		self._imagePIL = Image.open(str(fileLocation))
+	def createImage(self):
+		self._imagePIL = Image.open(str(self._imgLocation))
 		self._imgSize = self._imagePIL.size
-		self._imageTK[tag] = ImageTk.PhotoImage(self._imagePIL)
-		# self._myTag.append(tag)
+		self._imageTK = ImageTk.PhotoImage(self._imagePIL)
 
 
 	def placeImage(self, x, y, tag):
-		self.__render.create_image(x, y, tag=tag, image=self._imageTK[tag], anchor="nw")
+		self.locationID = tag
+		self.canvasID = self.__render.create_image(
+			x, y, tag=(self.locationID, self.myID, self.pieceID), image=self._imageTK, anchor="nw"
+			)
+		
+
 
 	def changedMyTag(self, oldTag, newTag):
 		#Save Value from original key

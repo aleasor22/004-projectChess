@@ -8,18 +8,18 @@ from Images import *
 class KING(Move):
 	def __init__(self, canvas):
 		Move.__init__(self, canvas)
-		self.imgLocation = None
+		self.pieceID = "KING"
 
-	def kingSetup(self, pos, color, tag):
+	def setup(self, pos, color, tag):
 			self.set_team(color)
-			self.createImage(self.imgLocation, tag)
+			self.createImage()
 			self.placeImage(pos[0], pos[1], tag)
 
 
 	def set_team(self, color):
 		if color == "black":
-			self.imgLocation = "Images/BlackKing.png"
+			self._imgLocation = "Images/BlackKing.png"
 		elif color == "white":
-			self.imgLocation = "Images/WhiteKing.png"
+			self._imgLocation = "Images/WhiteKing.png"
 		else:
 			print("Incorrect team selected @King.set_team()")

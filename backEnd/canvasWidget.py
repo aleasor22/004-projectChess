@@ -6,10 +6,10 @@ from PIL import ImageTk, Image ##NOTE may not need
 class mainCanvas:
 	def __init__(self):
 		self.__chessApp = tkinter.Tk()
-		self.__chessApp.title("Chess.leasor  [v0.0.42]")
+		self.__chessApp.title("Chess.leasor  [v0.0.44]")
 		self.__board = None ##Default to None
 		self.boardSize = 1024
-		self.rowTitle = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] ##Used to generate tags for each square
+		self.columnTitle = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] ##Used to generate tags for each square
 		self.bboxTileList = []
 
 	def createCanvas(self, ):
@@ -28,25 +28,25 @@ class mainCanvas:
 			yPos = 0
 			for column in range(8):
 				for row in range(8):
-					self.__board.create_text(xPos+64, yPos+64, font=("Arial", 16), text=(self.rowTitle[row], column+1), tag=(self.rowTitle[row], column+1))
+					self.__board.create_text(xPos+64, yPos+64, font=("Arial", 16), text=(self.columnTitle[row], column+1), tag=(self.columnTitle[row], column+1))
 					xPos += 128
 				yPos += 128
 				xPos = 0
 
 	def createGrid(self, ): ## NOTE: Need to add a label system to the grid spots (A1, A2, A3, etc.)
 		fillActive = False
-		fillColor = 'white'
+		fillColor = 'gray'
 		xPos = 0
 		yPos = 0
 		for column in range(8):
 			for row in range(8):
 				if fillActive == True:
-					fillColor = 'gray'
+					fillColor = 'white'
 					fillActive = False
 				else:
-					fillColor = 'white'
+					fillColor = 'gray'
 					fillActive = True
-				gridTag = str(self.rowTitle[row]) + str(column+1)
+				gridTag = str(self.columnTitle[row]) + str(column+1)
 				self.__board.create_rectangle(xPos, yPos, xPos+128, yPos+128, tag=gridTag, fill=fillColor)
 				xPos += 128
 			if column % 2 == 0:

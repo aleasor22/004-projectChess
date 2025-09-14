@@ -13,9 +13,6 @@ class Inputs():
 		self.__chessGame = chessClass
 		self.__render = canvas
 		
-		self.selectedPiece = imageWidget(canvas)
-		self.selectedPiece.createImage("Images/SelectedPiece.png", "default")
-
 		self.applicationActive = False
 		self.mouseLocation = None
 		
@@ -29,19 +26,19 @@ class Inputs():
 	def bindEvents(self, ):
 		if self.applicationActive:
 			self.__render.bind("<Motion>", self.findMyMouse)
-			self.__render.bind("<Button-1>", self.onMousePress)
+			# self.__render.bind("<Button-1>", self.onMousePress)
 		else:
 			self.__render.unbind("<Motion>")
 
-	def onMousePress(self, event):
-		if "default" in self.selectedPiece.get_imageTK_Dict(True):
-			self.selectedPiece.changedMyTag("default", self.mouseLocation)
-			self.selectedPiece.placeImage(self.__chessGame.get_nwCoords(self.mouseLocation), self.mouseLocation)
-		else:
-			self.selectedPiece.changedMyTag(self.selectedPiece.get_imageTK_Dict(True), self.mouseLocation)
-			self.selectedPiece.placeImage(self.__chessGame.get_nwCoords(self.mouseLocation), self.mouseLocation)
+	# def onMousePress(self, event):
+	# 	if "default" in self.selectedPiece.get_imageTK_Dict(True):
+	# 		self.selectedPiece.changedMyTag("default", self.mouseLocation)
+	# 		self.selectedPiece.placeImage(self.__chessGame.get_nwCoords(self.mouseLocation), self.mouseLocation)
+	# 	else:
+	# 		self.selectedPiece.changedMyTag(self.selectedPiece.get_imageTK_Dict(True), self.mouseLocation)
+	# 		self.selectedPiece.placeImage(self.__chessGame.get_nwCoords(self.mouseLocation), self.mouseLocation)
 
-		pass
+	# 	pass
 
 	def findMyMouse(self, event):
 		# print(event.x, event.y)
@@ -55,7 +52,7 @@ class Inputs():
 			
 			
 			self.mouseLocation = self.__render.gettags(matchingCanvasIDs)[0]
-			print(self.mouseLocation, " + ", matchingCanvasIDs)
+			# print(self.mouseLocation, " + ", matchingCanvasIDs)
 		except tkinter.TclError:
 			##currently triggers when perfectly inbetween tiles
 			print("Variable 'matchingCanvasIDs' cannot be of NoneType")
