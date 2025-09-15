@@ -5,12 +5,14 @@ from pynput import keyboard
 
 
 ##-------GLOBAL VARIABLES-------##
-ActiveDebug = False ##NOTE: Set this to true to have generic Debugging items displayed
+debugActive = True ##NOTE: Set this to true to have generic Debugging items displayed
+columnTitle = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] ##Used to generate tags for each square
+rowTitle = ["1", "2", "3", "4", "5", "6", "7", "8"]
 	## EX: Grid Locations, (ADD MORE AS NEEDDED)
 
 
 ##-------INITIAL RUNTIME-------##
-CHESS = mainCanvas()
+CHESS = mainCanvas(columnTitle, rowTitle)
 
 
 ##CREATE CANVAS AND CHESS BOARD
@@ -49,8 +51,8 @@ PLACE.placePieces("black")
 
 
 ##-------INITIAL RUNTIME DEBUGGING EVENTS-------##
-CHESS.displayGridTagList(ActiveDebug)
-
+CHESS.gridTagList(debugActive=False) ##Creates a list of all tile IDs, when debugActive=True it displays those tile IDs to screen
+PLACE.findNextMove(debugActive) ##Used to generate an initial list of possible moves per piece, When debugActive=True it prints posible moves to terminal
 
 ##-------LOOPING RUNTIME-------##
 # print(CHESS.get_mainApp().title())

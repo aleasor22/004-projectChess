@@ -9,6 +9,9 @@ class KNIGHT(imageWidget):
 	def __init__(self, canvas):
 		imageWidget.__init__(self, canvas)
 		self.pieceID = "KNIGHT"
+		
+		##List of Moves
+		self.canMoveHere = []
 
 
 	def setup(self, pos, color, tag):
@@ -16,6 +19,9 @@ class KNIGHT(imageWidget):
 			self.createImage()
 			self.placeImage(pos[0], pos[1], tag)
 
+	def availableMoves(self, ):
+		currColumn = self.locationID[0]
+		currRow = self.locationID[1]
 
 	def set_team(self, color):
 		if color == "black":

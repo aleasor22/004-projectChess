@@ -26,6 +26,8 @@ class Inputs():
 		self.clickCounter = 0
 		self.selectedPiece = None
 		self.aPieceIsSelected = False
+		self.canPlace = False
+		self.originalLocaiton = None
 		self.lastIMG = None
 
 
@@ -39,18 +41,22 @@ class Inputs():
 			self.__render.unbind("<Button-1>")
 
 	def onMousePress(self, event):
-		print(f"Mouse clicked at: {self.currMouseLocation}")
-		if self.clickCounter == 0:
+		# print(f"Mouse clicked at: {self.currMouseLocation}")
+		if self.clickCounter == 0: ##Piece gets selected
 			self.selectedPiece = self.__move.selectPiece(self.currMouseLocation)
 			# print("first Click") ## Debuggin
 			if self.selectedPiece != None:
-				print(f"Canvas ID: {self.selectedPiece.canvasID}")
+				# print(f"Canvas ID: {self.selectedPiece.canvasID}")
+				self.originalLocaiton = self.currMouseLocation
 				self.aPieceIsSelected = True
 				self.clickCounter += 1
-		elif self.clickCounter == 1:
+		elif self.clickCounter == 1: ##Attemps to place Piece
 			# print("Second Click") ## Debuggin
 			self.aPieceIsSelected = False
-			self.__move.movePiece(self.currMouseLocation)
+			if self.canPlace:
+				self.__move.movePiece(self.currMouseLocation)
+			else:
+				self.__move.movePiece(self.originalLocaiton)
 			self.__render.delete(self.lastIMG)
 			self.clickCounter = 0
 		else:
@@ -74,15 +80,22 @@ class Inputs():
 				self.oldMouseLocation = self.currMouseLocation ##Saves original Mouse location
 				
 			if self.aPieceIsSelected:
-				pos = self.__chessGame.get_nwCoord(matchingCanvasIDs)
+				if self.currMouseLocation in self.selectedPiece.canMoveHere:
+					self.canPlace = True
+					# print(f"Piece Can Move here: {self.currMouseLocation}")
+				else:
+					self.canPlace = False
+					# print(f"Piece Can't Move here: {self.currMouseLocation}")
+				pos = self.__chessGame.get_nwCoord(matchingCanvasIDs) ##returns top left coords of object @"matchingCanvasIDs"
+
 				self.__render.coords(self.selectedPiece.canvasID, pos[0], pos[1])
 				self.lastIMG = self.selectedPiece.canvasID
 			
 
 
-		except tkinter.TclError:
+		except tkinter.TclError as error:
 			##currently triggers when perfectly inbetween tiles
-			# print("Variable 'matchingCanvasIDs' cannot be of NoneType")
+			# print(f"Caught Error: {error} \n\t Error@ inputs.findMyMouse")
 			pass
 
 	##Logic for Keyboard inputs##
@@ -123,5 +136,5 @@ class Inputs():
 		try:
 			# print(pygetwindow.getActiveWindow().title)
 			return pygetwindow.getActiveWindow().title
-		except AttributeError:
-			print("Window Can't be of NoneType")
+		except AttributeError as error:
+			print(f"Caught Error: {error} \n\t @get_activeWindowTitle()")

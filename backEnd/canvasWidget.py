@@ -4,14 +4,20 @@ from PIL import ImageTk, Image ##NOTE may not need
 
 
 class mainCanvas:
-	def __init__(self):
+	def __init__(self, columnTitle, rowTitle):
 		self.__chessApp = tkinter.Tk()
-		self.__chessApp.title("Chess.leasor  [v0.0.5]")
+		self.__chessApp.title("Chess.leasor  [v0.0.52]")
 		self.__board = None ##Default to None
 		self.boardSize = 1024
-		self.columnTitle = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] ##Used to generate tags for each square
+
+		##Board Variables
+		self.columnTitle = columnTitle ##Used to generate tags for each square
+		self.rowTitle = rowTitle ##Used for tracking of rows
 		self.bboxTileList = []
 		self.tileTitleList = []
+
+		##Piece Tracking
+		self.activePositions = []
 
 	def createCanvas(self, ):
 		##Sets boundary based on parameter "boardSize"
@@ -23,14 +29,15 @@ class mainCanvas:
 		# self.board.grid(row=0, column=0, rowspan=self.boardSize, columnspan=self.boardSize)
 		self.__board.grid_propagate(False)
 	
-	def displayGridTagList(self, debugActive):
+	def gridTagList(self, debugActive):
 		xPos = 0
 		yPos = 0
-		for column in range(8):
-			for row in range(8):
+		for row in self.rowTitle:
+			for column in self.columnTitle:
+				gridTag = f"{column}{row}"
 				if debugActive:
-					self.__board.create_text(xPos+64, yPos+64, font=("Arial", 16), text=(self.columnTitle[row], column+1), tag=(self.columnTitle[row], column+1))
-				self.tileTitleList.append(f"{self.columnTitle[row]}{column+1}")
+					self.__board.create_text(xPos+64, yPos+64, font=("Arial", 16), text=gridTag, tag=gridTag)
+				self.tileTitleList.append(gridTag)
 				xPos += 128
 			yPos += 128
 			xPos = 0
@@ -41,20 +48,20 @@ class mainCanvas:
 		fillColor = 'gray'
 		xPos = 0
 		yPos = 0
-		for column in range(8):
-			for row in range(8):
+		for row in range(8):
+			for column in range(8):
 				if fillActive == True:
 					fillColor = 'white'
 					fillActive = False
 				else:
 					fillColor = 'gray'
 					fillActive = True
-				gridTag = str(self.columnTitle[row]) + str(column+1)
+				gridTag = str(self.columnTitle[column]) + str(row+1)
 				self.__board.create_rectangle(xPos, yPos, xPos+128, yPos+128, tag=gridTag, fill=fillColor)
+				# self.__board.create_text(xPos+64, yPos+64, font=("Arial", 16), text=gridTag, tag=gridTag)
 				xPos += 128
-			if column % 2 == 0:
+			if row % 2 == 0:
 				fillActive = True
-				# print("Only on even columns") #TODO REMOVE LATER
 			else: 
 				fillActive = False
 			yPos += 128
@@ -67,6 +74,14 @@ class mainCanvas:
 		# print(self.__board.find_withtag("a1")) 
 		## NOTE: Even though find_withtag returns a tuple, using it to call .coords won't error out
 		# print(self.__board.coords(self.__board.find_withtag("a1")), "CANVAS WIDGET @60")
+
+	def updateTracking(self, object):
+		# print("Old List:", self.activePositions)
+		for index in range(len(self.activePositions)):
+			if self.__origin == self.activePositions[index]:
+				self.activePositions[index] = self.__board.gettags(object.canvasID)[0]
+		# print("New List:", self.activePositions)
+		
 
 	def get_nwCoord(self, tag):
 		try:
@@ -86,3 +101,6 @@ class mainCanvas:
 	
 	def get_bbox(self, canvasID):
 		return self.__board.coords(canvasID)
+
+	def set_origin(self, origin):
+		self.__origin = origin	

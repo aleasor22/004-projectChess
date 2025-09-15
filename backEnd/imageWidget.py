@@ -6,15 +6,16 @@ from PIL import ImageTk, Image
 
 ##Start of the Image Class
 class imageWidget:
-	def __init__(self, canvas):
+	def __init__(self, chess):
 		"""Everything to do with creating/displaying images to screen"""
-		self.__render = canvas #Only for this class
+		self._chessObject = chess
+		self._render = chess.get_canvas() #Only for this class
 
 		## Identifying Tags (Global)
-		self.locationID = None
-		self.canvasID = None
-		self.pieceID = None
-		self.myID = None
+		self.locationID = None	##Active tile location (Tile Square Ex. 'a1' or 'e6')
+		self.canvasID = None	##Canvas tag (Tkinters canvas item id)
+		self.pieceID = None		##Piece Name (Ex. ROOK or PAWN, used to identify piece class)
+		self.myID = None		##Personal tag (Ex. ROOK-0 or ROOK-1 - used for the team dictionary)
 		
 		## Image Data (Local)
 		self._imgLocation = None
@@ -30,25 +31,13 @@ class imageWidget:
 
 	def placeImage(self, x, y, location):
 		self.locationID = location
-		self.canvasID = self.__render.create_image(
+		self.canvasID = self._render.create_image(
 			x, y, tag=(self.locationID, self.myID, self.pieceID), image=self._imageTK, anchor="nw"
 			)
 		
 	def removeImage(self):
 		if self.canvasID != None:
-			self.__render.delete(self.canvasID)
-
-	# def changedMyTag(self, oldTag, newTag):
-	# 	#Save Value from original key
-	# 	old_imageTK = self._imageTK[oldTag]
-
-	# 	#Delete Key & Value from dictionary
-	# 	del self._imageTK[oldTag]
-	# 	##Delete original Piece
-	# 	if len(self.__render.find_withtag(oldTag)) != 0:
-	# 		self.__render.delete(self.__render.find_withtag(oldTag)[1])
-	# 	#add original Value back with new Key
-	# 	self._imageTK[newTag] = old_imageTK
+			self._render.delete(self.canvasID)
 
 	def get_imageTK_Dict(self, key=False):
 		return self._imageTK
