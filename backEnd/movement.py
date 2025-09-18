@@ -19,7 +19,7 @@ class Move():
 		self.__chess.set_origin(mouseLocation)
 		self.__select.removeImage()
 		self.__select.placeImage(position[0], position[1], mouseLocation)
-		self.__currPiece = self.__place.get_piece(tagOrTile=mouseLocation) 
+		self.__currPiece = self.__place.get_piece(tagOrLocation=mouseLocation) 
 		return self.__currPiece
 		
 

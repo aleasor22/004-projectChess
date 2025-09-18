@@ -24,15 +24,6 @@ class ROOK(imageWidget):
 		currColumn = self.locationID[0]
 		currRow = self.locationID[1]
 		self.canMoveHere = []
-
-
-		##Forward & Backward Movement
-		for index in range(8):
-			self.canMoveHere.append(f"{currColumn}{index+1}")
-
-		##Side to Side Movement
-		for index in self._chessObject.columnTitle:
-			self.canMoveHere.append(f"{index}{currRow}")
 		
 
 

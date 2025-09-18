@@ -24,50 +24,6 @@ class PAWN(imageWidget):
 		currColumn = self.locationID[0]
 		currRow = self.locationID[1]
 		self.canMoveHere = []
-
-		
-		##Logic for diagonal spaces
-		currColumnIndex = -1
-		for index in range(len(self._chessObject.columnTitle)):
-			if currColumn == self._chessObject.columnTitle[index]:
-				currColumnIndex = index
-				break
-			
-		##White Piece Logic
-		if "White" in self._imgLocation:
-			try:
-				if currColumnIndex-1 < 0:
-					raise IndexError(f"Index out of range {currColumnIndex-1}")
-				self.canMoveHere.append(f"{self._chessObject.columnTitle[currColumnIndex-1]}{int(currRow)+1}")
-			except IndexError as outOfRange:
-				# print(outOfRange)
-				pass
-			self.canMoveHere.append(f"{currColumn}{int(currRow)+1}")
-			try:
-				self.canMoveHere.append(f"{self._chessObject.columnTitle[currColumnIndex+1]}{int(currRow)+1}")
-			except IndexError as outOfRange:
-				# print(outOfRange)
-				pass
-			if currRow == "2":
-				self.canMoveHere.append(f"{currColumn}{int(currRow)+2}")
-
-		##Black Piece Logic
-		elif "Black" in self._imgLocation:
-			try:
-				if currColumnIndex-1 < 0:
-					raise IndexError(f"Index out of range {currColumnIndex-1}")
-				self.canMoveHere.append(f"{self._chessObject.columnTitle[currColumnIndex-1]}{int(currRow)-1}")
-			except IndexError as outOfRange:
-				# print(outOfRange)
-				pass
-			self.canMoveHere.append(f"{currColumn}{int(currRow)-1}")
-			try:
-				self.canMoveHere.append(f"{self._chessObject.columnTitle[currColumnIndex+1]}{int(currRow)-1}")
-			except IndexError as outOfRange:
-				# print(outOfRange)
-				pass
-			if currRow == "7":
-				self.canMoveHere.append(f"{currColumn}{int(currRow)-2}")
 		
 			
 
