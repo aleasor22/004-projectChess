@@ -22,6 +22,23 @@ class BISHOP(imageWidget):
 	def availableMoves(self, ):
 		currColumn = self.locationID[0]
 		currRow = self.locationID[1]
+		self.canMoveHere = []
+
+		##Diagonal Forwards (Right & Left)
+		columnIndex = self.findMyIndex()
+
+		for letter in range(columnIndex, -1, -1):
+			print(letter)
+			self.canMoveHere.append(f"{self._chessObject.columnTitle[letter]}{currRow}")
+
+
+
+
+			pass
+
+
+
+
 
 	def set_team(self, color):
 		if color == "black":

@@ -6,7 +6,7 @@ from PIL import ImageTk, Image ##NOTE may not need
 class mainCanvas:
 	def __init__(self, columnTitle, rowTitle):
 		self.__chessApp = tkinter.Tk()
-		self.__chessApp.title("Chess.leasor  [v0.0.52]")
+		self.__chessApp.title("Chess.leasor  [v0.0.53]")
 		self.__board = None ##Default to None
 		self.boardSize = 1024
 
@@ -56,7 +56,7 @@ class mainCanvas:
 				else:
 					fillColor = 'gray'
 					fillActive = True
-				gridTag = str(self.columnTitle[column]) + str(row+1)
+				gridTag = f"{self.columnTitle[column]}{row+1}"
 				self.__board.create_rectangle(xPos, yPos, xPos+128, yPos+128, tag=gridTag, fill=fillColor)
 				# self.__board.create_text(xPos+64, yPos+64, font=("Arial", 16), text=gridTag, tag=gridTag)
 				xPos += 128

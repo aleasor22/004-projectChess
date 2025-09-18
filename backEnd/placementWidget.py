@@ -18,9 +18,12 @@ class placements():
 			if team == "white":
 				self.whitePieces[tag] = self.get_object(pieceName)
 				self.whitePieces[tag].myID = tag
+				self.whitePieces[tag].myTeam = "white"
 			elif team == "black":
 				self.blackPieces[tag] = self.get_object(pieceName)
 				self.blackPieces[tag].myID = tag
+				self.blackPieces[tag].myTeam = "black"
+
 
 
 	def placePieces(self, team):
