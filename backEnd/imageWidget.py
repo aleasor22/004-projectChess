@@ -51,6 +51,7 @@ class imageWidget:
 		return False
 	
 	def setToList(self):
+		self.canMoveHere=[]
 		for length in range(len(self.moveSet)):
 			self.canMoveHere.append(self.moveSet.pop())
 

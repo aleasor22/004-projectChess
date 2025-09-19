@@ -20,11 +20,22 @@ class KING(imageWidget):
 
 	def availableMoves(self, ):
 		##Rests
-		index_A, index_B = self._chessObject.MATRIX.findMyIndex(self.locationID)
+		index_A, index_B = self._chessObject.MATRIX.findMatrixIndex(self.locationID)
 		self.moveSet = set()
 
-		for i in range(-1, 1):
-			print(i)
+		for i in range(-1, 2):
+			for j in range(-1, 2):
+				# print(f"[{i}][{j}]")
+				try:
+					if (index_A+i) < 0 or (index_B+j) < 0:
+						raise IndexError("Less than 0")
+					self.moveSet.add(self.myMatrix[index_A+i][index_B+j])
+				except IndexError as e:
+					# print(e)
+					continue
+
+		self.setToList()
+
 
 	def set_team(self, color):
 		if color == "black":

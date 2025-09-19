@@ -20,8 +20,36 @@ class KNIGHT(imageWidget):
 			self.placeImage(pos[0], pos[1], tag)
 
 	def availableMoves(self, ):
-		currColumn = self.locationID[0]
-		currRow = self.locationID[1]
+		##Resets
+		self.canMoveHere = []
+		self.moveSet = set()
+
+		##Local Variables
+		index_A, index_B = self._chessObject.MATRIX.findMatrixIndex(self.locationID)
+
+		for i in range(-2, 3):
+			for j in range(-2, 3):
+				try:
+					if index_A+j < 0 or index_B+i < 0:
+						raise IndexError
+					if j % 2 == 0 and (i == -2 or i == 2):
+						raise IndexError
+					elif (i==-1 or i==1) and (j>=-1 and j<=1):
+						raise IndexError
+					elif (i==0 and j!=0):
+						raise IndexError
+					else:
+						# print(self.myMatrix[index_A+j][index_B+i], end=" ")
+						self.moveSet.add(self.myMatrix[index_A+j][index_B+i])
+				except IndexError:
+					# print("**", end=" ")
+					continue
+			# print()
+
+		print(self.moveSet)
+		self.setToList()
+				
+
 
 	def set_team(self, color):
 		if color == "black":

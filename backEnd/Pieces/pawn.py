@@ -19,12 +19,38 @@ class PAWN(imageWidget):
 		self.placeImage(pos[0], pos[1], tag)
 
 
-	def availableMoves(self, ):
+	def availableMoves(self):
 		##New Call Recets
-		currColumn = self.locationID[0]
 		currRow = self.locationID[1]
 		self.canMoveHere = []
-		
+		self.moveSet = set()
+
+		##Local Variables
+		index_A, index_B = self._chessObject.MATRIX.findMatrixIndex(self.locationID)
+
+		if "White" in self._imgLocation:
+			for col in range(-1, 2):
+				try:
+					if index_A+col < 0:
+						raise IndexError
+					self.moveSet.add(self.myMatrix[index_A+col][index_B+1])
+					if col == 0 and currRow == "2":
+						print(self.myMatrix[index_A+col][index_B+2])
+						self.moveSet.add(self.myMatrix[index_A+col][index_B+2])
+				except IndexError:
+					continue
+		if "Black" in self._imgLocation:
+			for col in range(-1, 2):
+				try:
+					if index_A+col < 0:
+						raise IndexError
+					self.moveSet.add(self.myMatrix[index_A+col][index_B-1])
+					if col == 0 and currRow == "7":
+						print(self.myMatrix[index_A+col][index_B-2])
+						self.moveSet.add(self.myMatrix[index_A+col][index_B-2])
+				except IndexError:
+					continue	
+		self.setToList()
 			
 
 	def set_team(self, color):
