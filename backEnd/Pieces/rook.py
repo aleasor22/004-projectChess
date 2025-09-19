@@ -21,12 +21,19 @@ class ROOK(imageWidget):
 	
 	def availableMoves(self):
 		##Reset
-		currColumn = self.locationID[0]
-		currRow = self.locationID[1]
 		self.canMoveHere = []
+		self.moveSet = set()
+
+		##Local Variables
+		index = self._chessObject.MATRIX.findMatrixIndex(self.locationID)
 		
+		for i in range(8):
+			self.moveSet.add(self.myMatrix[index[0]][i])
 
+		for j in range(8):
+			self.moveSet.add(self.myMatrix[j][index[1]])
 
+		self.setToList()
 
 	def set_team(self, color):
 		if color == "black":

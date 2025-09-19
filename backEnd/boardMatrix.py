@@ -48,3 +48,6 @@ class MATRIX():
 	##TODO REMOVE LATER:
 	def get_columnIDs(self):
 		return self.__columnID
+	
+	def get_rowIDs(self):
+		return self.__rowID

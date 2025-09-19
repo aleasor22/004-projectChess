@@ -12,6 +12,7 @@ class BISHOP(imageWidget):
 		
 		##List of Moves
 		self.canMoveHere = []
+		self.moveSet = set()
 		
 
 	def setup(self, pos, color, tag):
@@ -20,25 +21,43 @@ class BISHOP(imageWidget):
 			self.placeImage(pos[0], pos[1], tag)
 
 	def availableMoves(self, ):
-		currColumn = self.locationID[0]
-		currRow = self.locationID[1]
+		##Resets List
 		self.canMoveHere = []
+		self.moveSet = set()
 
-		##Diagonal Forwards (Right & Left)
-		columnIndex = self.findMyIndex()
+		##Local Variables
+		index = self._chessObject.MATRIX.findMatrixIndex(self.locationID)
+		# print(f"Index= {index} & Location= {self.myMatrix[index[0]][index[1]]}")
+		i = -1
+		j = 0
 
-		for letter in range(columnIndex, -1, -1):
-			print(letter)
-			self.canMoveHere.append(f"{self._chessObject.columnTitle[letter]}{currRow}")
-
-
-
-
-			pass
-
-
-
-
+		while i < 16:
+			i += 1
+			try:
+				if i <= 7:
+					if (index[0]+i) <=7:
+						# print(f"i:{i}={self.myMatrix[index[0]+i][index[1]+i]}", end=" ")
+						self.moveSet.add(self.myMatrix[index[0]+i][index[1]+i])
+					if (index[0]-i) >= 0:
+						# print(f"i:{i}={self.myMatrix[index[0]-i][index[1]+i]}", end=" ")
+						self.moveSet.add(self.myMatrix[index[0]-i][index[1]+i])
+				elif i > 7:
+					if (index[0]+j) <= 7:
+						# print(f"j:{j}={self.myMatrix[index[0]+j][index[1]-j]}", end=" ")
+						self.moveSet.add(self.myMatrix[index[0]+j][index[1]-j])
+					if (index[0]-j) >= 0:
+						# print(f"j:{j}={self.myMatrix[index[0]-j][index[1]-j]}", end=" ")
+						self.moveSet.add(self.myMatrix[index[0]-j][index[1]-j])
+					j += 1
+					
+			except IndexError:
+				# print(f"colummn: {index[0]+i}, row: {index[1]+i}", end=" | ")
+				# print(f"colummn: {index[0]-i}, row: {index[1]+i}")
+				continue
+		
+		self.setToList()
+				
+			
 
 	def set_team(self, color):
 		if color == "black":

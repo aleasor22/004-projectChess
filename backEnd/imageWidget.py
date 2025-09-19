@@ -18,6 +18,11 @@ class imageWidget:
 		self.myID = None		##Personal tag (Ex. ROOK-0 or ROOK-1 - used for the team dictionary)
 		self.myTeam = None		##What Team the Piece is on
 		
+		##Movement Logic
+		self.canMoveHere = []
+		self.moveSet = set()
+		self.myMatrix = chess.MATRIX.get_matrix()
+
 		## Image Data (Local)
 		self._imgLocation = None
 		self._imagePIL = None
@@ -40,14 +45,15 @@ class imageWidget:
 		if self.canvasID != None:
 			self._render.delete(self.canvasID)
 
-	def findMyIndex(self):
-		columnTitles = self._chessObject.columnTitle
+	def isInList(self, ID, myList):
+		if ID in myList:
+			return True
+		return False
+	
+	def setToList(self):
+		for length in range(len(self.moveSet)):
+			self.canMoveHere.append(self.moveSet.pop())
 
-		for index in range(len(columnTitles)):
-			if self.locationID[0] == columnTitles[index]:
-				# print(f"{self.myTeam} {self.myID}'s Column Index: {index}")
-				return index
-		
 	def get_imageTK_Dict(self, key=False):
 		return self._imageTK
 	

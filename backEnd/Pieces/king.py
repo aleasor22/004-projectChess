@@ -19,8 +19,12 @@ class KING(imageWidget):
 			self.placeImage(pos[0], pos[1], tag)
 
 	def availableMoves(self, ):
-		currColumn = self.locationID[0]
-		currRow = self.locationID[1]
+		##Rests
+		index_A, index_B = self._chessObject.MATRIX.findMyIndex(self.locationID)
+		self.moveSet = set()
+
+		for i in range(-1, 1):
+			print(i)
 
 	def set_team(self, color):
 		if color == "black":

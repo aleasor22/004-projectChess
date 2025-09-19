@@ -5,7 +5,7 @@ from pynput import keyboard
 
 
 ##-------GLOBAL VARIABLES-------##
-debugActive = False ##NOTE: Set this to true to have generic Debugging items displayed
+debugActive = True ##NOTE: Set this to true to have generic Debugging items displayed
 
 
 ##-------INITIAL RUNTIME-------##
