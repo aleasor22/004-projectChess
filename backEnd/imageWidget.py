@@ -54,7 +54,9 @@ class imageWidget:
 	def setToList(self):
 		self.canMoveHere=[]
 		for length in range(len(self.moveSet)):
-			self.canMoveHere.append(self.moveSet.pop())
+			popItem = self.moveSet.pop()
+			if popItem != self.locationID:
+				self.canMoveHere.append(popItem)
 
 	def get_imageTK_Dict(self, key=False):
 		return self._imageTK

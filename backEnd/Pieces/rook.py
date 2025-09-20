@@ -52,7 +52,6 @@ class ROOK(imageWidget):
 			self.moveSet.add(self.myGlobalMatrix[index_A][north])
 		
 		for south in range(index_B+1, 8):
-			print(south)
 			if self.myPieceMatrix[index_A][south] != "**":
 				# print(self.myPieceMatrix[index_A][south])
 				break

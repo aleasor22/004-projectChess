@@ -23,8 +23,9 @@ class Move():
 		self.__select.removeImage()
 		self.__select.placeImage(position[0], position[1], mouseLocation)
 		self.__currPiece = self.__place.get_piece(tagOrLocation=mouseLocation) 
-		# self.__currPiece.availableMoves()
-		print(f"Piece: {self.__currPiece.myID}, Can Move Here: {self.__currPiece.canMoveHere}")
+		if self.__currPiece != None:
+			self.__currPiece.availableMoves()
+			print(f"Piece: {self.__currPiece.myID}, Can Move Here: {self.__currPiece.canMoveHere}")
 		return self.__currPiece
 		
 

@@ -1,0 +1,18 @@
+Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
+
+
+Current Commit (#9 [v0.0.564]):
+	1. Bishop and Queen move detection logic now account for active/inactive squares.
+		a. Still doesn't know what/who is in an active square.
+	2. Created this document to summarize changes between commits
+	3. Pieces to change move detection based on active pieces
+		a. [Knight, King, Pawn]
+	4. After the remaining pieces have move logic adjusted. The goal to add piece capturing. This will be done by determining who is in a square, which team they're on, add the square to movement options if the piece's on another team
+
+
+Last Commit (#8 [v0.0.563]):
+	1. A basic form of piece tracking was created using "__myPieceMatrix"
+		a. A double matrix that shows "**" for empty locations and the location title for filled/active spots (EX. "a1" or "c7")
+		b. Used to tell if another piece is there, however doesn't know which piece is actually there
+	2. Adjusted the Rook's move detection logic to account for active/inactive pieces
+	3. Made ".avalableMoves()" get called every time a piece is selected.
