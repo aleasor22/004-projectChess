@@ -45,27 +45,24 @@ class placements():
 				if "0" in key:
 					location = f"{self.__chessGame.MATRIX.get_columnIDs()[columnNumber]}{backRow}"
 					teamDict[key].setup(self.__chessGame.get_nwCoord(location), team, location)
-					self.__chessGame.activePositions.append(location)
 					columnNumber += 1
 				elif "1" in key:
 					location = f"{self.__chessGame.MATRIX.get_columnIDs()[altColumnNum]}{backRow}"
 					teamDict[key].setup(self.__chessGame.get_nwCoord(location), team, location)
-					self.__chessGame.activePositions.append(location)
 					altColumnNum -= 1
 			else:
 				location = f"{self.__chessGame.MATRIX.get_columnIDs()[pawnCount]}{frontRow}"
 				teamDict[f"PAWN-{pawnCount}"].setup(self.__chessGame.get_nwCoord(location), team, location)
-				self.__chessGame.activePositions.append(location)
 				pawnCount += 1
 
 	def place(self, pieceObject, location):
 		position = self.__chessGame.get_nwCoord(location)
 		pieceObject.placeImage(position[0], position[1], location)
-		pieceObject.availableMoves() ##Updates Moveable Locations
-		self.__chessGame.updateTracking(pieceObject) ##Updates all used positions
+		pieceObject.availableMoves()
+		# self.findNextMove() ##Refresh All available moves
 		print(f"Next Moves: {pieceObject.canMoveHere}")
 
-	def findNextMove(self, debugActive):
+	def findNextMove(self, debugActive=False):
 		try:
 			##Team White
 			for object in self.whitePieces.values():
@@ -85,25 +82,17 @@ class placements():
 			print(f"Caught Error:, {error} \n\t @findNextMove()")
 		# pass
 
-	def get_piece(self, team=None, tagOrLocation=None):
-		if tagOrLocation in self.whitePieces or tagOrLocation in self.blackPieces:
-			if team == "white":
-				return self.whitePieces[tagOrLocation]
-			elif team == "black":
-				return self.blackPieces[tagOrLocation]
-			elif team == None:
-				pass
-			else:
-				print(f"Incorrect Team: {team} \n\t ERROR@ placements.get_piece")
-		elif self.__chessGame.MATRIX.foundInMatrix(tagOrLocation):
-			# print(tagOrTile) 
+	def get_piece(self, tagOrLocation=None):
+		if self.__chessGame.MATRIX.foundInMatrix(tagOrLocation):
 			for key in self.whitePieces.keys():
 				if self.whitePieces[key].locationID == tagOrLocation:
-					print(f"Found {self.whitePieces[key].pieceID}")
+					print(f"Found {self.whitePieces[key].myID} at {tagOrLocation}")
+					self.whitePieces[key].availableMoves()
 					return self.whitePieces[key] 
 			for key in self.blackPieces.keys():
 				if self.blackPieces[key].locationID == tagOrLocation:
-					print(f"Found {self.blackPieces[key].pieceID} at {tagOrLocation}")
+					print(f"Found {self.blackPieces[key].myID} at {tagOrLocation}")
+					self.blackPieces[key].availableMoves()
 					return self.blackPieces[key] 
 		else:
 			print(f"Incorrect tagOrTile: {tagOrLocation}")

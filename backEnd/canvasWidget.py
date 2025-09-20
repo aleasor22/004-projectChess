@@ -6,7 +6,7 @@ from .boardMatrix import MATRIX
 class mainCanvas:
 	def __init__(self):
 		self.__chessApp = tkinter.Tk()
-		self.__chessApp.title("Chess.leasor  [v0.0.56]")
+		self.__chessApp.title("Chess.leasor  [v0.0.563]")
 		self.__board = None ##Default to None
 		self.boardSize = 1024
 
@@ -14,8 +14,6 @@ class mainCanvas:
 		self.MATRIX = MATRIX()
 		self.bboxTileList = []
 
-		##Piece Tracking
-		self.activePositions = []
 
 	def createCanvas(self, ):
 		##Sets boundary based on parameter "boardSize"
@@ -48,7 +46,7 @@ class mainCanvas:
 				else:
 					fillColor = 'gray'
 					fillActive = True
-				gridTag = self.MATRIX.get_tagAtIndex(col, row)
+				gridTag = self.MATRIX.get_tagAtIndex(col, row, "Global")
 				self.__board.create_rectangle(xPos, yPos, xPos+128, yPos+128, tag=gridTag, fill=fillColor)
 				xPos += 128
 			if row % 2 == 0:
@@ -62,14 +60,6 @@ class mainCanvas:
 		for canvasID in self.__board.find_all():
 			self.bboxTileList.append(self.__board.coords(canvasID))
 		## NOTE: Even though find_withtag returns a tuple, using it to call .coords won't error out
-
-	def updateTracking(self, object):
-		# print("Old List:", self.activePositions)
-		for index in range(len(self.activePositions)):
-			if self.__origin == self.activePositions[index]:
-				self.activePositions[index] = self.__board.gettags(object.canvasID)[0]
-		# print("New List:", self.activePositions)
-		
 
 	def get_nwCoord(self, tag):
 		try:
@@ -86,6 +76,3 @@ class mainCanvas:
 	
 	def get_bbox(self, canvasID):
 		return self.__board.coords(canvasID)
-
-	def set_origin(self, origin):
-		self.__origin = origin	

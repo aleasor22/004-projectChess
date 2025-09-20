@@ -11,18 +11,40 @@ class Move():
 
 		self.__select = SELECT(chessObject)
 		self.__currPiece = None
+		self.__originLoc = None
+
+		self.noActivePrompt = True
 				
 
 	def selectPiece(self, mouseLocation):
 		print(f"Mouse clicked at: {mouseLocation}")
+		self.__originLoc = mouseLocation
 		position = self.__chess.get_nwCoord(mouseLocation)
-		self.__chess.set_origin(mouseLocation)
 		self.__select.removeImage()
 		self.__select.placeImage(position[0], position[1], mouseLocation)
 		self.__currPiece = self.__place.get_piece(tagOrLocation=mouseLocation) 
+		# self.__currPiece.availableMoves()
+		print(f"Piece: {self.__currPiece.myID}, Can Move Here: {self.__currPiece.canMoveHere}")
 		return self.__currPiece
 		
 
 	def movePiece(self, mouseLocation):
 		self.__place.place(self.__currPiece, mouseLocation)
+		self.__chess.MATRIX.updatePieceMatrix(self.__originLoc, mouseLocation)
+		self.__place.findNextMove()
 
+
+	## Used to Force Move by Terminal Inputs
+	##NOTE: Scrapping this idea till further notice
+	##		Will need to have a list of move IDs, to know which piece moves where, and how. 
+	##		EX: Qf5 or KNxd3 or e5 known as a pawn move
+	def forceMove(self, ):
+		userIn = str(input("Make Your Move \n\t>>"))
+
+		if self.__chess.MATRIX.foundInMatrix(userIn):
+			# index_A, index_B = self.__chess.MATRIX.findMatrixIndex(userIn)
+			# posX, posY = self.__chess.get_nwCoord(userIn)
+			self.__place.place(self.__place.get_piece(userIn), userIn)
+
+		else:
+			print("Not a move - Try Again")

@@ -21,7 +21,8 @@ class imageWidget:
 		##Movement Logic
 		self.canMoveHere = []
 		self.moveSet = set()
-		self.myMatrix = chess.MATRIX.get_matrix()
+		self.myGlobalMatrix = chess.MATRIX.get_matrix("Global")
+		self.myPieceMatrix = chess.MATRIX.get_matrix("Piece")
 
 		## Image Data (Local)
 		self._imgLocation = None

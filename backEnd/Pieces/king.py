@@ -19,8 +19,10 @@ class KING(imageWidget):
 			self.placeImage(pos[0], pos[1], tag)
 
 	def availableMoves(self, ):
+		# print(f"{self.myTeam}-{self.myID}'s Moves are being calculated")
 		##Rests
 		index_A, index_B = self._chessObject.MATRIX.findMatrixIndex(self.locationID)
+		self.canMoveHere = []
 		self.moveSet = set()
 
 		for i in range(-1, 2):
@@ -29,11 +31,12 @@ class KING(imageWidget):
 				try:
 					if (index_A+i) < 0 or (index_B+j) < 0:
 						raise IndexError("Less than 0")
-					self.moveSet.add(self.myMatrix[index_A+i][index_B+j])
+					self.moveSet.add(self.myGlobalMatrix[index_A+i][index_B+j])
 				except IndexError as e:
 					# print(e)
 					continue
 
+		print("Moves Calulated:", self.canMoveHere)
 		self.setToList()
 
 

@@ -20,6 +20,7 @@ class KNIGHT(imageWidget):
 			self.placeImage(pos[0], pos[1], tag)
 
 	def availableMoves(self, ):
+		# print(f"{self.myTeam}-{self.myID}'s Moves are being calculated")
 		##Resets
 		self.canMoveHere = []
 		self.moveSet = set()
@@ -39,14 +40,14 @@ class KNIGHT(imageWidget):
 					elif (i==0 and j!=0):
 						raise IndexError
 					else:
-						# print(self.myMatrix[index_A+j][index_B+i], end=" ")
-						self.moveSet.add(self.myMatrix[index_A+j][index_B+i])
+						# print(self.myGlobalMatrix[index_A+j][index_B+i], end=" ")
+						self.moveSet.add(self.myGlobalMatrix[index_A+j][index_B+i])
 				except IndexError:
 					# print("**", end=" ")
 					continue
 			# print()
 
-		print(self.moveSet)
+		# print("Moves Calculated:", self.canMoveHere)
 		self.setToList()
 				
 

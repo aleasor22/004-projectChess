@@ -46,6 +46,7 @@ PLACE.createPieces("QUEEN", 1, "black")
 PLACE.createPieces("KING", 1, "black")
 PLACE.placePieces("black")
 
+# CHESS.MATRIX.printMyPieceMatrix()
 
 ##-------INITIAL RUNTIME DEBUGGING EVENTS-------##
 if debugActive:
@@ -63,6 +64,7 @@ def chessLoop():
 	##Bind All events
 	INPUTS.bindEvents()
 	
+	# MOVE.forceMove() ##Retired method, May Remove
 	
 	CHESS.get_mainApp().after(1000, chessLoop)
 	

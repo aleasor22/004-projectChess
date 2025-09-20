@@ -20,14 +20,15 @@ class BISHOP(imageWidget):
 			self.createImage()
 			self.placeImage(pos[0], pos[1], tag)
 
-	def availableMoves(self, ):
+	def availableMoves(self):
+		# print(f"{self.myTeam}-{self.myID}'s Moves are being calculated")
 		##Resets List
 		self.canMoveHere = []
 		self.moveSet = set()
 
 		##Local Variables
 		index = self._chessObject.MATRIX.findMatrixIndex(self.locationID)
-		# print(f"Index= {index} & Location= {self.myMatrix[index[0]][index[1]]}")
+		# print(f"Index= {index} & Location= {self.myGlobalMatrix[index[0]][index[1]]}")
 		i = -1
 		j = 0
 
@@ -36,18 +37,18 @@ class BISHOP(imageWidget):
 			try:
 				if i <= 7:
 					if (index[0]+i) <=7:
-						# print(f"i:{i}={self.myMatrix[index[0]+i][index[1]+i]}", end=" ")
-						self.moveSet.add(self.myMatrix[index[0]+i][index[1]+i])
+						# print(f"i:{i}={self.myGlobalMatrix[index[0]+i][index[1]+i]}", end=" ")
+						self.moveSet.add(self.myGlobalMatrix[index[0]+i][index[1]+i])
 					if (index[0]-i) >= 0:
-						# print(f"i:{i}={self.myMatrix[index[0]-i][index[1]+i]}", end=" ")
-						self.moveSet.add(self.myMatrix[index[0]-i][index[1]+i])
+						# print(f"i:{i}={self.myGlobalMatrix[index[0]-i][index[1]+i]}", end=" ")
+						self.moveSet.add(self.myGlobalMatrix[index[0]-i][index[1]+i])
 				elif i > 7:
 					if (index[0]+j) <= 7:
-						# print(f"j:{j}={self.myMatrix[index[0]+j][index[1]-j]}", end=" ")
-						self.moveSet.add(self.myMatrix[index[0]+j][index[1]-j])
+						# print(f"j:{j}={self.myGlobalMatrix[index[0]+j][index[1]-j]}", end=" ")
+						self.moveSet.add(self.myGlobalMatrix[index[0]+j][index[1]-j])
 					if (index[0]-j) >= 0:
-						# print(f"j:{j}={self.myMatrix[index[0]-j][index[1]-j]}", end=" ")
-						self.moveSet.add(self.myMatrix[index[0]-j][index[1]-j])
+						# print(f"j:{j}={self.myGlobalMatrix[index[0]-j][index[1]-j]}", end=" ")
+						self.moveSet.add(self.myGlobalMatrix[index[0]-j][index[1]-j])
 					j += 1
 					
 			except IndexError:
@@ -55,6 +56,7 @@ class BISHOP(imageWidget):
 				# print(f"colummn: {index[0]-i}, row: {index[1]+i}")
 				continue
 		
+		print("Moves Calulated:", self.canMoveHere)
 		self.setToList()
 				
 			

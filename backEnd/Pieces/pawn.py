@@ -20,7 +20,8 @@ class PAWN(imageWidget):
 
 
 	def availableMoves(self):
-		##New Call Recets
+		# print(f"{self.myTeam}-{self.myID} Moves are being calculated")
+		##New Call Resets
 		currRow = self.locationID[1]
 		self.canMoveHere = []
 		self.moveSet = set()
@@ -33,10 +34,10 @@ class PAWN(imageWidget):
 				try:
 					if index_A+col < 0:
 						raise IndexError
-					self.moveSet.add(self.myMatrix[index_A+col][index_B+1])
+					self.moveSet.add(self.myGlobalMatrix[index_A+col][index_B+1])
 					if col == 0 and currRow == "2":
-						print(self.myMatrix[index_A+col][index_B+2])
-						self.moveSet.add(self.myMatrix[index_A+col][index_B+2])
+						# print(self.myGlobalMatrix[index_A+col][index_B+2])
+						self.moveSet.add(self.myGlobalMatrix[index_A+col][index_B+2])
 				except IndexError:
 					continue
 		if "Black" in self._imgLocation:
@@ -44,14 +45,14 @@ class PAWN(imageWidget):
 				try:
 					if index_A+col < 0:
 						raise IndexError
-					self.moveSet.add(self.myMatrix[index_A+col][index_B-1])
+					self.moveSet.add(self.myGlobalMatrix[index_A+col][index_B-1])
 					if col == 0 and currRow == "7":
-						print(self.myMatrix[index_A+col][index_B-2])
-						self.moveSet.add(self.myMatrix[index_A+col][index_B-2])
+						# print(self.myGlobalMatrix[index_A+col][index_B-2])
+						self.moveSet.add(self.myGlobalMatrix[index_A+col][index_B-2])
 				except IndexError:
 					continue	
 		self.setToList()
-			
+		# print("Moves Calculated:", self.canMoveHere)
 
 	def set_team(self, color):
 		if color == "black":
