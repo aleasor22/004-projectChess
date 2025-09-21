@@ -29,7 +29,7 @@ class BISHOP(imageWidget):
 		##Local Variables
 		index_A, index_B = self._chessObject.MATRIX.findMatrixIndex(self.locationID)
 		
-		print("North East:", end=" ")
+		# print("North East:", end=" ")
 		for northEast in range(8):
 			try:
 				if index_B-northEast < 0:
@@ -39,13 +39,13 @@ class BISHOP(imageWidget):
 				elif self.myPieceMatrix[index_A+northEast][index_B-northEast] != "**":
 					raise IndexError
 				else:
-					print(self.myGlobalMatrix[index_A+northEast][index_B-northEast], end=" ")
+					# print(self.myGlobalMatrix[index_A+northEast][index_B-northEast], end=" ")
 					self.moveSet.add(self.myGlobalMatrix[index_A+northEast][index_B-northEast])
 			except IndexError as e:
-				print(e)
+				# print(e)
 				break
 
-		print("\nNorth West:", end=" ")
+		# print("\nNorth West:", end=" ")
 		for northWest in range(8):
 			try:
 				if index_A-northWest < 0 or index_B-northWest < 0:
@@ -54,25 +54,25 @@ class BISHOP(imageWidget):
 					self.moveSet.add(self.myGlobalMatrix[index_A+northWest][index_B-northWest])
 				elif self.myPieceMatrix[index_A-northWest][index_B-northWest] != "**":
 					raise IndexError
-				print(self.myGlobalMatrix[index_A-northWest][index_B-northWest], end=" ")
+				# print(self.myGlobalMatrix[index_A-northWest][index_B-northWest], end=" ")
 				self.moveSet.add(self.myGlobalMatrix[index_A-northWest][index_B-northWest])
 			except IndexError as e:
-				print(e)
+				# print(e)
 				break
 			
-		print("\nSouth East:", end=" ")
+		# print("\nSouth East:", end=" ")
 		for southEast in range(8):
 			try:
 				if southEast == 0:
 					self.moveSet.add(self.myGlobalMatrix[index_A+southEast][index_B+southEast])
 				elif self.myPieceMatrix[index_A+southEast][index_B+southEast] != "**":
 					raise IndexError
-				print(self.myGlobalMatrix[index_A+southEast][index_B+southEast], end=" ")
+				# print(self.myGlobalMatrix[index_A+southEast][index_B+southEast], end=" ")
 				self.moveSet.add(self.myGlobalMatrix[index_A+southEast][index_B+southEast])
 			except IndexError as e:
-				print(e)
+				# print(e)
 				break
-		print("\nSouth West:", end=" ")
+		# print("\nSouth West:", end=" ")
 		for southWest in range(8):
 			try:
 				if index_A-southWest < 0:
@@ -81,10 +81,10 @@ class BISHOP(imageWidget):
 					self.moveSet.add(self.myGlobalMatrix[index_A-southWest][index_B+southWest])
 				elif self.myPieceMatrix[index_A-southWest][index_B+southWest] != "**":
 					raise IndexError
-				print(self.myGlobalMatrix[index_A-southWest][index_B+southWest], end=" ")
+				# print(self.myGlobalMatrix[index_A-southWest][index_B+southWest], end=" ")
 				self.moveSet.add(self.myGlobalMatrix[index_A-southWest][index_B+southWest])
 			except IndexError as e:
-				print(e)
+				# print(e)
 				break
 		
 		## OLD METHOD

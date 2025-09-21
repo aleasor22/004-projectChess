@@ -32,7 +32,7 @@ class Move():
 	def movePiece(self, mouseLocation):
 		self.__place.place(self.__currPiece, mouseLocation)
 		self.__chess.MATRIX.updatePieceMatrix(self.__originLoc, mouseLocation)
-		self.__place.findNextMove()
+		# self.__place.findNextMove()
 
 
 	## Used to Force Move by Terminal Inputs

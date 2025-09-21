@@ -41,6 +41,8 @@ class KNIGHT(imageWidget):
 						raise IndexError
 					else:
 						# print(self.myGlobalMatrix[index_A+j][index_B+i], end=" ")
+						if self.myPieceMatrix[index_A+j][index_B+i] != "**":
+							raise IndexError
 						self.moveSet.add(self.myGlobalMatrix[index_A+j][index_B+i])
 				except IndexError:
 					# print("**", end=" ")

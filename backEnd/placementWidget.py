@@ -24,8 +24,6 @@ class placements():
 				self.blackPieces[tag].myID = tag
 				self.blackPieces[tag].myTeam = "black"
 
-
-
 	def placePieces(self, team):
 		##Select Team
 		if team == "white":
@@ -56,11 +54,27 @@ class placements():
 				pawnCount += 1
 
 	def place(self, pieceObject, location):
-		position = self.__chessGame.get_nwCoord(location)
-		pieceObject.placeImage(position[0], position[1], location)
+		pos = self.__chessGame.get_nwCoord(location)
+		pieceObject.placeImage(pos[0], pos[1], location)
 		pieceObject.availableMoves()
-		# self.findNextMove() ##Refresh All available moves
-		print(f"Next Moves: {pieceObject.canMoveHere}")
+
+	def canNotLose(self, team, location):
+		# print(team)
+		if team == "white":
+			for object in self.blackPieces.values():
+				if location in object.canMoveHere:
+					# print("You would lose", location, f"because of {object.myID}")
+					return False
+			return True
+		if team == "black":
+			for object in self.whitePieces.values():
+				if location in object.canMoveHere:
+					# print("You would lose", location)
+					return False
+			return True
+
+	def capturePiece(self, ):
+		pass
 
 	def findNextMove(self, debugActive=False):
 		try:

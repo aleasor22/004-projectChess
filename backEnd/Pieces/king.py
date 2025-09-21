@@ -27,16 +27,17 @@ class KING(imageWidget):
 
 		for i in range(-1, 2):
 			for j in range(-1, 2):
-				# print(f"[{i}][{j}]")
 				try:
 					if (index_A+i) < 0 or (index_B+j) < 0:
 						raise IndexError("Less than 0")
+					if self.myPieceMatrix[index_A+i][index_B+j] != "**":
+						raise IndexError("Spot Used")
 					self.moveSet.add(self.myGlobalMatrix[index_A+i][index_B+j])
 				except IndexError as e:
 					# print(e)
 					continue
 
-		print("Moves Calulated:", self.canMoveHere)
+		# print("Moves Calulated:", self.canMoveHere)
 		self.setToList()
 
 
