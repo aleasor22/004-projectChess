@@ -34,6 +34,13 @@ class Move():
 		self.__chess.MATRIX.updatePieceMatrix(self.__originLoc, mouseLocation)
 		# self.__place.findNextMove()
 
+	def get_piece(self, pieceAtLocation):
+		return self.__place.get_piece(pieceAtLocation)
+	
+	def isLocationTaken(self, underPiece):
+		return self.__place.isOpponent(self.__currPiece, underPiece)
+	
+
 
 	## Used to Force Move by Terminal Inputs
 	##NOTE: Scrapping this idea till further notice

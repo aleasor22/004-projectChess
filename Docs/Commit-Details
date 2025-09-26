@@ -1,18 +1,18 @@
 Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
 
 
-Current Commit (#10 [v0.0.565]):
+Current Commit (#11 [v0.0.566]): 
+	1. Start of Class Cleanup Branch.
+		a. Goals of this cleanup:
+			i.		Remove Movement.py
+			ii.		Clean up comms between inputsWidget & placementWidget
+			iii.	Clean up imageWidget - Should only have image related logic
+
+
+Last Commit (#10 [v0.0.565]):
 	1. All Pieces movement based on Chess Rules, except:
 		a. The Pawn which can't "an passant" and will move diagonally on any whim. 
 		b. King can still jump into danger.
 	2. Next Goals:
 		a. Logic for capturing pieces
 		b. Clean-up of project classes
-
-Last Commit (#9 [v0.0.564]):
-	1. Bishop and Queen move detection logic now account for active/inactive squares.
-		a. Still doesn't know what/who is in an active square.
-	2. Created this document to summarize changes between commits
-	3. Pieces to change move detection based on active pieces
-		a. [Knight, King, Pawn]
-	4. After the remaining pieces have move logic adjusted. The goal to add piece capturing. This will be done by determining who is in a square, which team they're on, add the square to movement options if the piece's on another team

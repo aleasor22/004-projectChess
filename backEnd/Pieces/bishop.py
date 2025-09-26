@@ -87,37 +87,7 @@ class BISHOP(imageWidget):
 				# print(e)
 				break
 		
-		## OLD METHOD
-		# i = -1
-		# j = 0
-
-		# while i < 16:
-		# 	i += 1
-		# 	try:
-		# 		if i <= 7:
-		# 			if (index[0]+i) <=7:
-		# 				# print(f"i:{i}={self.myGlobalMatrix[index[0]+i][index[1]+i]}", end=" ")
-		# 				self.moveSet.add(self.myGlobalMatrix[index[0]+i][index[1]+i])
-		# 			if (index[0]-i) >= 0:
-		# 				# print(f"i:{i}={self.myGlobalMatrix[index[0]-i][index[1]+i]}", end=" ")
-		# 				self.moveSet.add(self.myGlobalMatrix[index[0]-i][index[1]+i])
-		# 		elif i > 7:
-		# 			if (index[0]+j) <= 7:
-		# 				# print(f"j:{j}={self.myGlobalMatrix[index[0]+j][index[1]-j]}", end=" ")
-		# 				self.moveSet.add(self.myGlobalMatrix[index[0]+j][index[1]-j])
-		# 			if (index[0]-j) >= 0:
-		# 				# print(f"j:{j}={self.myGlobalMatrix[index[0]-j][index[1]-j]}", end=" ")
-		# 				self.moveSet.add(self.myGlobalMatrix[index[0]-j][index[1]-j])
-		# 			j += 1
-					
-		# 	except IndexError:
-		# 		# print(f"colummn: {index[0]+i}, row: {index[1]+i}", end=" | ")
-		# 		# print(f"colummn: {index[0]-i}, row: {index[1]+i}")
-		# 		continue
-		self.setToList()
-		# print("\nMoves Calulated:", self.canMoveHere)
-		
-				
+		self.setToList()				
 			
 
 	def set_team(self, color):

@@ -96,6 +96,14 @@ class placements():
 			print(f"Caught Error:, {error} \n\t @findNextMove()")
 		# pass
 
+	def isOpponent(self, currPiece, underPiece):
+		print(f"Curr Piece: {currPiece.myTeam}\nCaptured Piece: {underPiece.myTeam}")
+		
+		
+		
+		pass
+
+
 	def get_piece(self, tagOrLocation=None):
 		if self.__chessGame.MATRIX.foundInMatrix(tagOrLocation):
 			for key in self.whitePieces.keys():

@@ -52,6 +52,16 @@ class Inputs():
 				self.clickCounter += 1
 		elif self.clickCounter == 1: ##Attemps to place Piece
 			# print("Second Click") ## Debuggin
+			print(f"Place here? {self.currMouseLocation}")
+			try:				
+				print(f"Selected Piece: {self.selectedPiece.myID} \nRemove {self.__move.get_piece(self.currMouseLocation).myID}")
+				isPieceCaptured = self.__move.get_piece(self.currMouseLocation).myID
+				self.__move.isLocationTaken(isPieceCaptured)
+				pass
+			except AttributeError:
+				print("Free Space")
+			
+			
 			self.aPieceIsSelected = False
 			if self.canPlace:
 				self.__move.movePiece(self.currMouseLocation)
