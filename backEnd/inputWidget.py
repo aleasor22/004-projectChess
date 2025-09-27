@@ -3,16 +3,14 @@ from pynput import keyboard
 from Images import * #imports Image file locations
 import pygetwindow
 
-import tkinter
-import sys
-import traceback
+import tkinter ##Used for Debugging
 
 class Inputs():
 	def __init__(self, chessObject, movement):
-		self.__listeningStarted =  False
+		self.__listeningStarted =  False ##Is this needed
 		self.__chessGame = chessObject
 		self.__render = chessObject.get_canvas()
-		self.__move = movement
+		self.__place = movement
 		
 		self.applicationActive = False
 		self.currMouseLocation = None
@@ -43,7 +41,7 @@ class Inputs():
 	def onMousePress(self, event):
 		# print(f"Mouse clicked at: {self.currMouseLocation}")
 		if self.clickCounter == 0: ##Piece gets selected
-			self.selectedPiece = self.__move.selectPiece(self.currMouseLocation)
+			self.selectedPiece = self.__place.selectPiece(self.currMouseLocation)
 			# print("first Click") ## Debuggin
 			if self.selectedPiece != None:
 				# print(f"Canvas ID: {self.selectedPiece.canvasID}")
@@ -54,9 +52,9 @@ class Inputs():
 			# print("Second Click") ## Debuggin
 			print(f"Place here? {self.currMouseLocation}")
 			try:				
-				print(f"Selected Piece: {self.selectedPiece.myID} \nRemove {self.__move.get_piece(self.currMouseLocation).myID}")
-				isPieceCaptured = self.__move.get_piece(self.currMouseLocation).myID
-				self.__move.isLocationTaken(isPieceCaptured)
+				print(f"Selected Piece: {self.selectedPiece.myID} \nRemove {self.__place.get_piece(self.currMouseLocation).myID}")
+				isPieceCaptured = self.__place.get_piece(self.currMouseLocation).myID
+				self.__place.isLocationTaken(isPieceCaptured)
 				pass
 			except AttributeError:
 				print("Free Space")
@@ -64,9 +62,9 @@ class Inputs():
 			
 			self.aPieceIsSelected = False
 			if self.canPlace:
-				self.__move.movePiece(self.currMouseLocation)
+				self.__place.movePiece(self.currMouseLocation)
 			else:
-				self.__move.movePiece(self.originalLocaiton)
+				self.__place.movePiece(self.originalLocaiton)
 			self.__render.delete(self.lastIMG)
 			self.clickCounter = 0
 		else:
@@ -75,7 +73,6 @@ class Inputs():
 		
 
 	def findMyMouse(self, event):
-		# print(event.x, event.y)
 		try: 
 			matchingCanvasIDs = None
 			for bbox in self.__chessGame.bboxTileList:
@@ -86,22 +83,17 @@ class Inputs():
 
 			self.currMouseLocation = self.__render.gettags(matchingCanvasIDs)[0] ##Saves current mouse location
 			if self.currMouseLocation != self.oldMouseLocation:
-				# print(f"My Mouse Position: {self.currMouseLocation}")
 				self.oldMouseLocation = self.currMouseLocation ##Saves original Mouse location
 				
 			if self.aPieceIsSelected:
 				if self.currMouseLocation in self.selectedPiece.canMoveHere:
 					self.canPlace = True
-					# print(f"Piece Can Move here: {self.currMouseLocation}")
 				else:
 					self.canPlace = False
-					# print(f"Piece Can't Move here: {self.currMouseLocation}")
-				pos = self.__chessGame.get_nwCoord(matchingCanvasIDs) ##returns top left coords of object @"matchingCanvasIDs"
-
+				## Visually shows the piece to follow the mouse
+				pos = self.__chessGame.get_nwCoord(matchingCanvasIDs)
 				self.__render.coords(self.selectedPiece.canvasID, pos[0], pos[1])
 				self.lastIMG = self.selectedPiece.canvasID
-			
-
 
 		except tkinter.TclError as error:
 			##currently triggers when perfectly inbetween tiles
@@ -110,24 +102,18 @@ class Inputs():
 
 	##Logic for Keyboard inputs##
 	def onPress(self, key):
-		pass
 		# try:
 		# 	print('alphanumeric key {0} pressed'.format(key.char))
 		# except AttributeError:
 		# 	print('special key {0} pressed'.format(key))
+		pass
 
+	##Logic to Track Keyboard Inputs
 	def onRelease(self, key):
-		##kills program based on this if statement
 		try:
-			
-			if key.char == 'q':
-				# Stop listener
-				self.stopListening()
-				# self.unBindAllEvents() ##NOTE: May be needed later
-				self.__render.quit()
-			# print('alphanumeric key {} released'.format(key.char))
-				# return False
+			print(f'alphanumeric key {key.char} released')
 		except AttributeError:
+			##Kills program when the "escape" key is pressed
 			if key == keyboard.Key.esc:
 				self.stopListening()
 				# self.unBindAllEvents() ##NOTE: May be needed later

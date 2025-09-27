@@ -36,7 +36,7 @@ class imageWidget:
 		self._imageTK = ImageTk.PhotoImage(self._imagePIL)
 
 
-	def placeImage(self, x, y, location):
+	def placeToRender(self, x, y, location):
 		self.locationID = location
 		self.canvasID = self._render.create_image(
 			x, y, tag=(self.locationID, self.myID, self.pieceID), image=self._imageTK, anchor="nw"

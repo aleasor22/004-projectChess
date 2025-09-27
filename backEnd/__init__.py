@@ -4,4 +4,3 @@ from .imageWidget import imageWidget
 from .canvasWidget import mainCanvas
 from .inputWidget import Inputs
 from .boardMatrix import MATRIX
-from .movement import Move

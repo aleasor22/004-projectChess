@@ -4,79 +4,59 @@ from .Pieces import *
 
 
 class placements():
-	def __init__(self, chessObject):
-		self.__chessGame = chessObject
-		self.__render = chessObject.get_canvas()
-		self.__pieceList = [ROOK(chessObject), KNIGHT(chessObject), BISHOP(chessObject), KING(chessObject), QUEEN(chessObject), PAWN(chessObject)]
+	def __init__(self, chess):
+		self.__chess = chess
+		self.__myGlobalMatrix = chess.MATRIX.get_matrix("Global")
+		self.backRow = ["ROOK", "KNIGHT", "BISHOP", "QUEEN", "KING", "BISHOP", "KNIGHT", "ROOK"]
 		self.whitePieces = {}
 		self.blackPieces = {}
 
 
 	def createPieces(self, pieceName, quantity, team):
 		for pieceNum in range(quantity):
-			tag = f"{pieceName}-{pieceNum}"
 			if team == "white":
+				tag = f"{pieceName}-W{pieceNum}"
 				self.whitePieces[tag] = self.get_object(pieceName)
 				self.whitePieces[tag].myID = tag
 				self.whitePieces[tag].myTeam = "white"
 			elif team == "black":
+				tag = f"{pieceName}-B{pieceNum}"
 				self.blackPieces[tag] = self.get_object(pieceName)
 				self.blackPieces[tag].myID = tag
 				self.blackPieces[tag].myTeam = "black"
 
-	def placePieces(self, team):
-		##Select Team
-		if team == "white":
-			teamDict = self.whitePieces
-			frontRow = 2
-			backRow = 1
-		elif team == "black":
-			teamDict = self.blackPieces
-			frontRow = 7
-			backRow = 8
-		
-		pawnCount = 0
-		columnNumber = 0
-		altColumnNum = 7
-		for key in teamDict.keys():
-			if "PAWN" not in key:
-				if "0" in key:
-					location = f"{self.__chessGame.MATRIX.get_columnIDs()[columnNumber]}{backRow}"
-					teamDict[key].setup(self.__chessGame.get_nwCoord(location), team, location)
-					columnNumber += 1
-				elif "1" in key:
-					location = f"{self.__chessGame.MATRIX.get_columnIDs()[altColumnNum]}{backRow}"
-					teamDict[key].setup(self.__chessGame.get_nwCoord(location), team, location)
-					altColumnNum -= 1
-			else:
-				location = f"{self.__chessGame.MATRIX.get_columnIDs()[pawnCount]}{frontRow}"
-				teamDict[f"PAWN-{pawnCount}"].setup(self.__chessGame.get_nwCoord(location), team, location)
-				pawnCount += 1
+	def placePieces(self):
+		for row in range(8):
+			for col in range(8):
+				location = self.__myGlobalMatrix[col][row]
+				if row == 0:
+					if col <= 4:
+						key = f"{self.backRow[col]}-W0"
+					elif col > 4:
+						key = f"{self.backRow[col]}-W1"
+					print(f"Piece Tag: {key}")
+					self.whitePieces[key].setup(self.__chess.get_nwCoord(location), "white", location)
+				elif row == 1:
+					self.whitePieces[f"PAWN-W{col}"].setup(self.__chess.get_nwCoord(location), location)
+				elif row == 6:
+					self.blackPieces[f"PAWN-B{col}"].setup(self.__chess.get_nwCoord(location), location)
+				elif row == 7:
+					if col <= 4:
+						key = f"{self.backRow[col]}-B0"
+					elif col > 4:
+						key = f"{self.backRow[col]}-B1"
+					print(f"Piece Tag: {key}")
+					self.blackPieces[key].setup(self.__chess.get_nwCoord(location), "black", location)
 
-	def place(self, pieceObject, location):
-		pos = self.__chessGame.get_nwCoord(location)
+	def movePiece(self, pieceObject, location):
+		pos = self.__chess.get_nwCoord(location)
 		pieceObject.placeImage(pos[0], pos[1], location)
 		pieceObject.availableMoves()
-
-	def canNotLose(self, team, location):
-		# print(team)
-		if team == "white":
-			for object in self.blackPieces.values():
-				if location in object.canMoveHere:
-					# print("You would lose", location, f"because of {object.myID}")
-					return False
-			return True
-		if team == "black":
-			for object in self.whitePieces.values():
-				if location in object.canMoveHere:
-					# print("You would lose", location)
-					return False
-			return True
 
 	def capturePiece(self, ):
 		pass
 
-	def findNextMove(self, debugActive=False):
+	def findNextMoves(self, debugActive=False):
 		try:
 			##Team White
 			for object in self.whitePieces.values():
@@ -104,34 +84,33 @@ class placements():
 		pass
 
 
-	def get_piece(self, tagOrLocation=None):
-		if self.__chessGame.MATRIX.foundInMatrix(tagOrLocation):
+	def get_piece(self, location=None):
+		if self.__chess.MATRIX.foundInMatrix(location):
 			for key in self.whitePieces.keys():
-				if self.whitePieces[key].locationID == tagOrLocation:
-					print(f"Found {self.whitePieces[key].myID} at {tagOrLocation}")
+				if self.whitePieces[key].locationID == location:
+					print(f"Found {self.whitePieces[key].myID} at {location}")
 					self.whitePieces[key].availableMoves()
 					return self.whitePieces[key] 
 			for key in self.blackPieces.keys():
-				if self.blackPieces[key].locationID == tagOrLocation:
-					print(f"Found {self.blackPieces[key].myID} at {tagOrLocation}")
+				if self.blackPieces[key].locationID == location:
+					print(f"Found {self.blackPieces[key].myID} at {location}")
 					self.blackPieces[key].availableMoves()
 					return self.blackPieces[key] 
 		else:
-			print(f"Incorrect tagOrTile: {tagOrLocation}")
+			print(f"Incorrect Location: {location}")
 
-	## 0=Rook, 1=KNIGHT, 2=BISHOP, 3=KING, 4=QUEEN, 5=PAWN
 	def get_object(self, title):
-		if title == self.__pieceList[0].pieceID: ##ROOK
-			return ROOK(self.__chessGame)
-		elif title == self.__pieceList[1].pieceID:
-			return KNIGHT(self.__chessGame)
-		elif title == self.__pieceList[2].pieceID:
-			return BISHOP(self.__chessGame)
-		elif title == self.__pieceList[3].pieceID:
-			return KING(self.__chessGame)
-		elif title == self.__pieceList[4].pieceID:
-			return QUEEN(self.__chessGame)
-		elif title == self.__pieceList[5].pieceID:
-			return PAWN(self.__chessGame)
+		if title == "ROOK": ##ROOK
+			return ROOK(self.__chess)
+		elif title == "KNIGHT": ##KNIGHT
+			return KNIGHT(self.__chess)
+		elif title == "BISHOP": ##BISHOP
+			return BISHOP(self.__chess)
+		elif title == "KING": ##KING
+			return KING(self.__chess)
+		elif title == "QUEEN": ##QUEEN
+			return QUEEN(self.__chess)
+		elif title == "PAWN": ##PAWN
+			return PAWN(self.__chess)
 		else:
 			print(f"Incorrect Piece Name: {title} \n")

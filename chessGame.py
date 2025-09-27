@@ -22,8 +22,7 @@ BOARD = CHESS.get_canvas()
 
 ##CLASS CALLING
 PLACE = placements(CHESS)
-MOVE = Move(CHESS, PLACE)
-INPUTS = Inputs(CHESS, MOVE)
+INPUTS = Inputs(CHESS, PLACE)
 
 
 
@@ -35,7 +34,6 @@ PLACE.createPieces("KNIGHT", 2, "white")
 PLACE.createPieces("BISHOP", 2, "white")
 PLACE.createPieces("QUEEN", 1, "white")
 PLACE.createPieces("KING", 1, "white")
-PLACE.placePieces("white")
 
 ##--BLACK PIECES--##
 PLACE.createPieces("PAWN", 8, "black")
@@ -44,7 +42,8 @@ PLACE.createPieces("KNIGHT", 2, "black")
 PLACE.createPieces("BISHOP", 2, "black")
 PLACE.createPieces("QUEEN", 1, "black")
 PLACE.createPieces("KING", 1, "black")
-PLACE.placePieces("black")
+
+PLACE.placePieces()
 
 # CHESS.MATRIX.printMyPieceMatrix()
 

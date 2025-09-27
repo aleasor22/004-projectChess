@@ -13,8 +13,8 @@ class PAWN(imageWidget):
 		##List of Moves
 		self.canMoveHere = []
 
-	def setup(self, pos, color, tag):
-		self.set_team(color)
+	def setup(self, pos, tag):
+		self.set_team()
 		self.createImage()
 		self.placeImage(pos[0], pos[1], tag)
 
@@ -54,10 +54,10 @@ class PAWN(imageWidget):
 		self.setToList()
 		# print("Moves Calculated:", self.canMoveHere)
 
-	def set_team(self, color):
-		if color == "black":
+	def set_team(self):
+		if "-B" in self.myID:
 			self._imgLocation = "Images/BlackPawn.png"
-		elif color == "white":
+		if "-W" in self.myID:
 			self._imgLocation = "Images/WhitePawn.png"
 		else:
 			print("Incorrect team selected @PAWN.set_team()")
