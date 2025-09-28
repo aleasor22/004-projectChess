@@ -6,7 +6,7 @@ from .boardMatrix import MATRIX
 class mainCanvas:
 	def __init__(self):
 		self.__chessApp = tkinter.Tk()
-		self.__chessApp.title("Chess.leasor  [v0.0.6]")
+		self.__chessApp.title("Chess.leasor  [v0.0.67]")
 		self.__board = None ##Default to None
 		self.boardSize = 1024
 
@@ -22,7 +22,6 @@ class mainCanvas:
 		##Generate the canvas object
 		self.__board = tkinter.Canvas(self.__chessApp, width=self.boardSize, height=self.boardSize)
 		self.__board.grid()
-		# self.board.grid(row=0, column=0, rowspan=self.boardSize, columnspan=self.boardSize)
 		self.__board.grid_propagate(False)
 	
 	def gridTagList(self):

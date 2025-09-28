@@ -58,6 +58,13 @@ class MATRIX():
 				if self.__myGlobalMatrix[j][i] == location:
 					return True
 		return False
+
+	def foundInPieceMatrix(self, location):
+		for i in range(8):
+			for j in range(8):
+				if self.__myPieceMatrix[j][i] == location:
+					return True
+		return False
 	
 	def printMyGlobalMatrix(self, easyToRead=True): ##For Debugging Purposes
 		if easyToRead:

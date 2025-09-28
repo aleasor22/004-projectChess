@@ -8,9 +8,8 @@ from Images import *
 class PAWN(PIECES):
 	def __init__(self, chess):
 		PIECES.__init__(self, chess)
+		self.piecePoints = 1
 		
-		##List of Moves
-		self.canMoveHere = []
 
 	def setup(self, tag):
 		self.set_team()
@@ -19,7 +18,6 @@ class PAWN(PIECES):
 
 
 	def availableMoves(self):
-		# print(f"{self.myTeam}-{self.myID} Moves are being calculated")
 		##New Call Resets
 		currRow = self.locationID[1]
 		self.canMoveHere = []
@@ -29,29 +27,36 @@ class PAWN(PIECES):
 		index_A, index_B = self._chess.MATRIX.findMatrixIndex(self.locationID)
 
 		if "White" in self._imgLocation:
-			for col in range(-1, 2):
-				try:
-					if index_A+col < 0:
-						raise IndexError
-					self.moveSet.add(self.myGlobalMatrix[index_A+col][index_B+1])
-					if col == 0 and currRow == "2":
-						# print(self.myGlobalMatrix[index_A+col][index_B+2])
-						self.moveSet.add(self.myGlobalMatrix[index_A+col][index_B+2])
-				except IndexError:
-					continue
+			try: #Handles General Pawn Movement
+				if self.myPieceMatrix[index_A][index_B+1] == "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A][index_B+1])
+				if currRow == "2" and self.myPieceMatrix[index_A][index_B+2] == "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A][index_B+2])
+			except IndexError:
+				pass
+			try: ##Handles Pawn Attacks
+				if self.myPieceMatrix[index_A-1][index_B+1] != "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A-1][index_B+1])
+				if self.myPieceMatrix[index_A+1][index_B+1] != "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A+1][index_B+1])
+			except IndexError:
+				pass
 		if "Black" in self._imgLocation:
-			for col in range(-1, 2):
-				try:
-					if index_A+col < 0:
-						raise IndexError
-					self.moveSet.add(self.myGlobalMatrix[index_A+col][index_B-1])
-					if col == 0 and currRow == "7":
-						# print(self.myGlobalMatrix[index_A+col][index_B-2])
-						self.moveSet.add(self.myGlobalMatrix[index_A+col][index_B-2])
-				except IndexError:
-					continue	
+			try: #Handles General Pawn Movement
+				if self.myPieceMatrix[index_A][index_B-1] == "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A][index_B-1])
+					if currRow == "7" and self.myPieceMatrix[index_A][index_B-2] == "**":
+						self.moveSet.add(self.myGlobalMatrix[index_A][index_B-2])
+			except IndexError:
+				pass
+			try: ##Handles Pawn Attacks
+				if self.myPieceMatrix[index_A-1][index_B-1] != "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A-1][index_B-1])
+				if self.myPieceMatrix[index_A+1][index_B-1] != "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A+1][index_B-1])
+			except IndexError:
+				pass
 		self.setToList()
-		# print("Moves Calculated:", self.canMoveHere)
 
 	def set_team(self):
 		if "-B" in self.myID:

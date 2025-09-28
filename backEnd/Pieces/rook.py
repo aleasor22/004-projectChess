@@ -8,6 +8,7 @@ from Images import *
 class ROOK(PIECES):
 	def __init__(self, canvas):
 		PIECES.__init__(self, canvas)
+		self.piecePoints = 5
 		
 		##List of Moves
 		self.canMoveHere = []

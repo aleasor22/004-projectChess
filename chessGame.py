@@ -45,8 +45,6 @@ PLACE.createPieces("KING", 1, "black")
 
 PLACE.placePieces()
 
-# CHESS.MATRIX.printMyPieceMatrix()
-
 ##-------INITIAL RUNTIME DEBUGGING EVENTS-------##
 if debugActive:
 	CHESS.gridTagList() ##Creates a list of all tile IDs, when debugActive=True it displays those tile IDs to screen
@@ -62,8 +60,6 @@ def chessLoop():
 		INPUTS.applicationActive = False
 	##Bind All events
 	INPUTS.bindEvents()
-	
-	# MOVE.forceMove() ##Retired method, May Remove
 	
 	CHESS.get_mainApp().after(1000, chessLoop)
 	

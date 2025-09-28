@@ -18,7 +18,6 @@ class KING(PIECES):
 			self.placeImage(tag)
 
 	def availableMoves(self, ):
-		# print(f"{self.myTeam}-{self.myID}'s Moves are being calculated")
 		##Rests
 		index_A, index_B = self._chess.MATRIX.findMatrixIndex(self.locationID)
 		self.canMoveHere = []
@@ -35,8 +34,6 @@ class KING(PIECES):
 				except IndexError as e:
 					# print(e)
 					continue
-
-		# print("Moves Calulated:", self.canMoveHere)
 		self.setToList()
 
 

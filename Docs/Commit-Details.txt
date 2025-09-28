@@ -1,22 +1,17 @@
 Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
 
 
-Current Commit (#14 [v0.0.6]):
+Current Commit #15 - [v0.0.67]:
+	1. Cleaned up various commented code
+	2. Cleaned up PAWN.availableMoves()
+	3. capturePiece logic initial stage is completed
+		a. Pawns can now capture Pieces
+		b. Other piece cannot because self.canMoveHere logic still avoids all active locaitons
+	3. Next Goals:
+		a. Allow other pieces to move to open & opponent locations
+			i. Verify the capturePiece method still works for other pieces
+
+Last Commit #14 - [v0.0.6]:
 	1. Finished below goals. Logic that should be used by each piece,
 		but not image related will be added to PIECES class
 	2. Next Goal
-
-Last Commit (#13 [v0.0.57]):
-	1. Removed select.py
-	2. Cleaned up placementWidget Methods:
-		a. selectPiece
-		b. movePiece
-		c. findNextMove
-		d. get_piece
-	3. Cleaned up inputWidget Methods:
-		a. onMousePress
-		b. findMyMouse
-	4. Next Goals:
-		a. Change Piece Logic per commit #12 note.3 for each piece
-		c. Restructure class inheritance between imageWidget & Pieces
-			i. cleans up imageWidget of non image related functions

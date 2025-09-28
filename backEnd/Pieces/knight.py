@@ -8,6 +8,7 @@ from Images import *
 class KNIGHT(PIECES):
 	def __init__(self, canvas):
 		PIECES.__init__(self, canvas)
+		self.piecePoints = 3
 		
 		##List of Moves
 		self.canMoveHere = []
@@ -19,7 +20,6 @@ class KNIGHT(PIECES):
 			self.placeImage(tag)
 
 	def availableMoves(self, ):
-		# print(f"{self.myTeam}-{self.myID}'s Moves are being calculated")
 		##Resets
 		self.canMoveHere = []
 		self.moveSet = set()
@@ -39,16 +39,11 @@ class KNIGHT(PIECES):
 					elif (i==0 and j!=0):
 						raise IndexError
 					else:
-						# print(self.myGlobalMatrix[index_A+j][index_B+i], end=" ")
 						if self.myPieceMatrix[index_A+j][index_B+i] != "**":
 							raise IndexError
 						self.moveSet.add(self.myGlobalMatrix[index_A+j][index_B+i])
 				except IndexError:
-					# print("**", end=" ")
 					continue
-			# print()
-
-		# print("Moves Calculated:", self.canMoveHere)
 		self.setToList()
 				
 

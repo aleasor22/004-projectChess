@@ -9,22 +9,26 @@ class placements():
 		##Config Variables
 		self.__chess = chess
 		self.__myGlobalMatrix = chess.MATRIX.get_matrix("Global")
+		self.__myPieceMatrix = chess.MATRIX.get_matrix("Piece")
 		self.backRow = ["ROOK", "KNIGHT", "BISHOP", "QUEEN", "KING", "BISHOP", "KNIGHT", "ROOK"]
 		self.allPieces = {}
 
-		##Move Piece Variables
+		##Piece Selection marker
 		self.selectImg = IMAGE(chess)
 		self.selectImg.createImage("Images/SelectedPiece.png")
 
+		##Piece Movement Variables
+		self.turnOrder = ["-W", "-B"]
 		self.selectedPiece = None
 		self.originalID = None
 		self.oldLocation = None
 		self.activePiece = False
 
-		
-
-		##Capture Piece Variables
-
+		##Team Scoring Varibles
+		self.blackTeamScore = 0
+		self.blackCaptures = []
+		self.whiteTeamScore = 0
+		self.whiteCaptures = []
 
 	def createPieces(self, pieceName, quantity, team):
 		for pieceNum in range(quantity):
@@ -60,43 +64,67 @@ class placements():
 					# print(f"Piece Tag: {key}")
 					self.allPieces[key].setup(location)
 
-
 	##Places a star next to a selected piece
 	def selectPiece(self, currMouseLoc):
-		self.selectedPiece = self.get_piece(currMouseLoc)
-		self.selectImg.removeImage()
-		self.selectImg.placeImage(currMouseLoc)
-		if self.selectedPiece != None:
-			self.oldLocation = self.selectedPiece.locationID
-			self.originalID = self.selectedPiece.canvasID
-			self.selectedPiece.availableMoves()
-			self.activePiece = True
-	
+		try:
+			self.selectedPiece = self.get_piece(currMouseLoc)
+			if self.turnOrder[0] in self.selectedPiece.myID:
+				self.selectImg.removeImage()
+				self.selectImg.placeImage(currMouseLoc)
+				if self.selectedPiece != None:
+					self.oldLocation = self.selectedPiece.locationID
+					self.originalID = self.selectedPiece.canvasID
+					self.selectedPiece.availableMoves()
+					self.activePiece = True
+			else:
+				print("not your turn")
+			# self.__chess.MATRIX.printMyPieceMatrix()
+		except AttributeError:
+			self.activePiece = False
+
+	def nextTurn(self):
+		currTurn = self.turnOrder[0]
+		self.turnOrder.remove(currTurn)
+		self.turnOrder.append(currTurn)
+
 	##Moves the selected piece to next location
 	def movePiece(self, location, mousePress=False):
 		try:
 			pos = self.__chess.get_nwCoord(location)
 			self.__chess.get_canvas().coords(self.selectedPiece.canvasID, pos[0], pos[1])
-			self.selectedPiece.locationID = location
+			# self.selectedPiece.locationID = location
 			# print(self.selectedPiece.locationID)
 
 			if mousePress:
-				print("Got Called on m1")
 				if location in self.selectedPiece.canMoveHere:
-					self.selectedPiece.placeImage(self.selectedPiece.locationID)
-					self.__chess.get_canvas().delete(self.originalID)
+					self.capturePiece(location)
+					self.selectedPiece.placeImage(location)
+					self.__chess.MATRIX.updatePieceMatrix(self.oldLocation, location)
+					self.nextTurn()
 				else:
 					self.selectedPiece.placeImage(self.oldLocation)
-					self.__chess.get_canvas().delete(self.originalID)
+				self.__chess.get_canvas().delete(self.originalID)
 				self.activePiece = False
-			
 		except AttributeError:
 			# print(f"self.selectedPiece cannot be NoneType \n\t@PLACE.movePiece()")
 			pass
 
-
-	def capturePiece(self, ):
-		pass
+	def capturePiece(self, location):
+		if self.__chess.MATRIX.foundInPieceMatrix(location):
+			for key, value in self.allPieces.items():
+				# print(f"{key} = {value}")
+				if location == value.locationID:
+					currTeam = f"{self.selectedPiece.myID[-3]}{self.selectedPiece.myID[-2]}"
+					opponent = f"{key[-3]}{key[-2]}"
+					if currTeam != opponent:
+						if currTeam == "-W":
+							self.whiteCaptures.append(value)
+							self.whiteTeamScore += value.piecePoints
+							value.removeImage()
+						elif currTeam == "-B":
+							self.blackCaptures.append(value)
+							self.blackTeamScore += value.piecePoints
+							value.removeImage()
 
 	def findNextMoves(self, debugActive=False):
 		try:
@@ -110,19 +138,11 @@ class placements():
 			print(f"Caught Error:, {error} \n\t @findNextMove()")
 		# pass
 
-	def isOpponent(self, currPiece, underPiece):
-		print(f"Curr Piece: {currPiece.myTeam}\nCaptured Piece: {underPiece.myTeam}")
-		
-		
-		
-		pass
-
-
 	def get_piece(self, location=None):
 		if self.__chess.MATRIX.foundInMatrix(location):
 			for key in self.allPieces.keys():
 				if self.allPieces[key].locationID == location:
-					print(f"Found {self.allPieces[key].myID} at {location}")
+					# print(f"Found {self.allPieces[key].myID} at {location}")
 					self.allPieces[key].availableMoves()
 					return self.allPieces[key]
 		else:

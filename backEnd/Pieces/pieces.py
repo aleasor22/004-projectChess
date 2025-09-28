@@ -5,7 +5,8 @@ class PIECES(IMAGE):
 		IMAGE.__init__(self, chess)
 		self.__chess = chess
 
-		##Tag IDs
+		##Point System
+		self.piecePoints = 0
 
 		##Movement Logic
 		self.canMoveHere = []
@@ -25,3 +26,5 @@ class PIECES(IMAGE):
 			popItem = self.moveSet.pop()
 			if popItem != self.locationID:
 				self.canMoveHere.append(popItem)
+		# print(f"Posssible Moves for {self.myID}: {self.canMoveHere}")
+		# print("\t@PIECES.setToList( )")
