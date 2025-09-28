@@ -13,10 +13,10 @@ class PAWN(imageWidget):
 		##List of Moves
 		self.canMoveHere = []
 
-	def setup(self, pos, tag):
+	def setup(self, tag):
 		self.set_team()
 		self.createImage()
-		self.placeImage(pos[0], pos[1], tag)
+		self.placeImage(tag)
 
 
 	def availableMoves(self):
@@ -27,7 +27,7 @@ class PAWN(imageWidget):
 		self.moveSet = set()
 
 		##Local Variables
-		index_A, index_B = self._chessObject.MATRIX.findMatrixIndex(self.locationID)
+		index_A, index_B = self._chess.MATRIX.findMatrixIndex(self.locationID)
 
 		if "White" in self._imgLocation:
 			for col in range(-1, 2):
@@ -60,4 +60,5 @@ class PAWN(imageWidget):
 		if "-W" in self.myID:
 			self._imgLocation = "Images/WhitePawn.png"
 		else:
-			print("Incorrect team selected @PAWN.set_team()")
+			# print("Incorrect team selected @PAWN.set_team()")
+			pass

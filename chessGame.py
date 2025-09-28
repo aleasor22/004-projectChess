@@ -50,7 +50,7 @@ PLACE.placePieces()
 ##-------INITIAL RUNTIME DEBUGGING EVENTS-------##
 if debugActive:
 	CHESS.gridTagList() ##Creates a list of all tile IDs, when debugActive=True it displays those tile IDs to screen
-PLACE.findNextMove(debugActive) ##Used to generate an initial list of possible moves per piece, When debugActive=True it prints posible moves to terminal
+PLACE.findNextMoves(False) ##Used to generate an initial list of possible moves per piece, When debugActive=True it prints posible moves to terminal
 
 ##-------LOOPING RUNTIME-------##
 # print(CHESS.get_mainApp().title())

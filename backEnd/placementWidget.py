@@ -1,29 +1,41 @@
 #Imports here
 # import tkinter
+from .imageWidget import imageWidget
 from .Pieces import *
 
 
 class placements():
 	def __init__(self, chess):
+		##Config Variables
 		self.__chess = chess
 		self.__myGlobalMatrix = chess.MATRIX.get_matrix("Global")
 		self.backRow = ["ROOK", "KNIGHT", "BISHOP", "QUEEN", "KING", "BISHOP", "KNIGHT", "ROOK"]
-		self.whitePieces = {}
-		self.blackPieces = {}
+		self.allPieces = {}
+
+		##Move Piece Variables
+		self.selectImg = imageWidget(chess)
+		self.selectImg.createImage("Images/SelectedPiece.png")
+
+		self.selectedPiece = None
+		self.originalID = None
+		self.oldLocation = None
+		self.activePiece = False
+
+		
+
+		##Capture Piece Variables
 
 
 	def createPieces(self, pieceName, quantity, team):
 		for pieceNum in range(quantity):
 			if team == "white":
 				tag = f"{pieceName}-W{pieceNum}"
-				self.whitePieces[tag] = self.get_object(pieceName)
-				self.whitePieces[tag].myID = tag
-				self.whitePieces[tag].myTeam = "white"
+				self.allPieces[tag] = self.get_object(pieceName)
+				self.allPieces[tag].myID = tag
 			elif team == "black":
 				tag = f"{pieceName}-B{pieceNum}"
-				self.blackPieces[tag] = self.get_object(pieceName)
-				self.blackPieces[tag].myID = tag
-				self.blackPieces[tag].myTeam = "black"
+				self.allPieces[tag] = self.get_object(pieceName)
+				self.allPieces[tag].myID = tag
 
 	def placePieces(self):
 		for row in range(8):
@@ -34,24 +46,54 @@ class placements():
 						key = f"{self.backRow[col]}-W0"
 					elif col > 4:
 						key = f"{self.backRow[col]}-W1"
-					print(f"Piece Tag: {key}")
-					self.whitePieces[key].setup(self.__chess.get_nwCoord(location), "white", location)
+					# print(f"Piece Tag: {key}")
+					self.allPieces[key].setup("white", location)
 				elif row == 1:
-					self.whitePieces[f"PAWN-W{col}"].setup(self.__chess.get_nwCoord(location), location)
+					self.allPieces[f"PAWN-W{col}"].setup(location)
 				elif row == 6:
-					self.blackPieces[f"PAWN-B{col}"].setup(self.__chess.get_nwCoord(location), location)
+					self.allPieces[f"PAWN-B{col}"].setup(location)
 				elif row == 7:
 					if col <= 4:
 						key = f"{self.backRow[col]}-B0"
 					elif col > 4:
 						key = f"{self.backRow[col]}-B1"
-					print(f"Piece Tag: {key}")
-					self.blackPieces[key].setup(self.__chess.get_nwCoord(location), "black", location)
+					# print(f"Piece Tag: {key}")
+					self.allPieces[key].setup("black", location)
 
-	def movePiece(self, pieceObject, location):
-		pos = self.__chess.get_nwCoord(location)
-		pieceObject.placeImage(pos[0], pos[1], location)
-		pieceObject.availableMoves()
+
+	##Places a star next to a selected piece
+	def selectPiece(self, currMouseLoc):
+		self.selectedPiece = self.get_piece(currMouseLoc)
+		self.selectImg.removeImage()
+		self.selectImg.placeImage(currMouseLoc)
+		if self.selectedPiece != None:
+			self.oldLocation = self.selectedPiece.locationID
+			self.originalID = self.selectedPiece.canvasID
+			self.selectedPiece.availableMoves()
+			self.activePiece = True
+	
+	##Moves the selected piece to next location
+	def movePiece(self, location, mousePress=False):
+		try:
+			pos = self.__chess.get_nwCoord(location)
+			self.__chess.get_canvas().coords(self.selectedPiece.canvasID, pos[0], pos[1])
+			self.selectedPiece.locationID = location
+			# print(self.selectedPiece.locationID)
+
+			if mousePress:
+				print("Got Called on m1")
+				if location in self.selectedPiece.canMoveHere:
+					self.selectedPiece.placeImage(self.selectedPiece.locationID)
+					self.__chess.get_canvas().delete(self.originalID)
+				else:
+					self.selectedPiece.placeImage(self.oldLocation)
+					self.__chess.get_canvas().delete(self.originalID)
+				self.activePiece = False
+			
+		except AttributeError:
+			# print(f"self.selectedPiece cannot be NoneType \n\t@PLACE.movePiece()")
+			pass
+
 
 	def capturePiece(self, ):
 		pass
@@ -59,15 +101,7 @@ class placements():
 	def findNextMoves(self, debugActive=False):
 		try:
 			##Team White
-			for object in self.whitePieces.values():
-				object.availableMoves()
-				if debugActive:
-					print(f"{object.myID} can move here: {object.canMoveHere}")
-
-			print() ##Spacer
-
-			##Team Black
-			for object in self.blackPieces.values():
+			for object in self.allPieces.values():
 				object.availableMoves()
 				if debugActive:
 					print(f"{object.myID} can move here: {object.canMoveHere}")
@@ -86,16 +120,11 @@ class placements():
 
 	def get_piece(self, location=None):
 		if self.__chess.MATRIX.foundInMatrix(location):
-			for key in self.whitePieces.keys():
-				if self.whitePieces[key].locationID == location:
-					print(f"Found {self.whitePieces[key].myID} at {location}")
-					self.whitePieces[key].availableMoves()
-					return self.whitePieces[key] 
-			for key in self.blackPieces.keys():
-				if self.blackPieces[key].locationID == location:
-					print(f"Found {self.blackPieces[key].myID} at {location}")
-					self.blackPieces[key].availableMoves()
-					return self.blackPieces[key] 
+			for key in self.allPieces.keys():
+				if self.allPieces[key].locationID == location:
+					print(f"Found {self.allPieces[key].myID} at {location}")
+					self.allPieces[key].availableMoves()
+					return self.allPieces[key]
 		else:
 			print(f"Incorrect Location: {location}")
 

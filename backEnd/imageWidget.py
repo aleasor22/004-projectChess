@@ -8,15 +8,20 @@ from PIL import ImageTk, Image
 class imageWidget:
 	def __init__(self, chess):
 		"""Everything to do with creating/displaying images to screen"""
-		self._chessObject = chess
+		self._chess = chess
 		self._render = chess.get_canvas() #Only for this class
+
+		## Image Data (Local)
+		self._imgLocation = None
+		self._imagePIL = None
+		self._imgSize = None
+		self._imageTK = None
 
 		## Identifying Tags (Global)
 		self.locationID = None	##Active tile location (Tile Square Ex. 'a1' or 'e6')
 		self.canvasID = None	##Canvas tag (Tkinters canvas item id)
-		self.pieceID = None		##Piece Name (Ex. ROOK or PAWN, used to identify piece class)
+		self.pieceID = None		##Piece Name (Ex. ROOK or PAWN, used to identify piece class) - PLANS FOR REMOVAL
 		self.myID = None		##Personal tag (Ex. ROOK-0 or ROOK-1 - used for the team dictionary)
-		self.myTeam = None		##What Team the Piece is on
 		
 		##Movement Logic
 		self.canMoveHere = []
@@ -24,19 +29,18 @@ class imageWidget:
 		self.myGlobalMatrix = chess.MATRIX.get_matrix("Global")
 		self.myPieceMatrix = chess.MATRIX.get_matrix("Piece")
 
-		## Image Data (Local)
-		self._imgLocation = None
-		self._imagePIL = None
-		self._imgSize = None
-		self._imageTK = None
 	
-	def createImage(self):
-		self._imagePIL = Image.open(str(self._imgLocation))
+	def createImage(self, imgLocation=None):
+		if imgLocation != None:
+			self._imagePIL = Image.open(imgLocation)
+		else:
+			self._imagePIL = Image.open(str(self._imgLocation))
 		self._imgSize = self._imagePIL.size
 		self._imageTK = ImageTk.PhotoImage(self._imagePIL)
 
 
-	def placeToRender(self, x, y, location):
+	def placeImage(self, location):
+		x, y = self._chess.get_nwCoord(location)
 		self.locationID = location
 		self.canvasID = self._render.create_image(
 			x, y, tag=(self.locationID, self.myID, self.pieceID), image=self._imageTK, anchor="nw"

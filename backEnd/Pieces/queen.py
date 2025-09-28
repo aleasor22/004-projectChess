@@ -10,10 +10,10 @@ class QUEEN(imageWidget):
 		imageWidget.__init__(self, canvas)
 		self.pieceID = "QUEEN"
 
-	def setup(self, pos, color, tag):
+	def setup(self, color, tag):
 			self.set_team(color)
 			self.createImage()
-			self.placeImage(pos[0], pos[1], tag)
+			self.placeImage(tag)
 
 	def availableMoves(self, ):
 		# print(f"{self.myTeam}-{self.myID}'s Moves are being calculated")
@@ -22,7 +22,7 @@ class QUEEN(imageWidget):
 		self.moveSet = set()
 
 		##Local Variables
-		index_A, index_B = self._chessObject.MATRIX.findMatrixIndex(self.locationID)
+		index_A, index_B = self._chess.MATRIX.findMatrixIndex(self.locationID)
 		
 		##Bishop Style Movement
 		# print("North East:", end=" ")

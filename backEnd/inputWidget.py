@@ -6,31 +6,25 @@ import pygetwindow
 import tkinter ##Used for Debugging
 
 class Inputs():
-	def __init__(self, chessObject, movement):
+	def __init__(self, chessObject, place):
 		self.__listeningStarted =  False ##Is this needed
 		self.__chessGame = chessObject
 		self.__render = chessObject.get_canvas()
-		self.__place = movement
+		self.__place = place
 		
 		self.applicationActive = False
 		self.currMouseLocation = None
 		self.oldMouseLocation = None
+		self.clickCount = 0
 		
 		self.__listenForKeyboard = keyboard.Listener(on_press=self.onPress, on_release=self.onRelease)
 		
 		##Starts listening for keyboard & mouse events
 		self.__listenForKeyboard.start()
 
-		self.clickCounter = 0
-		self.selectedPiece = None
-		self.aPieceIsSelected = False
-		self.canPlace = False
-		self.originalLocaiton = None
-		self.lastIMG = None
-
 
 	##Logic for Mouse Inputs##
-	def bindEvents(self, ):
+	def bindEvents(self):
 		if self.applicationActive:
 			self.__render.bind("<Motion>", self.findMyMouse)
 			self.__render.bind("<Button-1>", self.onMousePress)
@@ -38,39 +32,16 @@ class Inputs():
 			self.__render.unbind("<Motion>")
 			self.__render.unbind("<Button-1>")
 
+	##Below method got moved to placementWidget.py
 	def onMousePress(self, event):
-		# print(f"Mouse clicked at: {self.currMouseLocation}")
-		if self.clickCounter == 0: ##Piece gets selected
-			self.selectedPiece = self.__place.selectPiece(self.currMouseLocation)
-			# print("first Click") ## Debuggin
-			if self.selectedPiece != None:
-				# print(f"Canvas ID: {self.selectedPiece.canvasID}")
-				self.originalLocaiton = self.currMouseLocation
-				self.aPieceIsSelected = True
-				self.clickCounter += 1
-		elif self.clickCounter == 1: ##Attemps to place Piece
-			# print("Second Click") ## Debuggin
-			print(f"Place here? {self.currMouseLocation}")
-			try:				
-				print(f"Selected Piece: {self.selectedPiece.myID} \nRemove {self.__place.get_piece(self.currMouseLocation).myID}")
-				isPieceCaptured = self.__place.get_piece(self.currMouseLocation).myID
-				self.__place.isLocationTaken(isPieceCaptured)
-				pass
-			except AttributeError:
-				print("Free Space")
-			
-			
-			self.aPieceIsSelected = False
-			if self.canPlace:
-				self.__place.movePiece(self.currMouseLocation)
-			else:
-				self.__place.movePiece(self.originalLocaiton)
-			self.__render.delete(self.lastIMG)
-			self.clickCounter = 0
-		else:
-			print("ERROR @onMousePress")
+		if self.clickCount == 0:
+			self.__place.selectPiece(self.currMouseLocation)
+			if self.__place.activePiece:
+				self.clickCount += 1
 
-		
+		elif self.clickCount == 1:
+			self.__place.movePiece(self.currMouseLocation, True)
+			self.clickCount = 0
 
 	def findMyMouse(self, event):
 		try: 
@@ -84,16 +55,10 @@ class Inputs():
 			self.currMouseLocation = self.__render.gettags(matchingCanvasIDs)[0] ##Saves current mouse location
 			if self.currMouseLocation != self.oldMouseLocation:
 				self.oldMouseLocation = self.currMouseLocation ##Saves original Mouse location
+
 				
-			if self.aPieceIsSelected:
-				if self.currMouseLocation in self.selectedPiece.canMoveHere:
-					self.canPlace = True
-				else:
-					self.canPlace = False
-				## Visually shows the piece to follow the mouse
-				pos = self.__chessGame.get_nwCoord(matchingCanvasIDs)
-				self.__render.coords(self.selectedPiece.canvasID, pos[0], pos[1])
-				self.lastIMG = self.selectedPiece.canvasID
+			if self.__place.activePiece:
+				self.__place.movePiece(self.currMouseLocation)
 
 		except tkinter.TclError as error:
 			##currently triggers when perfectly inbetween tiles
