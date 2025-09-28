@@ -1,7 +1,12 @@
 Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
 
 
-Current Commit (#13 [v0.0.57]):
+Current Commit (#14 [v0.0.6]):
+	1. Finished below goals. Logic that should be used by each piece,
+		but not image related will be added to PIECES class
+	2. Next Goal
+
+Last Commit (#13 [v0.0.57]):
 	1. Removed select.py
 	2. Cleaned up placementWidget Methods:
 		a. selectPiece
@@ -13,16 +18,5 @@ Current Commit (#13 [v0.0.57]):
 		b. findMyMouse
 	4. Next Goals:
 		a. Change Piece Logic per commit #12 note.3 for each piece
-		b. Goal 4.b of Commit #12 is out of scope for current task
 		c. Restructure class inheritance between imageWidget & Pieces
 			i. cleans up imageWidget of non image related functions
-
-Last Commit (#12 [v0.0.567]):
-	1. Removed Movement.py
-	2. Cleaned up placementWidget Methods:
-		a. createPieces
-		b. placePieces
-	3. Added "W" or "B" to .myID to differenciate between teams
-	4. Goals:
-		a. Add movement logic to "movePiece"
-		b. Add logic for capturing Pieces

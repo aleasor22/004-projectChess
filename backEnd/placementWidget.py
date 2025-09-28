@@ -1,6 +1,6 @@
 #Imports here
 # import tkinter
-from .imageWidget import imageWidget
+from .imageWidget import IMAGE
 from .Pieces import *
 
 
@@ -13,7 +13,7 @@ class placements():
 		self.allPieces = {}
 
 		##Move Piece Variables
-		self.selectImg = imageWidget(chess)
+		self.selectImg = IMAGE(chess)
 		self.selectImg.createImage("Images/SelectedPiece.png")
 
 		self.selectedPiece = None
@@ -47,7 +47,7 @@ class placements():
 					elif col > 4:
 						key = f"{self.backRow[col]}-W1"
 					# print(f"Piece Tag: {key}")
-					self.allPieces[key].setup("white", location)
+					self.allPieces[key].setup(location)
 				elif row == 1:
 					self.allPieces[f"PAWN-W{col}"].setup(location)
 				elif row == 6:
@@ -58,7 +58,7 @@ class placements():
 					elif col > 4:
 						key = f"{self.backRow[col]}-B1"
 					# print(f"Piece Tag: {key}")
-					self.allPieces[key].setup("black", location)
+					self.allPieces[key].setup(location)
 
 
 	##Places a star next to a selected piece

@@ -1,4 +1,4 @@
-from .imageWidget import imageWidget
+from .imageWidget import IMAGE
 from pynput import keyboard
 from Images import * #imports Image file locations
 import pygetwindow

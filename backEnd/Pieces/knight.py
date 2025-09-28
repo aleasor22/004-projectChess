@@ -1,21 +1,20 @@
 ##List of  Imports
 import os
-from backEnd.imageWidget import imageWidget
+from .pieces import PIECES
 from Images import *
 
 
 ##Start of Class PAWN
-class KNIGHT(imageWidget):
+class KNIGHT(PIECES):
 	def __init__(self, canvas):
-		imageWidget.__init__(self, canvas)
-		self.pieceID = "KNIGHT"
+		PIECES.__init__(self, canvas)
 		
 		##List of Moves
 		self.canMoveHere = []
 
 
-	def setup(self, color, tag):
-			self.set_team(color)
+	def setup(self, tag):
+			self.set_team()
 			self.createImage()
 			self.placeImage(tag)
 
@@ -54,10 +53,10 @@ class KNIGHT(imageWidget):
 				
 
 
-	def set_team(self, color):
-		if color == "black":
+	def set_team(self):
+		if "-B" in self.myID:
 			self._imgLocation = "Images/BlackKnight.png"
-		elif color == "white":
+		elif "-W" in self.myID:
 			self._imgLocation = "Images/WhiteKnight.png"
 		else:
 			print("Incorrect team selected @Knight.set_team()")

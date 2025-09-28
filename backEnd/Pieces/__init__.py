@@ -1,5 +1,5 @@
 ##Listed Modules
-from .select import SELECT
+from .pieces import PIECES
 from .knight import KNIGHT
 from .bishop import BISHOP
 from .queen import QUEEN
