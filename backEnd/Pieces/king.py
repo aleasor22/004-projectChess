@@ -29,6 +29,7 @@ class KING(PIECES):
 					if (index_A+i) < 0 or (index_B+j) < 0:
 						raise IndexError("Less than 0")
 					if self.myPieceMatrix[index_A+i][index_B+j] != "**":
+						self.moveSet.add(self.myGlobalMatrix[index_A+i][index_B+j])
 						raise IndexError("Spot Used")
 					self.moveSet.add(self.myGlobalMatrix[index_A+i][index_B+j])
 				except IndexError as e:

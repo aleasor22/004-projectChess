@@ -1,7 +1,18 @@
 Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
 
 
-Current Commit #15 - [v0.0.67]:
+Current Commit #16 - [v0.0.7]
+	1. Adjusted piece.availableMoves() to add locations if something is there. 
+		Then lets PLACE.capturePiece() & PLACE.isOpponent() figure out if it's possible to move there
+	2. Capturing pieces is now possible
+	3. Program keeps track of which pieces were captured and each teams total piecePoints
+	4. Keeps track of turn order, and only lets current team pieces move
+	5. Next Goals:
+		a. Visual Rework
+		b. Logic to Win/Lose the game
+		c. Menu Bar
+
+Last Commit #15 - [v0.0.67]:
 	1. Cleaned up various commented code
 	2. Cleaned up PAWN.availableMoves()
 	3. capturePiece logic initial stage is completed
@@ -10,8 +21,3 @@ Current Commit #15 - [v0.0.67]:
 	3. Next Goals:
 		a. Allow other pieces to move to open & opponent locations
 			i. Verify the capturePiece method still works for other pieces
-
-Last Commit #14 - [v0.0.6]:
-	1. Finished below goals. Logic that should be used by each piece,
-		but not image related will be added to PIECES class
-	2. Next Goal

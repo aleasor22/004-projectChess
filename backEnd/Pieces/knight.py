@@ -39,8 +39,6 @@ class KNIGHT(PIECES):
 					elif (i==0 and j!=0):
 						raise IndexError
 					else:
-						if self.myPieceMatrix[index_A+j][index_B+i] != "**":
-							raise IndexError
 						self.moveSet.add(self.myGlobalMatrix[index_A+j][index_B+i])
 				except IndexError:
 					continue

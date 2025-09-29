@@ -34,6 +34,7 @@ class BISHOP(PIECES):
 				if northEast == 0:
 					self.moveSet.add(self.myGlobalMatrix[index_A+northEast][index_B-northEast])
 				elif self.myPieceMatrix[index_A+northEast][index_B-northEast] != "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A+northEast][index_B-northEast])
 					raise IndexError
 				else:
 					self.moveSet.add(self.myGlobalMatrix[index_A+northEast][index_B-northEast])
@@ -45,8 +46,9 @@ class BISHOP(PIECES):
 				if index_A-northWest < 0 or index_B-northWest < 0:
 					raise IndexError("Index Less than 0")
 				if northWest == 0:
-					self.moveSet.add(self.myGlobalMatrix[index_A+northWest][index_B-northWest])
+					self.moveSet.add(self.myGlobalMatrix[index_A-northWest][index_B-northWest])
 				elif self.myPieceMatrix[index_A-northWest][index_B-northWest] != "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A-northWest][index_B-northWest])
 					raise IndexError
 				self.moveSet.add(self.myGlobalMatrix[index_A-northWest][index_B-northWest])
 			except IndexError as e:
@@ -57,6 +59,7 @@ class BISHOP(PIECES):
 				if southEast == 0:
 					self.moveSet.add(self.myGlobalMatrix[index_A+southEast][index_B+southEast])
 				elif self.myPieceMatrix[index_A+southEast][index_B+southEast] != "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A+southEast][index_B+southEast])
 					raise IndexError
 				self.moveSet.add(self.myGlobalMatrix[index_A+southEast][index_B+southEast])
 			except IndexError as e:
@@ -69,6 +72,7 @@ class BISHOP(PIECES):
 				if southWest == 0:
 					self.moveSet.add(self.myGlobalMatrix[index_A-southWest][index_B+southWest])
 				elif self.myPieceMatrix[index_A-southWest][index_B+southWest] != "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A-southWest][index_B+southWest])
 					raise IndexError
 				self.moveSet.add(self.myGlobalMatrix[index_A-southWest][index_B+southWest])
 			except IndexError as e:

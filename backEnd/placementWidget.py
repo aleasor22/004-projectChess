@@ -20,9 +20,9 @@ class placements():
 		##Piece Movement Variables
 		self.turnOrder = ["-W", "-B"]
 		self.selectedPiece = None
-		self.originalID = None
-		self.oldLocation = None
 		self.activePiece = False
+		self.oldLocation = None
+		self.originalID = None
 
 		##Team Scoring Varibles
 		self.blackTeamScore = 0
@@ -72,12 +72,13 @@ class placements():
 				self.selectImg.removeImage()
 				self.selectImg.placeImage(currMouseLoc)
 				if self.selectedPiece != None:
+					print(f"{self.selectedPiece.myID} can move: {self.selectedPiece.canMoveHere}")
 					self.oldLocation = self.selectedPiece.locationID
 					self.originalID = self.selectedPiece.canvasID
 					self.selectedPiece.availableMoves()
 					self.activePiece = True
 			else:
-				print("not your turn")
+				print(f"not your turn - found Piece: {self.get_piece(currMouseLoc)}")
 			# self.__chess.MATRIX.printMyPieceMatrix()
 		except AttributeError:
 			self.activePiece = False
@@ -92,11 +93,10 @@ class placements():
 		try:
 			pos = self.__chess.get_nwCoord(location)
 			self.__chess.get_canvas().coords(self.selectedPiece.canvasID, pos[0], pos[1])
-			# self.selectedPiece.locationID = location
-			# print(self.selectedPiece.locationID)
 
 			if mousePress:
-				if location in self.selectedPiece.canMoveHere:
+				print(f"Opponent Found? {self.isOpponent(location)}")
+				if location in self.selectedPiece.canMoveHere and self.isOpponent(location) != None:
 					self.capturePiece(location)
 					self.selectedPiece.placeImage(location)
 					self.__chess.MATRIX.updatePieceMatrix(self.oldLocation, location)
@@ -110,21 +110,29 @@ class placements():
 			pass
 
 	def capturePiece(self, location):
+		self.underPiece = None
+		if self.isOpponent(location):
+			print(f"{self.underPiece.myID} is under team {self.turnOrder[0]} \n\t@PLACE.capturePiece")
+			if self.turnOrder[0] == "-W":
+				self.whiteCaptures.append(self.underPiece)
+				self.whiteTeamScore += self.underPiece.piecePoints
+				self.removePiece()
+			elif self.turnOrder[0] == "-B":
+				self.blackCaptures.append(self.underPiece)
+				self.blackTeamScore += self.underPiece.piecePoints
+				self.removePiece()
+
+	def isOpponent(self, location):
 		if self.__chess.MATRIX.foundInPieceMatrix(location):
 			for key, value in self.allPieces.items():
-				# print(f"{key} = {value}")
 				if location == value.locationID:
-					currTeam = f"{self.selectedPiece.myID[-3]}{self.selectedPiece.myID[-2]}"
-					opponent = f"{key[-3]}{key[-2]}"
-					if currTeam != opponent:
-						if currTeam == "-W":
-							self.whiteCaptures.append(value)
-							self.whiteTeamScore += value.piecePoints
-							value.removeImage()
-						elif currTeam == "-B":
-							self.blackCaptures.append(value)
-							self.blackTeamScore += value.piecePoints
-							value.removeImage()
+					underPiece = f"{key[-3]}{key[-2]}"
+					# print(f"{self.turnOrder[0]} == {underPiece}")
+					if self.turnOrder[0] != underPiece:
+						self.underPiece = value
+						return True
+		else:
+			return False
 
 	def findNextMoves(self, debugActive=False):
 		try:
@@ -163,3 +171,8 @@ class placements():
 			return PAWN(self.__chess)
 		else:
 			print(f"Incorrect Piece Name: {title} \n")
+
+	def removePiece(self):
+		self.underPiece.removeImage()
+		del self.allPieces[self.underPiece.myID]
+		# print(f"Is {self.underPiece.myID} in self.allPieces? {self.underPiece.myID in self.allPieces.keys()}")

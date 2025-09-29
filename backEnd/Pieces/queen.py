@@ -31,6 +31,7 @@ class QUEEN(PIECES):
 				if northEast == 0:
 					self.moveSet.add(self.myGlobalMatrix[index_A+northEast][index_B-northEast])
 				elif self.myPieceMatrix[index_A+northEast][index_B-northEast] != "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A+northEast][index_B-northEast])
 					raise IndexError
 				else:
 					self.moveSet.add(self.myGlobalMatrix[index_A+northEast][index_B-northEast])
@@ -42,8 +43,9 @@ class QUEEN(PIECES):
 				if index_A-northWest < 0 or index_B-northWest < 0:
 					raise IndexError("Index Less than 0")
 				if northWest == 0:
-					self.moveSet.add(self.myGlobalMatrix[index_A+northWest][index_B-northWest])
+					self.moveSet.add(self.myGlobalMatrix[index_A-northWest][index_B-northWest])
 				elif self.myPieceMatrix[index_A-northWest][index_B-northWest] != "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A-northWest][index_B-northWest])
 					raise IndexError
 				self.moveSet.add(self.myGlobalMatrix[index_A-northWest][index_B-northWest])
 			except IndexError as e:
@@ -54,6 +56,7 @@ class QUEEN(PIECES):
 				if southEast == 0:
 					self.moveSet.add(self.myGlobalMatrix[index_A+southEast][index_B+southEast])
 				elif self.myPieceMatrix[index_A+southEast][index_B+southEast] != "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A+southEast][index_B+southEast])
 					raise IndexError
 				self.moveSet.add(self.myGlobalMatrix[index_A+southEast][index_B+southEast])
 			except IndexError as e:
@@ -66,6 +69,7 @@ class QUEEN(PIECES):
 				if southWest == 0:
 					self.moveSet.add(self.myGlobalMatrix[index_A-southWest][index_B+southWest])
 				elif self.myPieceMatrix[index_A-southWest][index_B+southWest] != "**":
+					self.moveSet.add(self.myGlobalMatrix[index_A-southWest][index_B+southWest])
 					raise IndexError
 				self.moveSet.add(self.myGlobalMatrix[index_A-southWest][index_B+southWest])
 			except IndexError as e:
@@ -76,22 +80,26 @@ class QUEEN(PIECES):
 		## Horizontal Movement
 		for west in range(index_A-1, -1, -1):
 			if self.myPieceMatrix[west][index_B] != "**":
+				self.moveSet.add(self.myGlobalMatrix[west][index_B])
 				break
 			self.moveSet.add(self.myGlobalMatrix[west][index_B])
 
 		for east in range(index_A+1, 8):
 			if self.myPieceMatrix[east][index_B] != "**":
+				self.moveSet.add(self.myGlobalMatrix[east][index_B])
 				break
 			self.moveSet.add(self.myGlobalMatrix[east][index_B])
 
 		## Vertical Movment
 		for north in range(index_B-1, -1, -1):
 			if self.myPieceMatrix[index_A][north] != "**":
+				self.moveSet.add(self.myGlobalMatrix[index_A][north])
 				break
 			self.moveSet.add(self.myGlobalMatrix[index_A][north])
 		
 		for south in range(index_B+1, 8):
 			if self.myPieceMatrix[index_A][south] != "**":
+				self.moveSet.add(self.myGlobalMatrix[index_A][south])
 				break
 			self.moveSet.add(self.myGlobalMatrix[index_A][south])
 			
