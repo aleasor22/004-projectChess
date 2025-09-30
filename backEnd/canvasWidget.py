@@ -6,13 +6,13 @@ from .boardMatrix import MATRIX
 class mainCanvas:
 	def __init__(self):
 		self.__chessApp = tkinter.Tk()
-		self.__chessApp.title("Chess.leasor  [v0.0.7]")
+		self.__chessApp.title("Chess.leasor  [v0.0.72]")
 		self.__board = None ##Default to None
 		self.boardSize = 1024
 
 		##Board Variables
 		self.MATRIX = MATRIX()
-		self.bboxTileList = []
+		self.bboxInfo = {}
 
 
 	def createCanvas(self, ):
@@ -46,7 +46,8 @@ class mainCanvas:
 					fillColor = 'gray'
 					fillActive = True
 				gridTag = self.MATRIX.get_tagAtIndex(col, row, "Global")
-				self.__board.create_rectangle(xPos, yPos, xPos+128, yPos+128, tag=gridTag, fill=fillColor)
+				canvasID = self.__board.create_rectangle(xPos, yPos, xPos+128, yPos+128, tag=gridTag, fill=fillColor)
+				self.bboxInfo[gridTag] = (canvasID, fillColor, [xPos, yPos, xPos+128, yPos+128])
 				xPos += 128
 			if row % 2 == 0:
 				fillActive = True
@@ -54,11 +55,6 @@ class mainCanvas:
 				fillActive = False
 			yPos += 128
 			xPos = 0
-		
-		##Add bbox of each tile to self.bboxTileList
-		for canvasID in self.__board.find_all():
-			self.bboxTileList.append(self.__board.coords(canvasID))
-		## NOTE: Even though find_withtag returns a tuple, using it to call .coords won't error out
 
 	def get_nwCoord(self, tag):
 		try:

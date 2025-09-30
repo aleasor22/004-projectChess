@@ -1,4 +1,5 @@
 from ..imageWidget import IMAGE
+from Images import *
 
 class PIECES(IMAGE):
 	def __init__(self, chess):
@@ -14,6 +15,23 @@ class PIECES(IMAGE):
 		self.myGlobalMatrix = chess.MATRIX.get_matrix("Global")
 		self.myPieceMatrix = chess.MATRIX.get_matrix("Piece")
 		
+		##Visual aspect of Movement Logic
+		self._shownMoves = [] ##Holds canvas IDs of a pieces possible moves
+		self._showMovesImg = IMAGE(chess)
+		self._showMovesImg.createImage("Images/possibleMove.png")
+
+	
+	def showMyMoves(self):
+		self._shownMoves = [] ##Resets List
+		if len(self.canMoveHere) > 0:
+			for location in self.canMoveHere:
+				self._showMovesImg.placeImage(location)
+				self._shownMoves.append(self._showMovesImg.canvasID)
+			# print(self._shownMoves)
+	
+	def delShownMoves(self):
+		for id in self._shownMoves:
+			self._render.delete(id)
 
 	def isInList(self, ID, myList):
 		if ID in myList:

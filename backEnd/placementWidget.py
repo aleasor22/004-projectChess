@@ -24,11 +24,17 @@ class placements():
 		self.oldLocation = None
 		self.originalID = None
 
-		##Team Scoring Varibles
+		##Piece Capturing Varibles
 		self.blackTeamScore = 0
 		self.blackCaptures = []
 		self.whiteTeamScore = 0
 		self.whiteCaptures = []
+
+		##King is Under Threat Variables
+		self.kingInCheck = False
+		self.WKingUnderThreat = []
+		self.BKingUnderThreat = []
+
 
 	def createPieces(self, pieceName, quantity, team):
 		for pieceNum in range(quantity):
@@ -64,6 +70,11 @@ class placements():
 					# print(f"Piece Tag: {key}")
 					self.allPieces[key].setup(location)
 
+	def nextTurn(self):
+		currTurn = self.turnOrder[0]
+		self.turnOrder.remove(currTurn)
+		self.turnOrder.append(currTurn)
+
 	##Places a star next to a selected piece
 	def selectPiece(self, currMouseLoc):
 		try:
@@ -71,22 +82,18 @@ class placements():
 			if self.turnOrder[0] in self.selectedPiece.myID:
 				self.selectImg.removeImage()
 				self.selectImg.placeImage(currMouseLoc)
+				self.selectedPiece.availableMoves()
+				self.selectedPiece.showMyMoves()
 				if self.selectedPiece != None:
-					print(f"{self.selectedPiece.myID} can move: {self.selectedPiece.canMoveHere}")
+					# print(f"{self.selectedPiece.myID} can move: {self.selectedPiece.canMoveHere}")
 					self.oldLocation = self.selectedPiece.locationID
 					self.originalID = self.selectedPiece.canvasID
-					self.selectedPiece.availableMoves()
 					self.activePiece = True
 			else:
 				print(f"not your turn - found Piece: {self.get_piece(currMouseLoc)}")
 			# self.__chess.MATRIX.printMyPieceMatrix()
 		except AttributeError:
 			self.activePiece = False
-
-	def nextTurn(self):
-		currTurn = self.turnOrder[0]
-		self.turnOrder.remove(currTurn)
-		self.turnOrder.append(currTurn)
 
 	##Moves the selected piece to next location
 	def movePiece(self, location, mousePress=False):
@@ -95,14 +102,18 @@ class placements():
 			self.__chess.get_canvas().coords(self.selectedPiece.canvasID, pos[0], pos[1])
 
 			if mousePress:
-				print(f"Opponent Found? {self.isOpponent(location)}")
+				# print(f"Opponent Found? {self.isOpponent(location)}")
 				if location in self.selectedPiece.canMoveHere and self.isOpponent(location) != None:
 					self.capturePiece(location)
 					self.selectedPiece.placeImage(location)
 					self.__chess.MATRIX.updatePieceMatrix(self.oldLocation, location)
+					self.selectedPiece.availableMoves()
 					self.nextTurn()
+				elif self.kingInCheck:
+					print("a king is under check")
 				else:
 					self.selectedPiece.placeImage(self.oldLocation)
+				self.selectedPiece.delShownMoves()
 				self.__chess.get_canvas().delete(self.originalID)
 				self.activePiece = False
 		except AttributeError:
@@ -112,7 +123,7 @@ class placements():
 	def capturePiece(self, location):
 		self.underPiece = None
 		if self.isOpponent(location):
-			print(f"{self.underPiece.myID} is under team {self.turnOrder[0]} \n\t@PLACE.capturePiece")
+			# print(f"{self.underPiece.myID} is under team {self.turnOrder[0]} \n\t@PLACE.capturePiece")
 			if self.turnOrder[0] == "-W":
 				self.whiteCaptures.append(self.underPiece)
 				self.whiteTeamScore += self.underPiece.piecePoints
@@ -133,6 +144,53 @@ class placements():
 						return True
 		else:
 			return False
+	
+	def underCheck(self, ):
+		##Resets
+		self.WKingUnderThreat = []
+		self.BKingUnderThreat = []
+
+		try:
+			WKingLocation = self.allPieces["KING-W0"].locationID
+			BKingLocation = self.allPieces["KING-B0"].locationID
+			if self.turnOrder[0] == "-W":
+				for key, value in self.allPieces.items():
+					if ("KING" not in key) and ("-W" not in key):
+						if WKingLocation in value.canMoveHere:
+							print(f"{WKingLocation} found in {value.canMoveHere}")
+							self.WKingUnderThreat.append(value)
+				
+				if len(self.WKingUnderThreat) > 0:
+					self.kingInCheck = True
+				else:
+					self.kingInCheck = False
+				
+
+			elif self.turnOrder[0] == "-B":
+				for key, value in self.allPieces.items():
+					if ("KING" not in key) and ("-B" not in key):
+						if BKingLocation in value.canMoveHere:
+							print(f"{BKingLocation} found in {value.canMoveHere}")
+							self.BKingUnderThreat.append(value)
+				
+				if len(self.BKingUnderThreat) > 0:
+					self.kingInCheck = True
+				else:
+					self.kingInCheck = False
+			
+			
+		except KeyError as e:
+			if "KING-W0" not in self.allPieces.keys() or "KING-B0" not in self.allPieces.keys():
+				self.__chess.get_canvas().quit()
+				print("Game Over")
+			else:
+				print(e)
+				pass
+
+		def changeLocationColor(self, location, newColor):
+			print(f"Change {location} color to: {newColor}")
+			self.__chess.get_canvas().itemconfig(self.__chess.bboxInfo[location][0], fill=newColor)
+			pass
 
 	def findNextMoves(self, debugActive=False):
 		try:

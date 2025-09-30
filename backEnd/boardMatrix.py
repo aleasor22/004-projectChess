@@ -37,8 +37,8 @@ class MATRIX():
 			self.__myPieceMatrix[oldIndex_A][oldIndex_B] = "**"
 			self.__myPieceMatrix[newIndex_A][newIndex_B] = newLocaiton
 
-			self.printMyPieceMatrix()
-			print("Printing @MATRIX.updatePieceMatrix")
+			# self.printMyPieceMatrix()
+			# print("Printing @MATRIX.updatePieceMatrix")
 
 
 		except Exception:

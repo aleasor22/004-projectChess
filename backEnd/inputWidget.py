@@ -8,7 +8,7 @@ import tkinter ##Used for Debugging
 class Inputs():
 	def __init__(self, chessObject, place):
 		self.__listeningStarted =  False ##Is this needed
-		self.__chessGame = chessObject
+		self.__chess = chessObject
 		self.__render = chessObject.get_canvas()
 		self.__place = place
 		
@@ -44,26 +44,19 @@ class Inputs():
 			self.clickCount = 0
 
 	def findMyMouse(self, event):
-		try: 
-			matchingCanvasIDs = None
-			for bbox in self.__chessGame.bboxTileList:
-				if event.x > bbox[0] and event.x < bbox[2]:
-					if event.y > bbox[1] and event.y < bbox[3]:
-						matchingCanvasIDs = self.__render.find_overlapping(bbox[0]+1, bbox[1]+1, bbox[2]-1, bbox[3]-1)[0]
-						break
+		for key, value in self.__chess.bboxInfo.items():
+			bbox = value[2]
+			if event.x > bbox[0] and event.x < bbox[2]:
+				if event.y > bbox[1] and event.y < bbox[3]:
+					self.currMouseLocation = key
+					break
 
-			self.currMouseLocation = self.__render.gettags(matchingCanvasIDs)[0] ##Saves current mouse location
-			if self.currMouseLocation != self.oldMouseLocation:
-				self.oldMouseLocation = self.currMouseLocation ##Saves original Mouse location
-
-				
-			if self.__place.activePiece:
-				self.__place.movePiece(self.currMouseLocation)
-
-		except tkinter.TclError as error:
-			##currently triggers when perfectly inbetween tiles
-			# print(f"Caught Error: {error} \n\t Error@ inputs.findMyMouse")
-			pass
+		if self.currMouseLocation != self.oldMouseLocation:
+			self.oldMouseLocation = self.currMouseLocation ##Saves last Mouse location
+			# print(f"Current Box: {self.currMouseLocation}")
+			
+		if self.__place.activePiece:
+			self.__place.movePiece(self.currMouseLocation)
 
 	##Logic for Keyboard inputs##
 	def onPress(self, key):

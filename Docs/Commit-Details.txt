@@ -1,7 +1,31 @@
 Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
 
 
-Current Commit #16 - [v0.0.7]
+Current Commit #17 - [v0.0.72]
+	1. Created "possibleMove.png"
+	2. Display's a pieces available moves to screen
+		a. BUG: Shows avaiable moves to a location that is used by a team mate
+	3.Replaced bboxTileList with bboxInfo dictionary
+		a. Cleaned up the INPUT.findMyMouse() method
+		b. Allows for tracking of each locaitons default parameters
+			i.	Saves locationID as key
+			ii.	Saves canvasID in tuple - Item 0
+			iii.Saves fillColor in tuple - Item 1
+			iv.	Saves bbox list in tuple - Item 2
+				1) Cordinates of Top-Left & Bottom-Right Corners
+	4. Loosly knows if a king is under check, logic in initial stages 
+	5. Game Ends if a King is captured
+		a. Just displays "Game Over" to terminal
+		b. Quits out of the boards tkinter Window
+	6. Going to resturcture how Pieces calulate possible moves
+		a. New Class to be made: "moveCalculator.py"
+		b. Goals
+			i.	Make logic to capture a piece simpler
+			ii.	Make logic for a King under check/checkmate simpler
+			iii.Clean up visual representation of possible moves
+			iv.	Clean up move calculation logic
+
+Last Commit #15 - [v0.0.7]
 	1. Adjusted piece.availableMoves() to add locations if something is there. 
 		Then lets PLACE.capturePiece() & PLACE.isOpponent() figure out if it's possible to move there
 	2. Capturing pieces is now possible
@@ -11,13 +35,3 @@ Current Commit #16 - [v0.0.7]
 		a. Visual Rework
 		b. Logic to Win/Lose the game
 		c. Menu Bar
-
-Last Commit #15 - [v0.0.67]:
-	1. Cleaned up various commented code
-	2. Cleaned up PAWN.availableMoves()
-	3. capturePiece logic initial stage is completed
-		a. Pawns can now capture Pieces
-		b. Other piece cannot because self.canMoveHere logic still avoids all active locaitons
-	3. Next Goals:
-		a. Allow other pieces to move to open & opponent locations
-			i. Verify the capturePiece method still works for other pieces
