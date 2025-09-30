@@ -9,7 +9,7 @@ debugActive = False ##NOTE: Set this to true to have generic Debugging items dis
 
 
 ##-------INITIAL RUNTIME-------##
-CHESS = mainCanvas()
+CHESS = CANVAS()
 
 
 ##CREATE CANVAS AND CHESS BOARD
@@ -21,7 +21,8 @@ BOARD = CHESS.get_canvas()
 
 
 ##CLASS CALLING
-PLACE = placements(CHESS)
+CALC = MOVECALC(CHESS)
+PLACE = PLACEMENT(CHESS, CALC)
 INPUTS = Inputs(CHESS, PLACE)
 
 
@@ -48,7 +49,6 @@ PLACE.placePieces()
 ##-------INITIAL RUNTIME DEBUGGING EVENTS-------##
 if debugActive:
 	CHESS.gridTagList() ##Creates a list of all tile IDs, when debugActive=True it displays those tile IDs to screen
-PLACE.findNextMoves(False) ##Used to generate an initial list of possible moves per piece, When debugActive=True it prints posible moves to terminal
 
 ##-------LOOPING RUNTIME-------##
 # print(CHESS.get_mainApp().title())
@@ -61,8 +61,8 @@ def chessLoop():
 	##Bind All events
 	INPUTS.bindEvents()
 
-	if PLACE.kingInCheck == False:
-		PLACE.underCheck()
+	# if PLACE.kingInCheck == False:
+	# 	PLACE.underCheck()
 	
 	CHESS.get_mainApp().after(1000, chessLoop)
 	

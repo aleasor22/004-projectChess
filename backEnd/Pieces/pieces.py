@@ -10,10 +10,7 @@ class PIECES(IMAGE):
 		self.piecePoints = 0
 
 		##Movement Logic
-		self.canMoveHere = []
 		self.moveSet = set()
-		self.myGlobalMatrix = chess.MATRIX.get_matrix("Global")
-		self.myPieceMatrix = chess.MATRIX.get_matrix("Piece")
 		
 		##Visual aspect of Movement Logic
 		self._shownMoves = [] ##Holds canvas IDs of a pieces possible moves
@@ -23,8 +20,8 @@ class PIECES(IMAGE):
 	
 	def showMyMoves(self):
 		self._shownMoves = [] ##Resets List
-		if len(self.canMoveHere) > 0:
-			for location in self.canMoveHere:
+		if len(self.moveSet) > 0:
+			for location in self.moveSet:
 				self._showMovesImg.placeImage(location)
 				self._shownMoves.append(self._showMovesImg.canvasID)
 			# print(self._shownMoves)
@@ -37,12 +34,3 @@ class PIECES(IMAGE):
 		if ID in myList:
 			return True
 		return False
-	
-	def setToList(self):
-		self.canMoveHere=[]
-		for length in range(len(self.moveSet)):
-			popItem = self.moveSet.pop()
-			if popItem != self.locationID:
-				self.canMoveHere.append(popItem)
-		# print(f"Posssible Moves for {self.myID}: {self.canMoveHere}")
-		# print("\t@PIECES.setToList( )")

@@ -34,6 +34,7 @@ class Inputs():
 
 	##Below method got moved to placementWidget.py
 	def onMousePress(self, event):
+		# print(f"click Counter: {self.clickCount}")
 		if self.clickCount == 0:
 			self.__place.selectPiece(self.currMouseLocation)
 			if self.__place.activePiece:

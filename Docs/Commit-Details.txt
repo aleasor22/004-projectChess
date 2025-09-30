@@ -1,7 +1,19 @@
 Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
 
 
-Current Commit #17 - [v0.0.72]
+Current Commit #18 - [v0.0.74]
+	1. Created "moveCalculator.py"
+		a. Piece Moves working as they were previously
+			i. 	PIECE.availableMoves() deleted
+			ii.	PLACE.findMyNextMoves(location, pieceObject) now handles PIECE.availableMoves()
+		b. Removed self.canMoveHere - only using self.moveSet
+	2. Next Goals:
+		a. Use the new "moveCalculator.py" to better calculate piece Moves. 
+			i.	Will clean up the .showMyMoves()
+			ii.	Will better setup the check/checkmate logic
+		b. Visual representation of a king in check/checkmate
+
+Last Commit #17 - [v0.0.72]
 	1. Created "possibleMove.png"
 	2. Display's a pieces available moves to screen
 		a. BUG: Shows avaiable moves to a location that is used by a team mate
@@ -17,21 +29,10 @@ Current Commit #17 - [v0.0.72]
 	5. Game Ends if a King is captured
 		a. Just displays "Game Over" to terminal
 		b. Quits out of the boards tkinter Window
-	6. Going to resturcture how Pieces calulate possible moves
+	6. Going to resturcture how Pieces calculate possible moves
 		a. New Class to be made: "moveCalculator.py"
 		b. Goals
 			i.	Make logic to capture a piece simpler
 			ii.	Make logic for a King under check/checkmate simpler
 			iii.Clean up visual representation of possible moves
 			iv.	Clean up move calculation logic
-
-Last Commit #15 - [v0.0.7]
-	1. Adjusted piece.availableMoves() to add locations if something is there. 
-		Then lets PLACE.capturePiece() & PLACE.isOpponent() figure out if it's possible to move there
-	2. Capturing pieces is now possible
-	3. Program keeps track of which pieces were captured and each teams total piecePoints
-	4. Keeps track of turn order, and only lets current team pieces move
-	5. Next Goals:
-		a. Visual Rework
-		b. Logic to Win/Lose the game
-		c. Menu Bar

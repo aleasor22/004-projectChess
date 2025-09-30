@@ -1,6 +1,7 @@
-# from .menuWidgets import PLACEHOLDER
-from .placementWidget import placements
+from .placementWidget import PLACEMENT
+from .moveCalculator import MOVECALC
+from .canvasWidget import CANVAS
+# from .menuWidgets import MENU
 from .imageWidget import IMAGE
-from .canvasWidget import mainCanvas
 from .inputWidget import Inputs
 from .boardMatrix import MATRIX

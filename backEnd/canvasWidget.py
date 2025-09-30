@@ -3,10 +3,10 @@ from PIL import ImageTk, Image ##NOTE may not need
 from .boardMatrix import MATRIX
 
 
-class mainCanvas:
+class CANVAS():
 	def __init__(self):
 		self.__chessApp = tkinter.Tk()
-		self.__chessApp.title("Chess.leasor  [v0.0.72]")
+		self.__chessApp.title("Chess.Leasor  [v0.0.74]")
 		self.__board = None ##Default to None
 		self.boardSize = 1024
 
