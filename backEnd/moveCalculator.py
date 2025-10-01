@@ -7,13 +7,24 @@ class MOVECALC():
 		self.__myGlobalMatrix = chess.MATRIX.get_matrix("Global")
 		self.__myPieceMatrix = chess.MATRIX.get_matrix("Piece")
 		self.__activeLocaiton = {} ##Key == LocationID, value == PIECE.object @ Location
+		self.__forceTheseMoves = set()
+
+		self.check = False
 	
-	def dangerZone(self, whosInCheck, attackingPiece, ):
+	def dangerZone(self, check):
+		for key, object in check.items():
+			if "KING" not in key:
+				for item in object.moveSet:
+					self.__forceTheseMoves.add(item)
+		# print(self.__forceTheseMoves)
 
-
-
-
-		pass
+	def protectTheKing(self, object):
+		newSet = set()
+		for item in object.moveSet:
+			if item in self.__forceTheseMoves:
+				newSet.add(item)
+		object.moveSet = newSet
+		# print(f"{object.myID} Move Comparision\n- New:{newSet}\n- Old:{object.moveSet}")
 	
 	def updateActiveLocaitons(self, location, object):
 		for key, value in self.__activeLocaiton.items():
@@ -29,13 +40,13 @@ class MOVECALC():
 		if f"{object.myID[-3]}{object.myID[-2]}" not in self.__activeLocaiton[location].myID:
 			object.moveSet.add(location)
 
-	def bishopMoveCalc(self, location, object):
+	def bishopMoveCalc(self, origin, object):
 		##Resets List
 		if "QUEEN" not in object.myID:
 			object.moveSet = set()
 
 		##Local Variables
-		index_A, index_B = self.__chess.MATRIX.findMatrixIndex(location)
+		index_A, index_B = self.__chess.MATRIX.findMatrixIndex(origin)
 		for northEast in range(8):
 			try:
 				myLoc = self.__myPieceMatrix[index_A+northEast][index_B-northEast]
@@ -95,12 +106,12 @@ class MOVECALC():
 				# print(e)
 				break	
 	
-	def knightMoveCalc(self, location, object):
+	def knightMoveCalc(self, origin, object):
 		##Resets
 		object.moveSet = set()
 
 		##Local Variables
-		index_A, index_B = self.__chess.MATRIX.findMatrixIndex(location)
+		index_A, index_B = self.__chess.MATRIX.findMatrixIndex(origin)
 
 		for i in range(-2, 3):
 			for j in range(-2, 3):
@@ -122,13 +133,13 @@ class MOVECALC():
 				except IndexError:
 					continue
 	
-	def rookMoveCalc(self, location, object):
+	def rookMoveCalc(self, origin, object):
 		##Reset
 		if "QUEEN" not in object.myID:
 			object.moveSet = set()
 
 		##Local Variables
-		index_A, index_B = self.__chess.MATRIX.findMatrixIndex(location)
+		index_A, index_B = self.__chess.MATRIX.findMatrixIndex(origin)
 		
 		## Horizontal Movement
 		for west in range(index_A-1, -1, -1):
@@ -160,16 +171,16 @@ class MOVECALC():
 				break
 			object.moveSet.add(self.__myGlobalMatrix[index_A][south])
 	
-	def queenMoveCalc(self, location, object):
+	def queenMoveCalc(self, origin, object):
 		object.moveSet = set()
-		self.bishopMoveCalc(location, object)
-		self.rookMoveCalc(location, object)
+		self.bishopMoveCalc(origin, object)
+		self.rookMoveCalc(origin, object)
 
-	def kingMoveCalc(self, location, object):
+	def kingMoveCalc(self, origin, object):
 		##Rests
 		object.moveSet = set()
 		
-		index_A, index_B = self.__chess.MATRIX.findMatrixIndex(location)
+		index_A, index_B = self.__chess.MATRIX.findMatrixIndex(origin)
 		for i in range(-1, 2):
 			for j in range(-1, 2):
 				try:
@@ -186,13 +197,13 @@ class MOVECALC():
 					# print(e)
 					continue
 	
-	def pawnMoveCalc(self, location, object):
+	def pawnMoveCalc(self, origin, object):
 		##New Call Resets
-		currRow = location[1]
+		currRow = origin[1]
 		object.moveSet = set()
 
 		##Local Variables
-		index_A, index_B = self.__chess.MATRIX.findMatrixIndex(location)
+		index_A, index_B = self.__chess.MATRIX.findMatrixIndex(origin)
 
 		if "-W" in object.myID:
 			try: #Handles General Pawn Movement

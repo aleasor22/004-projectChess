@@ -1,7 +1,24 @@
 Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
 
 
-Current Commit #19 - [v0.0.75]
+Current Commit #20 - [v0.0.76]
+	1. Attempt #3 - Check/Checkmate logic
+		a. Saying Attempt #2 was a failure was an over reaction
+			i.	The method to determine if a king is under check works great
+			ii.	Just can't fit every aspect of Check/Checkmate logic into this one method
+			iii.Store the king that's in check and the attacking piece(s) to a dictionary
+			iv.	Passes this dictionary to CALC.dangerZone()
+		b. dangerZone Method:
+			i.	Takes the dictionary of King under check, and all the pieces attacking it
+			ii.	Adds attacking piece(s) self.moveSet to self.__forceTheseMoves
+		c. protectTheKing Method:
+			i.	Compares the current object.moveSet to the self.__forceTheseMoves, saves to a new set
+			ii.	Replaces object.moveSet w/ new set
+		d. This works some of the time
+		e. Solutions 1:
+			i.	Remove def protectTheKing. Add the logic to each pieces move calculation. 
+			
+Last Commit #19 - [v0.0.75]
 	1. Finished implimenting "moveCalculator.py"
 	2. Attempt #2 of Check/Checkmate logic (FAIL)
 		a. Issues w/ logic to determine when a king is under check
@@ -9,21 +26,8 @@ Current Commit #19 - [v0.0.75]
 		b. Need new approach to a check/checkmate logic
 		c. Requirements?
 			i.	Determine when and which king is in check
-			ii.	Determine when this calulation should occur
+			ii.	Determine when this calculation  should occur
 				1) What should reset this?
 			iii.Determine the attacking piece(s)
 				1) Determine the resulting "Danger Zone"
 			iv.	How to force these moves?
-			
-			
-Last Commit #18 - [v0.0.74]
-	1. Created "moveCalculator.py"
-		a. Piece Moves working as they were previously
-			i. 	PIECE.availableMoves() deleted
-			ii.	PLACE.findMyNextMoves(location, pieceObject) now handles PIECE.availableMoves()
-		b. Removed self.canMoveHere - only using self.moveSet
-	2. Next Goals:
-		a. Use the new "moveCalculator.py" to better calculate piece Moves. 
-			i.	Will clean up the .showMyMoves()
-			ii.	Will better setup the check/checkmate logic
-		b. Visual representation of a king in check/checkmate

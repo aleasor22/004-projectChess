@@ -60,7 +60,16 @@ def chessLoop():
 		INPUTS.applicationActive = False
 	##Bind All events
 	INPUTS.bindEvents()
-	
+
+	PLACE.underCheck() #Checks if the king is in check
+	if PLACE.kingInCheck: ##Handles logic when a king is in check
+		PLACE.changeLocationColor('red')
+		CALC.check = True
+		CALC.dangerZone(PLACE.kingInCheckTracking)
+	else:
+		PLACE.changeLocationColor()
+		CALC.check = False
+
 	CHESS.get_mainApp().after(1000, chessLoop)
 	
 
