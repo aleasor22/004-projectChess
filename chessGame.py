@@ -5,7 +5,7 @@ from pynput import keyboard
 
 
 ##-------GLOBAL VARIABLES-------##
-debugActive = False ##NOTE: Set this to true to have generic Debugging items displayed
+debugActive = True ##NOTE: Set this to true to have generic Debugging items displayed
 
 
 ##-------INITIAL RUNTIME-------##
@@ -60,9 +60,6 @@ def chessLoop():
 		INPUTS.applicationActive = False
 	##Bind All events
 	INPUTS.bindEvents()
-
-	# if PLACE.kingInCheck == False:
-	# 	PLACE.underCheck()
 	
 	CHESS.get_mainApp().after(1000, chessLoop)
 	

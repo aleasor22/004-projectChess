@@ -1,7 +1,22 @@
 Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
 
 
-Current Commit #18 - [v0.0.74]
+Current Commit #19 - [v0.0.75]
+	1. Finished implimenting "moveCalculator.py"
+	2. Attempt #2 of Check/Checkmate logic (FAIL)
+		a. Issues w/ logic to determine when a king is under check
+			i.	Difficult to track who's in check and who's attacking
+		b. Need new approach to a check/checkmate logic
+		c. Requirements?
+			i.	Determine when and which king is in check
+			ii.	Determine when this calulation should occur
+				1) What should reset this?
+			iii.Determine the attacking piece(s)
+				1) Determine the resulting "Danger Zone"
+			iv.	How to force these moves?
+			
+			
+Last Commit #18 - [v0.0.74]
 	1. Created "moveCalculator.py"
 		a. Piece Moves working as they were previously
 			i. 	PIECE.availableMoves() deleted
@@ -12,27 +27,3 @@ Current Commit #18 - [v0.0.74]
 			i.	Will clean up the .showMyMoves()
 			ii.	Will better setup the check/checkmate logic
 		b. Visual representation of a king in check/checkmate
-
-Last Commit #17 - [v0.0.72]
-	1. Created "possibleMove.png"
-	2. Display's a pieces available moves to screen
-		a. BUG: Shows avaiable moves to a location that is used by a team mate
-	3.Replaced bboxTileList with bboxInfo dictionary
-		a. Cleaned up the INPUT.findMyMouse() method
-		b. Allows for tracking of each locaitons default parameters
-			i.	Saves locationID as key
-			ii.	Saves canvasID in tuple - Item 0
-			iii.Saves fillColor in tuple - Item 1
-			iv.	Saves bbox list in tuple - Item 2
-				1) Cordinates of Top-Left & Bottom-Right Corners
-	4. Loosly knows if a king is under check, logic in initial stages 
-	5. Game Ends if a King is captured
-		a. Just displays "Game Over" to terminal
-		b. Quits out of the boards tkinter Window
-	6. Going to resturcture how Pieces calculate possible moves
-		a. New Class to be made: "moveCalculator.py"
-		b. Goals
-			i.	Make logic to capture a piece simpler
-			ii.	Make logic for a King under check/checkmate simpler
-			iii.Clean up visual representation of possible moves
-			iv.	Clean up move calculation logic

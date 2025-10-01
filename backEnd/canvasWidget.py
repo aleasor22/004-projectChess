@@ -6,18 +6,19 @@ from .boardMatrix import MATRIX
 class CANVAS():
 	def __init__(self):
 		self.__chessApp = tkinter.Tk()
-		self.__chessApp.title("Chess.Leasor  [v0.0.74]")
+		self.__chessApp.title("Chess.Leasor  [v0.0.75]")
 		self.__board = None ##Default to None
 		self.boardSize = 1024
 
 		##Board Variables
 		self.MATRIX = MATRIX()
-		self.bboxInfo = {}
-
+		self.bboxInfo = {} 
+			#Key == locationID
+			#Value == (canvasID, fillColor, [x1, y1, x2, y2])
 
 	def createCanvas(self, ):
 		##Sets boundary based on parameter "boardSize"
-		self.__chessApp.geometry(str(self.boardSize)+"x"+str(self.boardSize))
+		self.__chessApp.geometry(f"{self.boardSize}x{self.boardSize}")
 
 		##Generate the canvas object
 		self.__board = tkinter.Canvas(self.__chessApp, width=self.boardSize, height=self.boardSize)
