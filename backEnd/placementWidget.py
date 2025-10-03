@@ -88,7 +88,7 @@ class PLACEMENT():
 				self.selectImg.removeImage()
 				self.selectImg.placeImage(currMouseLoc)
 				if self.selectedPiece != None:
-					self.findMyNextMoves(self.selectedPiece, True)
+					self.__moveCalc.findMyNextMoves(self.selectedPiece)
 					self.selectedPiece.showMyMoves()
 					self.oldLocation = self.selectedPiece.locationID
 					self.originalID = self.selectedPiece.canvasID
@@ -97,7 +97,7 @@ class PLACEMENT():
 				print(f"not your turn - found Piece: {self.get_piece(currMouseLoc).myID}")
 			# self.__chess.MATRIX.printMyPieceMatrix()
 		except AttributeError as e:
-			# print(f"No Piece Selected: {e} \n\tPLACE.selectPiece()")
+			print(f"No Piece Selected: {e} \n\tPLACE.selectPiece()")
 			self.activePiece = False
 
 	##Moves the selected piece to next location
@@ -149,92 +149,16 @@ class PLACEMENT():
 		else:
 			return False
 	
-	def underCheck(self, ):
-		##Resets
-		self.kingInCheckTracking = {}
-		try:
-			WKingLocation = self.allPieces["KING-W0"].locationID
-			BKingLocation = self.allPieces["KING-B0"].locationID
-			if self.turnOrder[0] == "-W":
-				self.kingInCheckTracking = {"KING-W0":self.allPieces["KING-W0"]}
-				for key, value in self.allPieces.items():
-					if ("KING" not in key) and ("-W" not in key):
-						self.findMyNextMoves(value)
-						if WKingLocation in value.moveSet:
-							# print(f"{WKingLocation} found in {value.moveSet}")
-							self.kingInCheckTracking[key] = value				
-
-			elif self.turnOrder[0] == "-B":
-				self.kingInCheckTracking = {"KING-B0":self.allPieces["KING-B0"]}
-				for key, value in self.allPieces.items():
-					if ("KING" not in key) and ("-B" not in key):
-						self.findMyNextMoves(value)
-						if BKingLocation in value.moveSet:
-							# print(f"{BKingLocation} found in {value.moveSet}")
-							self.kingInCheckTracking[key] = value
-			
-			# print(self.kingInCheckTracking, "Length:", len(self.kingInCheckTracking))
-			if len(self.kingInCheckTracking) > 1:
-				self.kingInCheck = True
-			else:
-				self.kingInCheck = False
-			
-		except KeyError as e:
-			if "KING-W0" not in self.allPieces.keys() or "KING-B0" not in self.allPieces.keys():
-				self.__chess.get_canvas().quit()
-				print("Game Over")
-			else:
-				print(e)
-				pass
-
-	def changeLocationColor(self, newColor='default'):
-		if "KING-W0" in self.kingInCheckTracking.keys():
-			location = self.allPieces["KING-W0"].locationID
-		elif "KING-B0" in self.kingInCheckTracking.keys():
-			location = self.allPieces["KING-B0"].locationID
-
-		if newColor != 'default':
-			self.__chess.get_canvas().itemconfig(self.__chess.bboxInfo[location][0], fill=newColor)
-			self.locationChanged.append(location)
+	def changeLocationColor(self, key, newColor='default'):
+		if newColor != 'default' and key != "":
+			self.__chess.get_canvas().itemconfig(self.__chess.bboxInfo[self.allPieces[key].locationID][0], fill=newColor)
+			self.locationChanged.append(self.allPieces[key].locationID)
 		else:
 			for id in self.locationChanged:
 				tuple = self.__chess.bboxInfo[id]
 				self.__chess.get_canvas().itemconfig(tuple[0], fill=tuple[1])
 			self.locationChanged = []
 				
-
-	def findMyNextMoves(self, object, selectedPiece=False):
-		if selectedPiece:
-			print(object.myID)
-		if "PAWN" in object.myID:
-			self.__moveCalc.pawnMoveCalc(object.locationID, object)
-			# print(f"{object.myID} moves: {object.moveSet}")
-		elif "ROOK" in object.myID:
-			self.__moveCalc.rookMoveCalc(object.locationID, object)
-			if self.__moveCalc.check and selectedPiece:
-				self.__moveCalc.protectTheKing(object)
-			# print(f"{object.myID} moves: {object.moveSet}")
-		elif "KNIGHT" in object.myID:
-			self.__moveCalc.knightMoveCalc(object.locationID, object)
-			if self.__moveCalc.check and selectedPiece:
-				self.__moveCalc.protectTheKing(object)
-			# print(f"{object.myID} moves: {object.moveSet}")
-		elif "BISHOP" in object.myID:
-			self.__moveCalc.bishopMoveCalc(object.locationID, object)
-			if self.__moveCalc.check and selectedPiece:
-				self.__moveCalc.protectTheKing(object)
-			# print(f"{object.myID} moves: {object.moveSet}")
-		elif "QUEEN" in object.myID:
-			self.__moveCalc.queenMoveCalc(object.locationID, object)
-			if self.__moveCalc.check and selectedPiece:
-				self.__moveCalc.protectTheKing(object)
-			# print(f"{object.myID} moves: {object.moveSet}")
-		elif "KING" in object.myID:
-			self.__moveCalc.kingMoveCalc(object.locationID, object)
-			if self.__moveCalc.check and selectedPiece:
-				self.__moveCalc.protectTheKing(object)
-			# print(f"{object.myID} moves: {object.moveSet}")
-		pass
 
 	def get_piece(self, location=None):
 		# print(f"Got Called  @{location}")

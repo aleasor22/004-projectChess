@@ -1,7 +1,21 @@
 Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
 
 
-Current Commit #20 - [v0.0.76]
+Current Commit #21 - [v0.0.77]
+	1. Attempt #4 - Check/Checkmate logic
+		a. Made it so that the king can't move somewhere that would activly put him under threat
+			i. King can still capture a piece, even if it's guarded. (King captures, then another piece takes the king. Trade*)
+		b. Added KING.dangerZone & KING.threats
+			i.	dangerZone - Stores all moves that could be made, that would endanger the king
+			ii.	threats - Stores only the moves that the king can make, and are in dangerZone
+			iii.inCheck - Set to true if the kings location is in dangerZone or Threats. Refreshes every second through chessGame.py
+		c. Next Goal:
+			i.	Figure out logic to foce protection of the King. Base this on PLACE.selectPiece() - Use the KING.inCheck tracking
+			ii.	Solve the above bug with king movement. Low Priority however.
+	2. Changed "possibleMove.png" to be a better contrast to board colors.
+		
+			
+Last Commit #20 - [v0.0.76]
 	1. Attempt #3 - Check/Checkmate logic
 		a. Saying Attempt #2 was a failure was an over reaction
 			i.	The method to determine if a king is under check works great
@@ -17,17 +31,3 @@ Current Commit #20 - [v0.0.76]
 		d. This works some of the time
 		e. Solutions 1:
 			i.	Remove def protectTheKing. Add the logic to each pieces move calculation. 
-			
-Last Commit #19 - [v0.0.75]
-	1. Finished implimenting "moveCalculator.py"
-	2. Attempt #2 of Check/Checkmate logic (FAIL)
-		a. Issues w/ logic to determine when a king is under check
-			i.	Difficult to track who's in check and who's attacking
-		b. Need new approach to a check/checkmate logic
-		c. Requirements?
-			i.	Determine when and which king is in check
-			ii.	Determine when this calculation  should occur
-				1) What should reset this?
-			iii.Determine the attacking piece(s)
-				1) Determine the resulting "Danger Zone"
-			iv.	How to force these moves?

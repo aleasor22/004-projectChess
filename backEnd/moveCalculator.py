@@ -7,24 +7,27 @@ class MOVECALC():
 		self.__myGlobalMatrix = chess.MATRIX.get_matrix("Global")
 		self.__myPieceMatrix = chess.MATRIX.get_matrix("Piece")
 		self.__activeLocaiton = {} ##Key == LocationID, value == PIECE.object @ Location
-		self.__forceTheseMoves = set()
+		# self.__forceTheseMoves = set()
 
-		self.check = False
+		##Check/Checkmate Logic
+		self.WKingCheck = False
+		self.BKingCheck = False
 	
-	def dangerZone(self, check):
-		for key, object in check.items():
-			if "KING" not in key:
-				for item in object.moveSet:
-					self.__forceTheseMoves.add(item)
-		# print(self.__forceTheseMoves)
+	
 
-	def protectTheKing(self, object):
-		newSet = set()
-		for item in object.moveSet:
-			if item in self.__forceTheseMoves:
-				newSet.add(item)
-		object.moveSet = newSet
-		# print(f"{object.myID} Move Comparision\n- New:{newSet}\n- Old:{object.moveSet}")
+	def findMyNextMoves(self, object, calcKing=True):
+		if "PAWN" in object.myID:
+			self.pawnMoveCalc(object.locationID, object)
+		elif "ROOK" in object.myID:
+			self.rookMoveCalc(object.locationID, object)
+		elif "KNIGHT" in object.myID:
+			self.knightMoveCalc(object.locationID, object)
+		elif "BISHOP" in object.myID:
+			self.bishopMoveCalc(object.locationID, object)
+		elif "QUEEN" in object.myID:
+			self.queenMoveCalc(object.locationID, object)
+		elif "KING" in object.myID and calcKing == True:
+			self.kingMoveCalc(object.locationID, object)
 	
 	def updateActiveLocaitons(self, location, object):
 		for key, value in self.__activeLocaiton.items():
@@ -36,8 +39,10 @@ class MOVECALC():
 		self.__activeLocaiton[location] = object
 		# print(f"{object.myID} added to activeLocation[{location}]")
 
-	def captureAble(self, location, object=None, currTurn=None):
-		if f"{object.myID[-3]}{object.myID[-2]}" not in self.__activeLocaiton[location].myID:
+	def captureAble(self, location, object=None):
+		"""If the neiboring location is used by an opponent's piece, add it to possible moves"""
+		# print(object.myID[-2], " vs ", self.__activeLocaiton[location].myID[-2])
+		if object.myID[-2] not in self.__activeLocaiton[location].myID[-2]:
 			object.moveSet.add(location)
 
 	def bishopMoveCalc(self, origin, object):
@@ -57,6 +62,10 @@ class MOVECALC():
 				elif myLoc != "**": 
 					self.captureAble(myLoc, object)
 					raise IndexError
+					# if "KING" in self.__activeLocaiton[myLoc].myID:
+					# 	continue
+					# else:
+					# 	raise IndexError
 				else:
 					object.moveSet.add(self.__myGlobalMatrix[index_A+northEast][index_B-northEast])
 			except IndexError as e:
@@ -72,6 +81,10 @@ class MOVECALC():
 				elif myLoc != "**": 
 					self.captureAble(myLoc, object)
 					raise IndexError
+					# if "KING" in self.__activeLocaiton[myLoc].myID:
+					# 	continue
+					# else:
+					# 	raise IndexError
 				else:
 					object.moveSet.add(self.__myGlobalMatrix[index_A-northWest][index_B-northWest])
 			except IndexError as e:
@@ -85,6 +98,10 @@ class MOVECALC():
 				elif myLoc != "**": 
 					self.captureAble(myLoc, object)
 					raise IndexError
+					# if "KING" in self.__activeLocaiton[myLoc].myID:
+					# 	continue
+					# else:
+					# 	raise IndexError
 				else:
 					object.moveSet.add(self.__myGlobalMatrix[index_A+southEast][index_B+southEast])
 			except IndexError as e:
@@ -100,6 +117,10 @@ class MOVECALC():
 				elif myLoc != "**": 
 					self.captureAble(myLoc, object)
 					raise IndexError
+					# if "KING" in self.__activeLocaiton[myLoc].myID:
+					# 	continue
+					# else:
+					# 	raise IndexError
 				else:
 					object.moveSet.add(self.__myGlobalMatrix[index_A-southWest][index_B+southWest])
 			except IndexError as e:
@@ -147,6 +168,10 @@ class MOVECALC():
 			if myLoc != "**":
 				self.captureAble(myLoc, object)
 				break
+				# if "KING" in self.__activeLocaiton[myLoc].myID:
+				# 	continue
+				# else:
+				# 	break
 			object.moveSet.add(self.__myGlobalMatrix[west][index_B])
 
 		for east in range(index_A+1, 8):
@@ -154,6 +179,10 @@ class MOVECALC():
 			if myLoc != "**":
 				self.captureAble(myLoc, object)
 				break
+				# if "KING" in self.__activeLocaiton[myLoc].myID:
+				# 	continue
+				# else:
+				# 	break
 			object.moveSet.add(self.__myGlobalMatrix[east][index_B])
 
 		## Vertical Movment
@@ -162,13 +191,21 @@ class MOVECALC():
 			if myLoc != "**":
 				self.captureAble(myLoc, object)
 				break
+				# if "KING" in self.__activeLocaiton[myLoc].myID:
+				# 	continue
+				# else:
+				# 	break
 			object.moveSet.add(self.__myGlobalMatrix[index_A][north])
 		
 		for south in range(index_B+1, 8):
 			myLoc = self.__myPieceMatrix[index_A][south]
 			if myLoc != "**":
 				self.captureAble(myLoc, object)
-				break
+				# break
+				# if "KING" in self.__activeLocaiton[myLoc].myID:
+				# 	continue
+				# else:
+				# 	break
 			object.moveSet.add(self.__myGlobalMatrix[index_A][south])
 	
 	def queenMoveCalc(self, origin, object):
@@ -176,27 +213,86 @@ class MOVECALC():
 		self.bishopMoveCalc(origin, object)
 		self.rookMoveCalc(origin, object)
 
+	def endOfGame(self, object):
+		if object.locationID in object.threats or object.locationID in object.dangerZone:
+			object.inCheck = True
+		else:
+			object.inCheck = False
+	
+	def nonKingMoves(self, kingObj, ):
+		# print(f"\n{kingObj.myID} = Curr King")
+		##Reset
+		kingObj.dangerZone = set()
+
+		##Calulates potential threats to king
+		for object in self.__activeLocaiton.values():
+			if kingObj.myID[-2] != object.myID[-2]:
+				if "PAWN" not in object.myID:
+					# print(object.myID)
+					self.findMyNextMoves(object, calcKing=False)
+					for loc in object.moveSet:
+						kingObj.dangerZone.add(loc)
+				else:
+					pawnAttack = self.pawnAttackCalc(object.locationID, object)
+					# print(f"{object.myID} attacks {pawnAttack}")
+					for loc in pawnAttack:
+						# print(loc, "Pawn Attack?")
+						kingObj.dangerZone.add(loc)
+
+
 	def kingMoveCalc(self, origin, object):
 		##Rests
+		self.nonKingMoves(object)
 		object.moveSet = set()
+		object.threats = set()
 		
 		index_A, index_B = self.__chess.MATRIX.findMatrixIndex(origin)
 		for i in range(-1, 2):
 			for j in range(-1, 2):
 				try:
 					locationUsed = self.__myPieceMatrix[index_A+i][index_B+j]
+					globLocation = self.__myGlobalMatrix[index_A+i][index_B+j]
 					if (index_A+i) < 0 or (index_B+j) < 0:
 						raise IndexError("Less than 0")
-					elif locationUsed == object.locationID:
-						raise IndexError("Ignore Origin")
+					elif globLocation not in object.dangerZone and locationUsed == "**":
+						object.moveSet.add(globLocation)
 					elif locationUsed != "**":
-						self.captureAble(locationUsed, object)
+						self.captureAble(locationUsed, object) ##Only add location as a move, if it's an opposing piece
 					else:
-						object.moveSet.add(self.__myGlobalMatrix[index_A+i][index_B+j])
+						object.threats.add(globLocation)
+					if object.locationID in object.dangerZone:
+						object.threats.add(object.locationID)
 				except IndexError as e:
 					# print(e)
 					continue
-	
+		# print("Next Step?", object.moveSet, object.threats)
+		# if len(object.threats) >= 1:
+		# 	if object.locationID in object.dangerZone:
+		# 		pass
+		# self.endOfGame(object)
+		# print(object.threats, "Listed Threats")
+
+	def pawnAttackCalc(self, origin, object):
+		row = origin[1]
+		tempSet = set()
+
+		##Local Variables
+		index_A, index_B = self.__chess.MATRIX.findMatrixIndex(origin)
+		if "-W" in object.myID:
+			try: ##Handles Pawn Attacks
+				tempSet.add(self.__myGlobalMatrix[index_A-1][index_B+1])
+				tempSet.add(self.__myGlobalMatrix[index_A+1][index_B+1])
+			except IndexError:
+				pass
+		elif "-B" in object.myID:
+			try: ##Handles Pawn Attacks
+				tempSet.add(self.__myGlobalMatrix[index_A-1][index_B-1])
+				tempSet.add(self.__myGlobalMatrix[index_A+1][index_B-1])
+			except IndexError:
+				pass
+
+		return tempSet
+
 	def pawnMoveCalc(self, origin, object):
 		##New Call Resets
 		currRow = origin[1]

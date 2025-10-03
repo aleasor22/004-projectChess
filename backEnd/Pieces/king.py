@@ -8,6 +8,9 @@ from Images import *
 class KING(PIECES):
 	def __init__(self, canvas):
 		PIECES.__init__(self, canvas)
+		self.dangerZone = set()
+		self.threats = set()
+		self.inCheck = False
 
 	def setup(self, tag):
 			self.set_team()
