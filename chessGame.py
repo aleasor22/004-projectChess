@@ -64,10 +64,13 @@ def chessLoop():
 	##If king get's removed from PLACE.allPieces, Game Auto Loses
 	##This won't happen once logic is cleaned up to better prevent moves that put the king under threat
 	try:
-		CALC.endOfGame(PLACE.allPieces["KING-W0"]) #Checks if the king is in check
+		# CALC.endOfGame(PLACE.allPieces["KING-W0"]) #Checks if the king is in check
 		CALC.nonKingMoves(PLACE.allPieces["KING-W0"]) #Checks if the king is in check
-		CALC.endOfGame(PLACE.allPieces["KING-B0"]) #Checks if the king is in check
+		# CALC.endOfGame(PLACE.allPieces["KING-B0"]) #Checks if the king is in check
 		CALC.nonKingMoves(PLACE.allPieces["KING-B0"]) #Checks if the king is in check
+
+		print("Refresh:", PLACE.allPieces["KING-W0"].inCheck, PLACE.allPieces["KING-B0"].inCheck)
+
 		if PLACE.allPieces["KING-W0"].inCheck:
 			PLACE.changeLocationColor("KING-W0", 'red')
 		elif PLACE.allPieces["KING-B0"].inCheck:

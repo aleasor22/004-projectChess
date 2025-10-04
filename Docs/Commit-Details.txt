@@ -1,7 +1,23 @@
 Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
 
 
-Current Commit #21 - [v0.0.77]
+Current Commit #22 - [v0.0.772]
+	1. Attempt #4 - Check/Checkmate logic (FAIL)
+		a. Successfully used the KING.dangerZone/.threats/.inCheck for check logic
+		b. Successfully got pieces to force moves that protect the king.
+		c. Then changed self.__activeLocations key to use PIECE.myID instead of .locationID
+			i.	 This broke everything
+			ii.	 The king will toggle .inCheck rather than stay as True or False
+			iii. Official end of Attempt #4 for Check/Checkmate logic
+	2. Next Plan of action:
+		a. Make a new class LOGIC - "checkLogic.py" to calulate and monitor information relating to a king being in check
+			i.	 It  will be a parrent to moveCalculator.py
+			ii.	 Will clean up moveCalulator.
+			iii. Goal of fixing issue with current .inCheck boolean logic
+			iv.	 Marks the start of Attempt #5
+		
+			
+Last Commit #21 - [v0.0.77]
 	1. Attempt #4 - Check/Checkmate logic
 		a. Made it so that the king can't move somewhere that would activly put him under threat
 			i. King can still capture a piece, even if it's guarded. (King captures, then another piece takes the king. Trade*)
@@ -13,21 +29,3 @@ Current Commit #21 - [v0.0.77]
 			i.	Figure out logic to foce protection of the King. Base this on PLACE.selectPiece() - Use the KING.inCheck tracking
 			ii.	Solve the above bug with king movement. Low Priority however.
 	2. Changed "possibleMove.png" to be a better contrast to board colors.
-		
-			
-Last Commit #20 - [v0.0.76]
-	1. Attempt #3 - Check/Checkmate logic
-		a. Saying Attempt #2 was a failure was an over reaction
-			i.	The method to determine if a king is under check works great
-			ii.	Just can't fit every aspect of Check/Checkmate logic into this one method
-			iii.Store the king that's in check and the attacking piece(s) to a dictionary
-			iv.	Passes this dictionary to CALC.dangerZone()
-		b. dangerZone Method:
-			i.	Takes the dictionary of King under check, and all the pieces attacking it
-			ii.	Adds attacking piece(s) self.moveSet to self.__forceTheseMoves
-		c. protectTheKing Method:
-			i.	Compares the current object.moveSet to the self.__forceTheseMoves, saves to a new set
-			ii.	Replaces object.moveSet w/ new set
-		d. This works some of the time
-		e. Solutions 1:
-			i.	Remove def protectTheKing. Add the logic to each pieces move calculation. 

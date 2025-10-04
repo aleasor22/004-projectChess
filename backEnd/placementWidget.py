@@ -32,9 +32,9 @@ class PLACEMENT():
 		self.whiteCaptures = []
 
 		##King is Under Threat Variables
-		self.kingInCheck = False
+		# self.kingInCheck = False
 		self.locationChanged = []
-		self.kingInCheckTracking = {}
+		# self.kingInCheckTracking = {}
 
 
 	def createPieces(self, pieceName, quantity, team):
@@ -59,13 +59,13 @@ class PLACEMENT():
 						key = f"{self.backRow[col]}-W1"
 					# print(f"Piece Tag: {key}")
 					self.allPieces[key].setup(location)
-					self.__moveCalc.updateActiveLocaitons(location, self.allPieces[key])
+					self.__moveCalc.addActiveLocaitons(self.allPieces[key])
 				elif row == 1:
 					self.allPieces[f"PAWN-W{col}"].setup(location)
-					self.__moveCalc.updateActiveLocaitons(location, self.allPieces[f"PAWN-W{col}"])
+					self.__moveCalc.addActiveLocaitons(self.allPieces[f"PAWN-W{col}"])
 				elif row == 6:
 					self.allPieces[f"PAWN-B{col}"].setup(location)
-					self.__moveCalc.updateActiveLocaitons(location, self.allPieces[f"PAWN-B{col}"])
+					self.__moveCalc.addActiveLocaitons(self.allPieces[f"PAWN-B{col}"])
 				elif row == 7:
 					if col <= 4:
 						key = f"{self.backRow[col]}-B0"
@@ -73,7 +73,7 @@ class PLACEMENT():
 						key = f"{self.backRow[col]}-B1"
 					# print(f"Piece Tag: {key}")
 					self.allPieces[key].setup(location)
-					self.__moveCalc.updateActiveLocaitons(location, self.allPieces[key])
+					self.__moveCalc.addActiveLocaitons(self.allPieces[key])
 
 	def nextTurn(self):
 		currTurn = self.turnOrder[0]
@@ -107,11 +107,11 @@ class PLACEMENT():
 			self.__chess.get_canvas().coords(self.selectedPiece.canvasID, pos[0], pos[1])
 
 			if mousePress:
+				# print(f"{location} is in {self.selectedPiece.moveSet}")
 				if location in self.selectedPiece.moveSet:
 					self.capturePiece(location)
 					self.selectedPiece.placeImage(location)
 					self.__chess.MATRIX.updatePieceMatrix(self.oldLocation, location)
-					self.__moveCalc.updateActiveLocaitons(location, self.selectedPiece)
 					self.nextTurn()
 				else:
 					self.selectedPiece.placeImage(self.oldLocation)
@@ -158,8 +158,7 @@ class PLACEMENT():
 				tuple = self.__chess.bboxInfo[id]
 				self.__chess.get_canvas().itemconfig(tuple[0], fill=tuple[1])
 			self.locationChanged = []
-				
-
+	
 	def get_piece(self, location=None):
 		# print(f"Got Called  @{location}")
 		if self.__chess.MATRIX.foundInMatrix(location):
