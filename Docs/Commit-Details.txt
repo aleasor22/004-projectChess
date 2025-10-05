@@ -1,7 +1,22 @@
 Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
 
 
-Current Commit #22 - [v0.0.772]
+Current Commit #23 - [v0.0.774]
+	1. Created logic to flip the board during setup
+	2. Attempt #5 - Check/Checkmate Logic 
+		a. More testing resulted in Check logic being inconsistent.
+		b. These moves being forced has also become inconsistent
+		c. self.__activeLocations is now self._pieces
+		d. Created checkLogic.py - cleaned up moveCalculator.py but didn't solve previous issues.
+	3. Goals:
+		a. Start move calulation from scratch again
+			i.	 Original logic stays. The special moves (capture and forcedMoves) are getting re-worked
+			ii.	 When moves are calulated also needs changed. 
+		b. Impliment Checkmate Logic
+			i.	 Game Finished Screen
+		
+			
+Last Commit #22 - [v0.0.772]
 	1. Attempt #4 - Check/Checkmate logic (FAIL)
 		a. Successfully used the KING.dangerZone/.threats/.inCheck for check logic
 		b. Successfully got pieces to force moves that protect the king.
@@ -10,22 +25,8 @@ Current Commit #22 - [v0.0.772]
 			ii.	 The king will toggle .inCheck rather than stay as True or False
 			iii. Official end of Attempt #4 for Check/Checkmate logic
 	2. Next Plan of action:
-		a. Make a new class LOGIC - "checkLogic.py" to calulate and monitor information relating to a king being in check
-			i.	 It  will be a parrent to moveCalculator.py
+		a. Make a new class LOGIC - "checkLogic.py" to calculate  and monitor information relating to a king being in check
+			i.	 It  will be a parent  to moveCalculator.py
 			ii.	 Will clean up moveCalulator.
 			iii. Goal of fixing issue with current .inCheck boolean logic
 			iv.	 Marks the start of Attempt #5
-		
-			
-Last Commit #21 - [v0.0.77]
-	1. Attempt #4 - Check/Checkmate logic
-		a. Made it so that the king can't move somewhere that would activly put him under threat
-			i. King can still capture a piece, even if it's guarded. (King captures, then another piece takes the king. Trade*)
-		b. Added KING.dangerZone & KING.threats
-			i.	dangerZone - Stores all moves that could be made, that would endanger the king
-			ii.	threats - Stores only the moves that the king can make, and are in dangerZone
-			iii.inCheck - Set to true if the kings location is in dangerZone or Threats. Refreshes every second through chessGame.py
-		c. Next Goal:
-			i.	Figure out logic to foce protection of the King. Base this on PLACE.selectPiece() - Use the KING.inCheck tracking
-			ii.	Solve the above bug with king movement. Low Priority however.
-	2. Changed "possibleMove.png" to be a better contrast to board colors.

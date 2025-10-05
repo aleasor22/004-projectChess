@@ -14,7 +14,7 @@ CHESS = CANVAS()
 
 ##CREATE CANVAS AND CHESS BOARD
 CHESS.createCanvas()
-CHESS.createGrid()
+CHESS.createGrid()#False)
 
 ##Create the "Board" that the game is played on
 BOARD = CHESS.get_canvas()
@@ -64,18 +64,19 @@ def chessLoop():
 	##If king get's removed from PLACE.allPieces, Game Auto Loses
 	##This won't happen once logic is cleaned up to better prevent moves that put the king under threat
 	try:
-		# CALC.endOfGame(PLACE.allPieces["KING-W0"]) #Checks if the king is in check
-		CALC.nonKingMoves(PLACE.allPieces["KING-W0"]) #Checks if the king is in check
-		# CALC.endOfGame(PLACE.allPieces["KING-B0"]) #Checks if the king is in check
-		CALC.nonKingMoves(PLACE.allPieces["KING-B0"]) #Checks if the king is in check
-
 		print("Refresh:", PLACE.allPieces["KING-W0"].inCheck, PLACE.allPieces["KING-B0"].inCheck)
 
 		if PLACE.allPieces["KING-W0"].inCheck:
+			print("KING-W0 threats:", PLACE.allPieces["KING-W0"].threats)
+			print("KING-W0 threats:", PLACE.allPieces["KING-W0"].dangerZone)
 			PLACE.changeLocationColor("KING-W0", 'red')
 		elif PLACE.allPieces["KING-B0"].inCheck:
+			print("KING-B0 threats:", PLACE.allPieces["KING-B0"].threats)
+			print("KING-B0 threats:", PLACE.allPieces["KING-B0"].dangerZone)
 			PLACE.changeLocationColor("KING-B0", 'red')
 		else:
+			CALC.nonKingMoves("KING-W0") #Checks if the king is in check
+			CALC.nonKingMoves("KING-B0") #Checks if the king is in check
 			PLACE.changeLocationColor("", 'default')
 	except KeyError as E:
 		print(f"Game Over - Team {E} lost")

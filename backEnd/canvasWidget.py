@@ -6,7 +6,7 @@ from .boardMatrix import MATRIX
 class CANVAS():
 	def __init__(self):
 		self.__chessApp = tkinter.Tk()
-		self.__chessApp.title("Chess.Leasor  [v0.0.772]")
+		self.__chessApp.title("Chess.Leasor  [v0.0.774]")
 		self.__board = None ##Default to None
 		self.boardSize = 1024
 
@@ -33,14 +33,28 @@ class CANVAS():
 				self.__board.create_text(pos[0]+64, pos[1]+64, font=("Arial", 16), text=gridTag, tag=gridTag)
 
 
-	def createGrid(self):
-		fillActive = False
-		fillColor = 'gray'
+	def createGrid(self, flippedBoard=True):
 		xPos = 0
 		yPos = 0
-		for row in range(8):
+
+		if flippedBoard:
+			##Row Counts backwards
+			start = 7
+			stop = -1
+			step = -1
+			fillActive = True
+			fillColor = 'white'
+		else:
+			##Row Counts forwards
+			start = 0
+			stop = 8
+			step = 1
+			fillActive = False
+			fillColor = 'gray'
+
+		for row in range(start, stop, step):
 			for col in range(8):
-				if fillActive == True:
+				if fillActive:
 					fillColor = 'white'
 					fillActive = False
 				else:
