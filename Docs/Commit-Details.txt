@@ -1,32 +1,31 @@
 Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
 
 
-Current Commit #23 - [v0.0.774]
+Current Commit #24 - [v0.0.776]
+	1. Attempt #5 - Check/Checkmate Logic 
+		a. Check logic almost done
+			i.	 Pieces are forced to protect the king if possible.
+			ii.	 The King can't actively put himself in danger.
+			iii. (in-progress) Other Pieces cannot put their King in check.
+	2. Can now Castle King with ether rook
+	3. Goals:
+		a. en passante logic for pawns
+		b. Calculating if a piece is pinned
+			i.	 True = Prevent Movement (Outside of capturing attacker)
+			ii.	 False = Allow moves as normal
+		c. Checkmate Logic
+		
+			
+Last Commit #23 - [v0.0.774]
 	1. Created logic to flip the board during setup
 	2. Attempt #5 - Check/Checkmate Logic 
 		a. More testing resulted in Check logic being inconsistent.
 		b. These moves being forced has also become inconsistent
-		c. self.__activeLocations is now self._pieces
+		c. self.__activeLocations is now self.pieces
 		d. Created checkLogic.py - cleaned up moveCalculator.py but didn't solve previous issues.
 	3. Goals:
-		a. Start move calulation from scratch again
+		a. Start move calculation from scratch again
 			i.	 Original logic stays. The special moves (capture and forcedMoves) are getting re-worked
-			ii.	 When moves are calulated also needs changed. 
-		b. Impliment Checkmate Logic
+			ii.	 When moves are calculated also needs changed. 
+		b. Implement Checkmate Logic
 			i.	 Game Finished Screen
-		
-			
-Last Commit #22 - [v0.0.772]
-	1. Attempt #4 - Check/Checkmate logic (FAIL)
-		a. Successfully used the KING.dangerZone/.threats/.inCheck for check logic
-		b. Successfully got pieces to force moves that protect the king.
-		c. Then changed self.__activeLocations key to use PIECE.myID instead of .locationID
-			i.	 This broke everything
-			ii.	 The king will toggle .inCheck rather than stay as True or False
-			iii. Official end of Attempt #4 for Check/Checkmate logic
-	2. Next Plan of action:
-		a. Make a new class LOGIC - "checkLogic.py" to calculate  and monitor information relating to a king being in check
-			i.	 It  will be a parent  to moveCalculator.py
-			ii.	 Will clean up moveCalulator.
-			iii. Goal of fixing issue with current .inCheck boolean logic
-			iv.	 Marks the start of Attempt #5

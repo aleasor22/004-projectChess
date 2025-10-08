@@ -1,5 +1,6 @@
 ##List of Imports
 import os
+import sys
 import tkinter as tk
 from PIL import ImageTk, Image
 
@@ -49,3 +50,12 @@ class IMAGE:
 	
 	def get_size(self):
 		return self._imgSize
+
+	##EXE Logic
+	def resource_path(relative_path):
+		try:
+			base_path = sys._MEIPASS
+		except Exception:
+			base_path = os.path.abspath(".")
+
+		return os.path.join(base_path, relative_path)

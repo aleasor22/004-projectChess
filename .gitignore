@@ -75,6 +75,7 @@ instance/
 /Docs/__Archive
 
 # Ignore From Images
+/application
 /Images/__Archive
 /Images/AsepriteFiles
 /backEnd/__pycache__

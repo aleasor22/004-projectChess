@@ -9,6 +9,7 @@ class KING(PIECES):
 	def __init__(self, canvas):
 		PIECES.__init__(self, canvas)
 		self.dangerZone = set()
+		self.attacters = []
 		self.threats = set()
 		self.inCheck = False
 

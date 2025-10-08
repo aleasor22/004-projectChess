@@ -31,23 +31,19 @@ class PLACEMENT():
 		self.whiteCaptures = []
 
 		##King is Under Threat Variables
-		# self.kingInCheck = False
 		self.locationChanged = []
-		# self.kingInCheckTracking = {}
 
 
 	def createPieces(self, pieceName, quantity, team):
 		for pieceNum in range(quantity):
 			if team == "white":
 				tag = f"{pieceName}-W{pieceNum}"
-				self.allPieces[tag] = self.get_object(pieceName)
-				self.allPieces[tag].myID = tag
-				self.__moveCalc.addActiveLocaitons(tag, self.allPieces[tag])
 			elif team == "black":
-				tag = f"{pieceName}-B{pieceNum}"
-				self.allPieces[tag] = self.get_object(pieceName)
-				self.allPieces[tag].myID = tag
-				self.__moveCalc.addActiveLocaitons(tag, self.allPieces[tag])
+				tag = f"{pieceName}-B{pieceNum}"			
+
+			self.allPieces[tag] = self.get_object(pieceName)
+			self.allPieces[tag].myID = tag
+			self.__moveCalc.updateActiveLocaitons(self.allPieces[tag])
 
 	def placePieces(self):
 		for row in range(8):
@@ -60,10 +56,13 @@ class PLACEMENT():
 						key = f"{self.backRow[col]}-W1"
 					# print(f"Piece Tag: {key}")
 					self.allPieces[key].setup(location)
+					self.__moveCalc.updateActiveLocaitons(self.allPieces[key])
 				elif row == 1:
 					self.allPieces[f"PAWN-W{col}"].setup(location)
+					self.__moveCalc.updateActiveLocaitons(self.allPieces[key])
 				elif row == 6:
 					self.allPieces[f"PAWN-B{col}"].setup(location)
+					self.__moveCalc.updateActiveLocaitons(self.allPieces[key])
 				elif row == 7:
 					if col <= 4:
 						key = f"{self.backRow[col]}-B0"
@@ -71,6 +70,7 @@ class PLACEMENT():
 						key = f"{self.backRow[col]}-B1"
 					# print(f"Piece Tag: {key}")
 					self.allPieces[key].setup(location)
+					self.__moveCalc.updateActiveLocaitons(self.allPieces[key])
 
 	def nextTurn(self):
 		currTurn = self.__moveCalc.turnOrder[0]
@@ -85,8 +85,9 @@ class PLACEMENT():
 				self.selectImg.removeImage()
 				self.selectImg.placeImage(currMouseLoc)
 				if self.selectedPiece != None:
+					# print("Piece Selected:", self.selectedPiece.myID)
+					print(f"Has {self.selectedPiece.myID} moved? {self.selectedPiece.hasMoved}")
 					self.__moveCalc.findMyNextMoves(self.selectedPiece)
-					# self.__moveCalc.nonKingMoves(f"KING{self.__moveCalc.turnOrder[0]}0")
 					self.selectedPiece.showMyMoves()
 					self.oldLocation = self.selectedPiece.locationID
 					self.originalID = self.selectedPiece.canvasID
@@ -107,10 +108,15 @@ class PLACEMENT():
 			if mousePress:
 				# print(f"{location} is in {self.selectedPiece.moveSet}")
 				if location in self.selectedPiece.moveSet:
+					if "KING" in self.selectedPiece.myID:
+						if location in ["c1", "g1", "c8", "g8"]:
+							self.__moveCalc.kingCastle(location)
 					self.capturePiece(location)
 					self.selectedPiece.placeImage(location)
+					if self.selectedPiece.hasMoved == False:
+						self.selectedPiece.hasMoved = True
+					self.__moveCalc.attackingTheKing(f"KING{self.__moveCalc.turnOrder[0]}0")
 					self.__chess.MATRIX.updatePieceMatrix(self.oldLocation, location)
-					self.__moveCalc.nonKingMoves(f"KING{self.__moveCalc.turnOrder[0]}0")
 					self.nextTurn()
 				else:
 					self.selectedPiece.placeImage(self.oldLocation)
@@ -187,4 +193,5 @@ class PLACEMENT():
 	def removePiece(self):
 		self.underPiece.removeImage()
 		del self.allPieces[self.underPiece.myID]
+		del self.__moveCalc.pieces[self.underPiece.myID]
 		# print(f"Is {self.underPiece.myID} in self.allPieces? {self.underPiece.myID in self.allPieces.keys()}")

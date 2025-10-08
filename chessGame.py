@@ -64,20 +64,18 @@ def chessLoop():
 	##If king get's removed from PLACE.allPieces, Game Auto Loses
 	##This won't happen once logic is cleaned up to better prevent moves that put the king under threat
 	try:
-		print("Refresh:", PLACE.allPieces["KING-W0"].inCheck, PLACE.allPieces["KING-B0"].inCheck)
+		# print("Refresh:", PLACE.allPieces["KING-W0"].inCheck, PLACE.allPieces["KING-B0"].inCheck)
 
 		if PLACE.allPieces["KING-W0"].inCheck:
-			print("KING-W0 threats:", PLACE.allPieces["KING-W0"].threats)
-			print("KING-W0 threats:", PLACE.allPieces["KING-W0"].dangerZone)
 			PLACE.changeLocationColor("KING-W0", 'red')
 		elif PLACE.allPieces["KING-B0"].inCheck:
-			print("KING-B0 threats:", PLACE.allPieces["KING-B0"].threats)
-			print("KING-B0 threats:", PLACE.allPieces["KING-B0"].dangerZone)
 			PLACE.changeLocationColor("KING-B0", 'red')
 		else:
-			CALC.nonKingMoves("KING-W0") #Checks if the king is in check
-			CALC.nonKingMoves("KING-B0") #Checks if the king is in check
+			CALC.attackingTheKing("KING-W0") #Checks if the king is in check
+			CALC.attackingTheKing("KING-B0") #Checks if the king is in check
 			PLACE.changeLocationColor("", 'default')
+		
+		pass
 	except KeyError as E:
 		print(f"Game Over - Team {E} lost")
 

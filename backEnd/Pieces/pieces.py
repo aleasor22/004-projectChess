@@ -4,13 +4,14 @@ from Images import *
 class PIECES(IMAGE):
 	def __init__(self, chess):
 		IMAGE.__init__(self, chess)
-		self.__chess = chess
+		self._chess = chess
 
 		##Point System
 		self.piecePoints = 0
 
 		##Movement Logic
 		self.moveSet = set()
+		self.hasMoved = False
 		
 		##Visual aspect of Movement Logic
 		self._shownMoves = [] ##Holds canvas IDs of a pieces possible moves

@@ -4,7 +4,6 @@ class MOVECALC(LOGIC):
 	def __init__(self, chess, ): ##place):
 		##Class Variables (w/ Instance Tracking)
 		LOGIC.__init__(self, chess)
-		self.turnOrder = ["-W", "-B"]
 
 
 	def findMyNextMoves(self, object, calcKing=True):
@@ -22,101 +21,6 @@ class MOVECALC(LOGIC):
 		elif "KING" in object.myID and calcKing:
 			self.kingMoveCalc(object.locationID, object)
 	
-	def addActiveLocaitons(self, key, object):
-		self._pieces[key] = object
-		# print(f"{object.myID} added to activeLocation[{location}]")
-
-	def bishopMoveCalc(self, origin, object):
-		##Resets List
-		if "QUEEN" not in object.myID:
-			object.moveSet = set()
-
-		##Local Variables
-		index_A, index_B = self._chess.MATRIX.findMatrixIndex(origin)
-		myBool = (self._pieces["KING-W0"].inCheck or self._pieces["KING-B0"].inCheck)
-
-		for northEast in range(8):
-			try:
-				myLoc = self._myPieceMatrix[index_A+northEast][index_B-northEast]
-				myglobLoc = self._myGlobalMatrix[index_A+northEast][index_B-northEast]
-				if index_B-northEast < 0:
-					break
-				elif myLoc == object.locationID:
-					continue
-				elif myBool  and self.turnOrder[0] not in object.myID:
-					if myLoc != "**":
-						break
-					self.forceThisMove(myglobLoc, object)
-					continue
-				elif myLoc != "**": 
-					self.captureAble(myLoc, object)
-					break
-				else:
-					object.moveSet.add(self._myGlobalMatrix[index_A+northEast][index_B-northEast])
-			except IndexError as e:
-				# print(e)
-				break
-		for northWest in range(8):
-			try:
-				myLoc = self._myPieceMatrix[index_A-northWest][index_B-northWest]
-				myglobLoc = self._myGlobalMatrix[index_A-northWest][index_B-northWest]
-				if index_A-northWest < 0 or index_B-northWest < 0:
-					raise IndexError("Index Less than 0")
-				elif myLoc == object.locationID:
-					continue
-				elif myBool  and self.turnOrder[0] not in object.myID:
-					if myLoc != "**":
-						break
-					self.forceThisMove(myglobLoc, object)
-					continue
-				elif myLoc != "**": 
-					self.captureAble(myLoc, object)
-					raise IndexError
-				else:
-					object.moveSet.add(self._myGlobalMatrix[index_A-northWest][index_B-northWest])
-			except IndexError as e:
-				# print(e)
-				break
-		for southEast in range(8):
-			try:
-				myLoc = self._myPieceMatrix[index_A+southEast][index_B+southEast]
-				myglobLoc = self._myGlobalMatrix[index_A+southEast][index_B+southEast]
-				if myLoc == object.locationID:
-					continue
-				elif myBool  and self.turnOrder[0] not in object.myID:
-					if myLoc != "**":
-						break
-					self.forceThisMove(myglobLoc, object)
-					continue
-				elif myLoc != "**": 
-					self.captureAble(myLoc, object)
-					raise IndexError
-				else:
-					object.moveSet.add(self._myGlobalMatrix[index_A+southEast][index_B+southEast])
-			except IndexError as e:
-				# print(e)
-				break
-		for southWest in range(8):
-			try:
-				myLoc = self._myPieceMatrix[index_A-southWest][index_B+southWest]
-				myglobLoc = self._myGlobalMatrix[index_A-southWest][index_B+southWest]
-				if index_A-southWest < 0:
-					raise IndexError("Index Less than 0")
-				elif myLoc == object.locationID:
-					continue
-				elif myBool and self.turnOrder[0] not in object.myID:
-					if myLoc != "**":
-						break
-					self.forceThisMove(myglobLoc, object)
-					continue
-				elif myLoc != "**": 
-					self.captureAble(myLoc, object)
-					raise IndexError
-				else:
-					object.moveSet.add(self._myGlobalMatrix[index_A-southWest][index_B+southWest])
-			except IndexError as e:
-				# print(e)
-				break	
 	
 	def knightMoveCalc(self, origin, object):
 		##Resets
@@ -124,14 +28,11 @@ class MOVECALC(LOGIC):
 
 		##Local Variables
 		index_A, index_B = self._chess.MATRIX.findMatrixIndex(origin)
-		myBool = (self._pieces["KING-W0"].inCheck or self._pieces["KING-B0"].inCheck)
 
 		for i in range(-2, 3):
 			for j in range(-2, 3):
 				try:
-					myLoc = self._myPieceMatrix[index_A+j][index_B+i]
-					myglobLoc = self._myGlobalMatrix[index_A+j][index_B+i]
-					
+					myGlobLoc = self._myGlobalMatrix[index_A+j][index_B+i]
 					if index_A+j < 0 or index_B+i < 0:
 						continue
 					elif j % 2 == 0 and (i == -2 or i == 2):
@@ -140,18 +41,107 @@ class MOVECALC(LOGIC):
 						continue
 					elif (i==0 and j!=0):
 						continue
-					elif myglobLoc == object.locationID:
-						continue
-					elif myBool and self.turnOrder[0] not in object.myID:
-						self.forceThisMove(myglobLoc, object)
-						continue
-					elif myLoc != "**":
-						self.captureAble(self._myPieceMatrix[index_A+j][index_B+i], object)
-						continue
-					else:
-						object.moveSet.add(self._myGlobalMatrix[index_A+j][index_B+i])
-				except IndexError:
+					self.specialMoves(myGlobLoc, object)
+				except IndexError as e:
+					# print(e)
+					pass
+	
+	def pawnMoveCalc(self, origin, object):
+		##New Call Resets
+		object.moveSet = set()
+
+		##Local Variables
+		index_A, index_B = self._chess.MATRIX.findMatrixIndex(origin)
+
+		if "-W" in object.myID:
+			for location in self.pawnAttackCalc(object.locationID, object):
+				if self._chess.MATRIX.foundInPieceMatrix(location):
+					self.specialMoves(location, object)
+			if self._myPieceMatrix[index_A][index_B+1] == "**":  ##Handdles basic move logic
+				if origin[1] == "2" and self._myPieceMatrix[index_A][index_B+2] == "**":
+					self.specialMoves(self._myGlobalMatrix[index_A][index_B+2], object)
+				self.specialMoves(self._myGlobalMatrix[index_A][index_B+1], object)
+
+		elif "-B" in object.myID:
+			for location in self.pawnAttackCalc(object.locationID, object):
+				if self._chess.MATRIX.foundInPieceMatrix(location):
+					self.specialMoves(location, object)
+			if self._myPieceMatrix[index_A][index_B-1] == "**":  ##Handdles basic move logic
+				if origin[1] == "7" and self._myPieceMatrix[index_A][index_B-2] == "**":
+					self.specialMoves(self._myGlobalMatrix[index_A][index_B-2], object)
+				self.specialMoves(self._myGlobalMatrix[index_A][index_B-1], object)
+
+	def bishopMoveCalc(self, origin, object):
+		##Resets List
+		if "QUEEN" not in object.myID:
+			object.moveSet = set()
+
+		##Local Variables
+		index_A, index_B = self._chess.MATRIX.findMatrixIndex(origin)
+
+		for southEast in range(8):
+			try:
+				myLoc = self._myPieceMatrix[index_A+southEast][index_B-southEast]
+				myGlobLoc = self._myGlobalMatrix[index_A+southEast][index_B-southEast]
+				##Logic Here
+				if index_A+southEast < 0 or index_B-southEast < 0:
+					break
+				if myGlobLoc == object.locationID:
 					continue
+				self.specialMoves(myGlobLoc, object)
+				if myLoc != "**":
+					break
+			except IndexError as e:
+				# print(e)
+				break
+
+		for southWest in range(8):
+			try:
+				myLoc = self._myPieceMatrix[index_A-southWest][index_B-southWest]
+				myGlobLoc = self._myGlobalMatrix[index_A-southWest][index_B-southWest]
+				##Logic Here
+				if index_A-southWest < 0 or index_B-southWest < 0:
+					break
+				if myGlobLoc == object.locationID:
+					continue
+				self.specialMoves(myGlobLoc, object)
+				if myLoc != "**":
+					break
+			except IndexError as e:
+				# print(e)
+				break
+
+		for northEast in range(8):
+			try:
+				myLoc = self._myPieceMatrix[index_A+northEast][index_B+northEast]
+				myGlobLoc = self._myGlobalMatrix[index_A+northEast][index_B+northEast]
+				##Logic Here
+				if index_A+northEast < 0 or index_B+northEast < 0:
+					break
+				if myGlobLoc == object.locationID:
+					continue
+				self.specialMoves(myGlobLoc, object)
+				if myLoc != "**":
+					break
+			except IndexError as e:
+				# print(e)
+				break
+
+		for northWest in range(8):
+			try:
+				myLoc = self._myPieceMatrix[index_A-northWest][index_B+northWest]
+				myGlobLoc = self._myGlobalMatrix[index_A-northWest][index_B+northWest]
+				##Logic Here
+				if index_A-northWest < 0 or index_B+northWest < 0:
+					break
+				if myGlobLoc == object.locationID:
+					continue
+				self.specialMoves(myGlobLoc, object)
+				if myLoc != "**":
+					break
+			except IndexError as e:
+				# print(e)
+				break
 	
 	def rookMoveCalc(self, origin, object):
 		##Reset
@@ -160,73 +150,36 @@ class MOVECALC(LOGIC):
 
 		##Local Variables
 		index_A, index_B = self._chess.MATRIX.findMatrixIndex(origin)
-		myBool = (self._pieces["KING-W0"].inCheck or self._pieces["KING-B0"].inCheck)
 		
 		## Horizontal Movement
-		for west in range(index_A-1, -1, -1):
-			myLoc = self._myPieceMatrix[west][index_B]
-			myglobLoc = self._myGlobalMatrix[west][index_B]
-			try:
-				if myBool and self.turnOrder[0] not in object.myID:
-					if myLoc != "**":
-						break
-					self.forceThisMove(myglobLoc, object)
-					continue
-				elif myLoc != "**":
-					self.captureAble(myLoc, object)
-					break
-			except IndexError:
+		for east in range(index_A-1, -1, -1):
+			myLoc = self._myPieceMatrix[east][index_B]
+			myGlobLoc = self._myGlobalMatrix[east][index_B]
+			self.specialMoves(myGlobLoc, object)
+			if myLoc != "**":
 				break
-			object.moveSet.add(self._myGlobalMatrix[west][index_B])
 
-		for east in range(index_A+1, 8):
-			myLoc = self._myPieceMatrix[east][index_B] 
-			myglobLoc = self._myGlobalMatrix[east][index_B]
-			try:
-				if myBool and self.turnOrder[0] not in object.myID:
-					if myLoc != "**":
-						break
-					self.forceThisMove(myglobLoc, object)
-					continue
-				elif myLoc != "**":
-					self.captureAble(myLoc, object)
-					break
-			except IndexError:
+		for west in range(index_A+1, 8):
+			myLoc = self._myPieceMatrix[west][index_B] 
+			myGlobLoc = self._myGlobalMatrix[west][index_B]
+			self.specialMoves(myGlobLoc, object)
+			if myLoc != "**":
 				break
-			object.moveSet.add(self._myGlobalMatrix[east][index_B])
 
-		## Vertical Movment
-		for north in range(index_B-1, -1, -1):
-			myLoc = self._myPieceMatrix[index_A][north]
-			myglobLoc = self._myGlobalMatrix[index_A][north]
-			try:
-				if myBool and self.turnOrder[0] not in object.myID:
-					if myLoc != "**":
-						break
-					self.forceThisMove(myglobLoc, object)
-					continue
-				elif myLoc != "**":
-					self.captureAble(myLoc, object)
-					break
-			except IndexError:
-				break
-			object.moveSet.add(myglobLoc)
-		
-		for south in range(index_B+1, 8):
+		# Vertical Movment
+		for south in range(index_B-1, -1, -1):
 			myLoc = self._myPieceMatrix[index_A][south]
-			myglobLoc = self._myGlobalMatrix[index_A][south]			
-			try:
-				if myBool and self.turnOrder[0] not in object.myID:
-					if myLoc != "**":
-						break
-					self.forceThisMove(myglobLoc, object)
-					continue
-				elif myLoc != "**":
-					self.captureAble(myLoc, object)
-					break
-			except IndexError:
+			myGlobLoc = self._myGlobalMatrix[index_A][south]
+			self.specialMoves(myGlobLoc, object)
+			if myLoc != "**":
 				break
-			object.moveSet.add(self._myGlobalMatrix[index_A][south])
+		
+		for north in range(index_B+1, 8):
+			myLoc = self._myPieceMatrix[index_A][north]
+			myGlobLoc = self._myGlobalMatrix[index_A][north]
+			self.specialMoves(myGlobLoc, object)
+			if myLoc != "**":
+				break
 	
 	def queenMoveCalc(self, origin, object):
 		object.moveSet = set()
@@ -235,84 +188,60 @@ class MOVECALC(LOGIC):
 
 	def kingMoveCalc(self, origin, object):
 		##Rests
-		self.nonKingMoves(object.myID)
+		self.attackingTheKing(object.myID)
+		self.potentialThreatsOnKing(object)
 		object.moveSet = set()
-		object.threats = set()
 		
 		index_A, index_B = self._chess.MATRIX.findMatrixIndex(origin)
+		
+		## Castle Logic - The Setup
+		if "-W" in object.myID and object.hasMoved == False:
+			if self._chess.MATRIX.foundInPieceMatrix("f1") == False and self._chess.MATRIX.foundInPieceMatrix("g1") == False:
+				print("White King Sided Castle")
+				object.moveSet.add("g1")
+			elif self._chess.MATRIX.foundInPieceMatrix("b1") == False and self._chess.MATRIX.foundInPieceMatrix("c1") == False and self._chess.MATRIX.foundInPieceMatrix("d1") == False:
+				print("White Queen Sided Castle")
+				object.moveSet.add("c1")
+
+		if "-B" in object.myID and object.hasMoved == False:
+			if self._chess.MATRIX.foundInPieceMatrix("f8") == False and self._chess.MATRIX.foundInPieceMatrix("g8") == False:
+				print("Black King Sided Castle")
+				object.moveSet.add("g8")
+			elif self._chess.MATRIX.foundInPieceMatrix("b8") == False and self._chess.MATRIX.foundInPieceMatrix("c8") == False and self._chess.MATRIX.foundInPieceMatrix("d8") == False:
+				print("Black Queen Sided Castle")
+				object.moveSet.add("c8")
+
 		for i in range(-1, 2):
 			for j in range(-1, 2):
 				try:
-					locationUsed = self._myPieceMatrix[index_A+i][index_B+j]
-					globLocation = self._myGlobalMatrix[index_A+i][index_B+j]
+					myloc = self._myPieceMatrix[index_A+i][index_B+j]
+					myGlobLoc = self._myGlobalMatrix[index_A+i][index_B+j]
 					if (index_A+i) < 0 or (index_B+j) < 0:
-						raise IndexError("Less than 0")
-					elif globLocation not in object.dangerZone and locationUsed == "**":
-						object.moveSet.add(globLocation)
-					elif locationUsed != "**" and locationUsed not in object.dangerZone:
-						self.captureAble(locationUsed, object) ##Only add location as a move, if it's an opposing piece
-					else:
-						# print(object.dangerZone)
-						object.threats.add(globLocation)
-					##Adds King's own location to .treats if it's being attacted. 
-					if object.locationID in object.dangerZone:
-						object.threats.add(object.locationID)					
+						raise IndexError
+					if myGlobLoc not in object.threats:
+						self.specialMoves(myGlobLoc, object)
 				except IndexError as e:
-					print(e)
+					# print(f"Error: {e} \n\t@CALC.kingMoveCalc()")
 					continue
-
-	def pawnMoveCalc(self, origin, object):
-		##New Call Resets
-		currRow = origin[1]
-		object.moveSet = set()
-
-		##Local Variables
-		index_A, index_B = self._chess.MATRIX.findMatrixIndex(origin)
-		myBool = (self._pieces["KING-W0"].inCheck or self._pieces["KING-B0"].inCheck)
-
-		if "-W" in object.myID:
-			myloc = self._myPieceMatrix[index_A][index_B+1]
-			try: #Handles General Pawn Movement
-				if myloc == "**":
-					if myBool and self.turnOrder[0] not in object.myID:
-						self.forceThisMove(self._myGlobalMatrix[index_A][index_B+1], object)
-					else:
-						object.moveSet.add(self._myGlobalMatrix[index_A][index_B+1])
-				if currRow == "2" and self._myPieceMatrix[index_A][index_B+2] == "**":
-					if myBool and self.turnOrder[0] not in object.myID:
-						self.forceThisMove(self._myGlobalMatrix[index_A][index_B+2], object)
-					else:
-						object.moveSet.add(self._myGlobalMatrix[index_A][index_B+2])
-			except IndexError:
-				pass
-			try: ##Handles Pawn Attacks
-				if self._myPieceMatrix[index_A-1][index_B+1] != "**":
-					self.captureAble(self._myGlobalMatrix[index_A-1][index_B+1], object)
-				if self._myPieceMatrix[index_A+1][index_B+1] != "**":
-					self.captureAble(self._myGlobalMatrix[index_A+1][index_B+1], object)
-			except IndexError:
-				pass
-		if "-B" in object.myID:
-			try: #Handles General Pawn Movement
-				if self._myPieceMatrix[index_A][index_B-1] == "**":
-					if myBool and self.turnOrder[0] not in object.myID:
-						self.forceThisMove(self._myGlobalMatrix[index_A][index_B-1], object)
-					else:
-						object.moveSet.add(self._myGlobalMatrix[index_A][index_B-1])
-				if currRow == "7" and self._myPieceMatrix[index_A][index_B-2] == "**":
-					if myBool and self.turnOrder[0] not in object.myID:
-						self.forceThisMove(self._myGlobalMatrix[index_A][index_B-2], object)
-					else:
-						object.moveSet.add(self._myGlobalMatrix[index_A][index_B-2])
-			except IndexError:
-				pass
-			try: ##Handles Pawn Attacks
-				if self._myPieceMatrix[index_A-1][index_B-1] != "**":
-					self.captureAble(self._myGlobalMatrix[index_A-1][index_B-1], object)
-				if self._myPieceMatrix[index_A+1][index_B-1] != "**":
-					self.captureAble(self._myGlobalMatrix[index_A+1][index_B-1], object)
-			except IndexError:
-				pass
-	
-
-
+		
+	def kingCastle(self, location):
+		# print(self.get_piece("h1").myID, "this rook king@g1")
+		##White King
+		if location == "g1" and self.get_pieceAtLocation("h1").hasMoved == False:
+			rook = self.get_pieceAtLocation("h1")
+			self._chess.get_canvas().delete(rook.canvasID)
+			rook.placeImage("f1")
+		elif location == "c1" and self.get_pieceAtLocation("a1").hasMoved == False:
+			rook = self.get_pieceAtLocation("a1")
+			self._chess.get_canvas().delete(rook.canvasID)
+			rook.placeImage("d1")
+		
+		##Black King
+		if location == "g8" and self.get_pieceAtLocation("h8").hasMoved == False:
+			rook = self.get_pieceAtLocation("h8")
+			self._chess.get_canvas().delete(rook.canvasID)
+			rook.placeImage("f8")
+		elif location == "c8" and self.get_pieceAtLocation("a8").hasMoved == False:
+			rook = self.get_pieceAtLocation("a8")
+			self._chess.get_canvas().delete(rook.canvasID)
+			rook.placeImage("d8")
