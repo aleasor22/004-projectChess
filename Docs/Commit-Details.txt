@@ -1,7 +1,17 @@
 Goal of Document: To further elaborate on what each commit is, changes made, project goals/tasks completed.
 
 
-Current Commit #24 - [v0.0.776]
+Current Commit #25 - [v0.0.777]
+	1. Attempt #5 - Check/Checkmate Logic 
+		a. Checkmate Logic Progress:
+			i.	 Program knows if a piece is pinned to the king or not. 
+			ii.	 Mostly Works, King is able to capture gaurded Pieces
+	2. Calculate pinned piece logic from king pov.
+		a. Completed Pinned Pieces logic. Pieces can no longer put their own king in check.
+		b. Through this found a better way to calculate moves for Bishop, Rook, and Queen. Plans to impliment this
+	
+			
+Last Commit #24 - [v0.0.776]
 	1. Attempt #5 - Check/Checkmate Logic 
 		a. Check logic almost done
 			i.	 Pieces are forced to protect the king if possible.
@@ -14,18 +24,3 @@ Current Commit #24 - [v0.0.776]
 			i.	 True = Prevent Movement (Outside of capturing attacker)
 			ii.	 False = Allow moves as normal
 		c. Checkmate Logic
-		
-			
-Last Commit #23 - [v0.0.774]
-	1. Created logic to flip the board during setup
-	2. Attempt #5 - Check/Checkmate Logic 
-		a. More testing resulted in Check logic being inconsistent.
-		b. These moves being forced has also become inconsistent
-		c. self.__activeLocations is now self.pieces
-		d. Created checkLogic.py - cleaned up moveCalculator.py but didn't solve previous issues.
-	3. Goals:
-		a. Start move calculation from scratch again
-			i.	 Original logic stays. The special moves (capture and forcedMoves) are getting re-worked
-			ii.	 When moves are calculated also needs changed. 
-		b. Implement Checkmate Logic
-			i.	 Game Finished Screen

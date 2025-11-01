@@ -2,8 +2,8 @@
 import os
 import sys
 import tkinter as tk
+# from PIL import ImageTk, Image
 from PIL import ImageTk, Image
-
 
 ##Start of the Image Class
 class IMAGE:

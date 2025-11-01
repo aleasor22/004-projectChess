@@ -12,6 +12,8 @@ class PIECES(IMAGE):
 		##Movement Logic
 		self.moveSet = set()
 		self.hasMoved = False
+		self.isPinned = False
+		self.pinnedMoves = []
 		
 		##Visual aspect of Movement Logic
 		self._shownMoves = [] ##Holds canvas IDs of a pieces possible moves

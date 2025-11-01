@@ -1,12 +1,11 @@
 import tkinter ##Needed to import the tkinter Class
-from PIL import ImageTk, Image ##NOTE may not need
 from .boardMatrix import MATRIX
 
 
 class CANVAS():
 	def __init__(self):
 		self.__chessApp = tkinter.Tk()
-		self.__chessApp.title("Chess.Leasor  [v0.0.776]")
+		self.__chessApp.title("Chess.Leasor  [v0.0.777]")
 		self.__board = None ##Default to None
 		self.boardSize = 1024
 

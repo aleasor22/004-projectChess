@@ -66,6 +66,10 @@ def chessLoop():
 	try:
 		# print("Refresh:", PLACE.allPieces["KING-W0"].inCheck, PLACE.allPieces["KING-B0"].inCheck)
 
+		##Pinned Piece Calculation:
+		CALC.pinnedPiecesReset(PLACE.allPieces[f"KING{CALC.turnOrder[0]}0"]) 
+		CALC.pinnedPieces(PLACE.allPieces[f"KING{CALC.turnOrder[0]}0"])
+
 		if PLACE.allPieces["KING-W0"].inCheck:
 			PLACE.changeLocationColor("KING-W0", 'red')
 		elif PLACE.allPieces["KING-B0"].inCheck:

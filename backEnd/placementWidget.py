@@ -12,6 +12,7 @@ class PLACEMENT():
 		self.__myGlobalMatrix = chess.MATRIX.get_matrix("Global")
 		self.backRow = ["ROOK", "KNIGHT", "BISHOP", "QUEEN", "KING", "BISHOP", "KNIGHT", "ROOK"]
 		self.allPieces = {}
+		self.M2GotHit = False
 
 		##Piece Selection marker
 		self.selectImg = IMAGE(chess)
@@ -86,7 +87,7 @@ class PLACEMENT():
 				self.selectImg.placeImage(currMouseLoc)
 				if self.selectedPiece != None:
 					# print("Piece Selected:", self.selectedPiece.myID)
-					print(f"Has {self.selectedPiece.myID} moved? {self.selectedPiece.hasMoved}")
+					# self.__moveCalc.pinnedPieced(self.selectedPiece, self.allPieces[f"KING{self.__moveCalc.turnOrder[0]}0"])
 					self.__moveCalc.findMyNextMoves(self.selectedPiece)
 					self.selectedPiece.showMyMoves()
 					self.oldLocation = self.selectedPiece.locationID
@@ -107,7 +108,7 @@ class PLACEMENT():
 
 			if mousePress:
 				# print(f"{location} is in {self.selectedPiece.moveSet}")
-				if location in self.selectedPiece.moveSet:
+				if location in self.selectedPiece.moveSet: #NOTE# or self.M2GotHit:
 					if "KING" in self.selectedPiece.myID:
 						if location in ["c1", "g1", "c8", "g8"]:
 							self.__moveCalc.kingCastle(location)

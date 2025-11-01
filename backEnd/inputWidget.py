@@ -7,7 +7,7 @@ import tkinter ##Used for Debugging
 
 class Inputs():
 	def __init__(self, chessObject, place):
-		self.__listeningStarted =  False ##Is this needed
+		self.__listeningStarted =  False ##Is this needed?
 		self.__chess = chessObject
 		self.__render = chessObject.get_canvas()
 		self.__place = place
@@ -28,9 +28,15 @@ class Inputs():
 		if self.applicationActive:
 			self.__render.bind("<Motion>", self.findMyMouse)
 			self.__render.bind("<Button-1>", self.onMousePress)
+			self.__render.bind("<Button-2>", self.M2Pressed)
 		else:
 			self.__render.unbind("<Motion>")
 			self.__render.unbind("<Button-1>")
+			self.__render.bind("<Button-2>")
+
+	def M2Pressed(self, event):
+		self.__place.M2GotHit = True
+		pass
 
 	##Below method got moved to placementWidget.py
 	def onMousePress(self, event):
@@ -59,7 +65,7 @@ class Inputs():
 		if self.__place.activePiece:
 			self.__place.movePiece(self.currMouseLocation)
 
-	##Logic for Keyboard inputs##
+	##--Logic for Keyboard inputs - pre release--##
 	def onPress(self, key):
 		# try:
 		# 	print('alphanumeric key {0} pressed'.format(key.char))
@@ -67,7 +73,7 @@ class Inputs():
 		# 	print('special key {0} pressed'.format(key))
 		pass
 
-	##Logic to Track Keyboard Inputs
+	##--Logic for keyboard inputs - post release--##
 	def onRelease(self, key):
 		try:
 			print(f'alphanumeric key {key.char} released')

@@ -1,4 +1,4 @@
-from .checkLogic import LOGIC
+from .advancedMoveLogic import LOGIC
 
 class MOVECALC(LOGIC):
 	def __init__(self, chess, ): ##place):
@@ -52,29 +52,36 @@ class MOVECALC(LOGIC):
 
 		##Local Variables
 		index_A, index_B = self._chess.MATRIX.findMatrixIndex(origin)
+		try:
+			if "-W" in object.myID:
+				for location in self.pawnAttackCalc(object.locationID, object):
+					if self._chess.MATRIX.foundInPieceMatrix(location):
+						self.specialMoves(location, object)
+				if self._myPieceMatrix[index_A][index_B+1] == "**":  ##Handdles basic move logic
+					if origin[1] == "2" and self._myPieceMatrix[index_A][index_B+2] == "**":
+						self.specialMoves(self._myGlobalMatrix[index_A][index_B+2], object)
+					self.specialMoves(self._myGlobalMatrix[index_A][index_B+1], object)
 
-		if "-W" in object.myID:
-			for location in self.pawnAttackCalc(object.locationID, object):
-				if self._chess.MATRIX.foundInPieceMatrix(location):
-					self.specialMoves(location, object)
-			if self._myPieceMatrix[index_A][index_B+1] == "**":  ##Handdles basic move logic
-				if origin[1] == "2" and self._myPieceMatrix[index_A][index_B+2] == "**":
-					self.specialMoves(self._myGlobalMatrix[index_A][index_B+2], object)
-				self.specialMoves(self._myGlobalMatrix[index_A][index_B+1], object)
-
-		elif "-B" in object.myID:
-			for location in self.pawnAttackCalc(object.locationID, object):
-				if self._chess.MATRIX.foundInPieceMatrix(location):
-					self.specialMoves(location, object)
-			if self._myPieceMatrix[index_A][index_B-1] == "**":  ##Handdles basic move logic
-				if origin[1] == "7" and self._myPieceMatrix[index_A][index_B-2] == "**":
-					self.specialMoves(self._myGlobalMatrix[index_A][index_B-2], object)
-				self.specialMoves(self._myGlobalMatrix[index_A][index_B-1], object)
+			elif "-B" in object.myID:
+				for location in self.pawnAttackCalc(object.locationID, object):
+					if self._chess.MATRIX.foundInPieceMatrix(location):
+						self.specialMoves(location, object)
+				if self._myPieceMatrix[index_A][index_B-1] == "**":  ##Handdles basic move logic
+					if origin[1] == "7" and self._myPieceMatrix[index_A][index_B-2] == "**":
+						self.specialMoves(self._myGlobalMatrix[index_A][index_B-2], object)
+					self.specialMoves(self._myGlobalMatrix[index_A][index_B-1], object)
+		except IndexError as e:
+			# print(f"ERROR @CALC.moveCalculator(): {e}")
+			pass
 
 	def bishopMoveCalc(self, origin, object):
 		##Resets List
 		if "QUEEN" not in object.myID:
 			object.moveSet = set()
+		
+		# list = ["North West", "North East", "South East", "South West"]
+		# for direction in list:
+		# 	self.directionLooping(origin, object, direction, "red")
 
 		##Local Variables
 		index_A, index_B = self._chess.MATRIX.findMatrixIndex(origin)
@@ -186,16 +193,17 @@ class MOVECALC(LOGIC):
 		self.bishopMoveCalc(origin, object)
 		self.rookMoveCalc(origin, object)
 
-	def kingMoveCalc(self, origin, object):
+	def kingMoveCalc(self, origin, object, notCheckmateLogic=True):
 		##Rests
-		self.attackingTheKing(object.myID)
+		if notCheckmateLogic:
+			self.attackingTheKing(object.myID)
 		self.potentialThreatsOnKing(object)
 		object.moveSet = set()
 		
 		index_A, index_B = self._chess.MATRIX.findMatrixIndex(origin)
 		
 		## Castle Logic - The Setup
-		if "-W" in object.myID and object.hasMoved == False:
+		if "-W" in object.myID and object.hasMoved == False and object.inCheck == False:
 			if self._chess.MATRIX.foundInPieceMatrix("f1") == False and self._chess.MATRIX.foundInPieceMatrix("g1") == False:
 				print("White King Sided Castle")
 				object.moveSet.add("g1")
@@ -203,7 +211,7 @@ class MOVECALC(LOGIC):
 				print("White Queen Sided Castle")
 				object.moveSet.add("c1")
 
-		if "-B" in object.myID and object.hasMoved == False:
+		if "-B" in object.myID and object.hasMoved == False and object.inCheck == False:
 			if self._chess.MATRIX.foundInPieceMatrix("f8") == False and self._chess.MATRIX.foundInPieceMatrix("g8") == False:
 				print("Black King Sided Castle")
 				object.moveSet.add("g8")
